@@ -1,7 +1,7 @@
 package booking;
 
-import booking.view.ChooseDateView;
-import booking.view.ChooseDateViewModel;
+import booking.view.chooseDate.ChooseDateView;
+import booking.view.chooseDate.ChooseDateViewModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ public class App extends Application
 {
     @Override public void start(Stage primaryStage) throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/ChooseDateView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/chooseDate/ChooseDateView.fxml"));
         Scene scene = null;
         try
         {

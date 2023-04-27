@@ -1,25 +1,20 @@
 package booking.core;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class BookingInterval
 {
-    private LocalDate date;
-    private LocalTime from;
-    private LocalTime to;
+    private final LocalDate date;
+    private final LocalTime from;
+    private final LocalTime to;
 
     public BookingInterval(LocalDate date, LocalTime from, LocalTime to)
     {
-        if (!from.isBefore(to))
-        {
-            throw new IllegalArgumentException("From time must be before to time");
-        }
-
-        this.date = date;
-        this.from = from;
-        this.to = to;
+        this.date = Objects.requireNonNull(date);
+        this.from = Objects.requireNonNull(from);
+        this.to = Objects.requireNonNull(to);
     }
 
     public LocalDate getDate()
@@ -27,29 +22,14 @@ public class BookingInterval
         return date;
     }
 
-    public void setDate(LocalDate date)
-    {
-        this.date = date;
-    }
-
     public LocalTime getFrom()
     {
         return from;
     }
 
-    public void setFrom(LocalTime from)
-    {
-        this.from = from;
-    }
-
     public LocalTime getTo()
     {
         return to;
-    }
-
-    public void setTo(LocalTime to)
-    {
-        this.to = to;
     }
 
     public boolean isOverlapWith(LocalTime time)

@@ -1,4 +1,4 @@
-package booking.view;
+package booking.view.roomList;
 
 import booking.core.Room;
 import javafx.collections.FXCollections;

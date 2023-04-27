@@ -3,12 +3,11 @@ package booking;
 import booking.core.Booking;
 import booking.core.BookingInterval;
 import booking.core.BookingSystem;
-import booking.core.Bruger;
-import booking.core.BrugerType;
+import booking.core.User;
+import booking.core.UserType;
 import booking.core.Room;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class TestData
@@ -17,9 +16,9 @@ public class TestData
     {
         BookingSystem model = new BookingSystem();
 
-        Bruger brugerA = new Bruger(1, BrugerType.USER_TYPE_STUDENT);
-        Bruger brugerB = new Bruger(1, BrugerType.USER_TYPE_STUDENT);
-        Bruger brugerC = new Bruger(1, BrugerType.USER_TYPE_STUDENT);
+        User brugerA = new User(1, UserType.USER_TYPE_STUDENT);
+        User brugerB = new User(1, UserType.USER_TYPE_STUDENT);
+        User brugerC = new User(1, UserType.USER_TYPE_STUDENT);
 
         Room roomA = new Room("C02.01");
         Room roomB = new Room("C02.02");

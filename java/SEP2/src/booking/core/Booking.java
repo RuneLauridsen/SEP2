@@ -1,14 +1,12 @@
 package booking.core;
 
-import java.time.LocalDateTime;
-
 public class Booking
 {
     private BookingInterval interval;
-    private Bruger bruger;
+    private User bruger;
     private Room room;
 
-    public Booking(BookingInterval interval, Bruger bruger, Room room)
+    public Booking(BookingInterval interval, User bruger, Room room)
     {
         this.interval = interval;
         this.bruger = bruger;
@@ -26,12 +24,12 @@ public class Booking
         this.interval = interval;
     }
 
-    public Bruger getBruger()
+    public User getBruger()
     {
         return bruger;
     }
 
-    public void setBruger(Bruger bruger)
+    public void setBruger(User bruger)
     {
         this.bruger = bruger;
     }

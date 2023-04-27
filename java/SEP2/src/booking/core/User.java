@@ -1,13 +1,13 @@
 package booking.core;
 
-public class Bruger
+public class User
 {
-    private int viaID;
-    private BrugerType type;
+    private int viaId;
+    private UserType type;
 
-    public Bruger(int viaID, BrugerType type)
+    public User(int viaID, UserType type)
     {
-        this.viaID = viaID;
+        this.viaId = viaID;
         this.type = type;
     }
 
