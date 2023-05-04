@@ -16,6 +16,7 @@ CREATE TABLE user_type
     user_type_id            serial      NOT NULL PRIMARY KEY ,
     user_type_name          varchar(50) NOT NULL ,
     can_edit_users          bool        NOT NULL
+    -- TODO: Andre privilegier?
 );
 
 -- Hvilke brugertyper har mulighed for at booke hvilke lokaletyper
@@ -86,3 +87,64 @@ CREATE TABLE time_slot
     time_slot_end           time        NOT NULL
 );
 
+
+
+INSERT INTO user_type
+    (user_type_name, can_edit_users)
+VALUES
+    /* 1 */ ('Admin', true),
+    /* 2 */ ('Medarbejder', true),
+    /* 3 */ ('Studerende', true),
+    /* 4 */ ('Studerende (Bachelor)', true);
+
+INSERT INTO room_type
+    (room_type_name)
+VALUES
+    /* 1 */ ('Grupperum'),
+    /* 2 */ ('Bachelorrum'),
+    /* 3 */ ('Medarbejderum'),
+    /* 4 */ ('Klasselokale'),
+    /* 5 */ ('Auditorium'),
+    /* 6 */ ('Laboratorium'),
+    /* 7 */ ('Hub');
+
+INSERT INTO user_type_allowed_room_type
+    (user_type_id, room_type_id)
+VALUES
+    (1, 1), -- Admin, Grupperum
+    (1, 2), -- Admin, Bachelorum
+    (1, 3), -- Admin, Medarbejderum
+    (1, 4), -- Admin, Klasselokale
+    (1, 5), -- Admin, Auditorium
+    (1, 6), -- Admin, Laboratorium
+    (1, 7), -- Admin, Hub
+
+    (2, 1), -- Medarbejder, Grupperum
+    (2, 2), -- Medarbejder, Bachelorum
+    (2, 3), -- Medarbejder, Medarbejderum
+    (2, 4), -- Medarbejder, Klasselokale
+    -- (2, 5), -- Medarbejder, Auditorium
+    (2, 6), -- Medarbejder, Laboratorium
+    -- (2, 7), -- Medarbejder, Hub
+
+    (3, 1), -- Studerende, Grupperum
+    -- (3, 2), -- Studerende, Bachelorum
+    -- (3, 3), -- Studerende, Medarbejderum
+    -- (3, 4), -- Studerende, Klasselokale
+    -- (3, 5), -- Studerende, Auditorium
+    -- (3, 6), -- Studerende, Laboratorium
+    -- (3, 7), -- Studerende, Hub
+
+    (4, 1), -- Studerende (Bachelor), Grupperum
+    (4, 2)  -- Studerende (Bachelor), Bachelorum
+    -- (4, 3), -- Studerende (Bachelor), Medarbejderum
+    -- (4, 4), -- Studerende (Bachelor), Klasselokale
+    -- (4, 5), -- Studerende (Bachelor), Auditorium
+    -- (4, 6), -- Studerende (Bachelor), Laboratorium
+    -- (4, 7), -- Studerende (Bachelor), Hub
+    ;
+
+SELECT ut.user_type_name, rt.room_type_name
+FROM user_type_allowed_room_type utart
+INNER JOIN user_type ut ON utart.user_type_id = ut.user_type_id
+INNER JOIN room_type rt ON utart.room_type_id = rt.room_type_id;
