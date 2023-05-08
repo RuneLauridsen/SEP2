@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="booking.view.chooseDate.ChooseDateView"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox spacing="20">
+        <padding>
+            <Insets top="5" bottom="5" left="5" right="5"/>
+        </padding>
+
+        <VBox>
+            <Label text="Tidsinterval" styleClass="group-header"/>
+            <HBox>
+                <Label text="Dato" prefWidth="50"/>
+                <DatePicker fx:id="datePicker"/>
+            </HBox>
+            <HBox>
+                <Label text="Fra" prefWidth="50"/>
+                <TextField fx:id="timeTextFrom"/>
+            </HBox>
+            <HBox>
+                <Label text="Til" prefWidth="50"/>
+                <TextField fx:id="timeTextTo"/>
+            </HBox>
+            <Button text="Se lokaler" onAction="#showRoomsClicked"/>
+        </VBox>
+
+        <Separator/>
+
+        <VBox>
+            <Label text="Tidspunkt" styleClass="group-header"/>
+            <HBox>
+                <Label text="Dato" prefWidth="50"/>
+                <DatePicker/>
+            </HBox>
+            <HBox>
+                <Label text="Tid" prefWidth="50"/>
+                <TextField/>
+            </HBox>
+            <Button text="Se lokaler"/>
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>

@@ -1,4 +1,4 @@
-package booking.view.Login;
+package booking.view.login;
 
 public class LoginController
 {
