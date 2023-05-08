@@ -2,6 +2,7 @@ package booking;
 
 import booking.view.chooseDate.ChooseDateView;
 import booking.view.chooseDate.ChooseDateViewModel;
+import booking.view.homeScreen.UserHomeScreen;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,7 +14,7 @@ public class App extends Application
 {
     @Override public void start(Stage primaryStage) throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/chooseDate/ChooseDateView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/homeScreen/UserHomeScreen.fxml"));
         Scene scene = null;
         try
         {
@@ -24,9 +25,10 @@ public class App extends Application
             throw new RuntimeException(e);
         }
 
-        ChooseDateViewModel viewModel = new ChooseDateViewModel();
-        ChooseDateView controller = fxmlLoader.getController();
-        controller.init(viewModel);
+        //ChooseDateViewModel viewModel = new ChooseDateViewModel();
+        UserHomeScreen controller = fxmlLoader.getController();
+        controller.init();
+        //controller.init(viewModel);
 
         primaryStage.setTitle("Booking");
         primaryStage.setScene(scene);
