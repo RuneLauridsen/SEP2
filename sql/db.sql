@@ -7,16 +7,17 @@ SET SEARCH_PATH = "sep2";
 CREATE TABLE room_type
 (
     room_type_id            serial      NOT NULL PRIMARY KEY,
-    room_type_name          varchar(50) NOT NULL
+    room_type_name          varchar(50) NOT NULL UNIQUE
 );
 
 -- Brugertyper, medarbejder, studerende, 6. semester studerende osv.
 CREATE TABLE user_type
 (
     user_type_id            serial      NOT NULL PRIMARY KEY ,
-    user_type_name          varchar(50) NOT NULL ,
-    can_edit_users          bool        NOT NULL
-    -- TODO: Andre privilegier?
+    user_type_name          varchar(50) NOT NULL UNIQUE ,
+    can_edit_users          bool        NOT NULL ,
+    can_edit_rooms          bool        NOT NULL ,
+    max_booking_count       int         NOT NULL
 );
 
 -- Hvilke brugertyper har mulighed for at booke hvilke lokaletyper
@@ -35,47 +36,61 @@ CREATE TABLE "user"
     user_name               varchar(99) NOT NULL,
     user_initials           varchar(10) NULL, -- null hvis ikke medarbejder
     user_viaid              int         NULL, -- null hvis ikke studerende
-    user_type_id            int         NOT NULL REFERENCES user_type(user_type_id),
+    user_password_hash      varchar(40) NOT NULL,
+    user_type_id            int         NOT NULL REFERENCES user_type(user_type_id)
 
-    user_password_hash      varchar(40) NOT NULL
 );
 
 -- Fag
 CREATE TABLE course
 (
     course_id               serial      NOT NULL PRIMARY KEY ,
-    course_name             varchar(50) NOT NULL,
-    course_time_slot_count  int         NOT NULL, -- antal timer der skal bookes til dette fag
-    course_teacher_user_id  int         NOT NULL REFERENCES "user"(user_id)
+    course_name             varchar(50) NOT NULL UNIQUE ,
+    course_time_slot_count  int         NOT NULL -- antal timer der skal bookes til dette fag
 );
 
 -- Hold eller klasser
 CREATE TABLE user_group
 (
     user_group_id           serial      NOT NULL PRIMARY KEY,
-    user_group_name         varchar(50) NOT NULL
+    user_group_name         varchar(50) NOT NULL UNIQUE ,
+    course_id               int         NULL REFERENCES course(course_id)
+);
+
+-- Hvilke brugere hører til hvilke hold/klasser
+CREATE TABLE user_group_users
+(
+    user_group_id           int         NOT NULL REFERENCES user_group(user_group_id),
+    user_id                 int         NOT NULL REFERENCES "user"(user_id),
+    is_teacher              bool        NOT NULL,
+    
+    PRIMARY KEY (user_group_id, user_id)
 );
 
 -- Lokaler, alle typer
 CREATE TABLE room
 (
     room_id                 serial      NOT NULL PRIMARY KEY ,
-    room_name               varchar(50) NOT NULL ,
+    room_name               varchar(50) NOT NULL UNIQUE ,
     room_size               int         NOT NULL ,
     room_comfort_capacity   int         NOT NULL,
     room_fire_capacity      int         NOT NULL,
+    room_comment            varchar(99) NOT NULL,
 
     room_type_id            int         NOT NULL REFERENCES room_type(room_type_id)
 
     -- TODO: Rum med skillevægge
 );
 
--- Farveopdeling af lokaler pr. bruger
-CREATE TABLE user_room_category
+-- Farveopdeling af lokaler pr. bruger + personlig bemærkning
+CREATE TABLE user_room_data
 (
     user_id                 int         NOT NULL REFERENCES "user"(user_id),
     room_id                 int         NOT NULL REFERENCES room(room_id),
-    color                   int         NOT NULL -- argb
+    color                   int         NOT NULL , -- argb
+    comment                 varchar(99) NOT NULL ,
+
+    PRIMARY KEY (user_id, room_id)
 );
 
 
@@ -87,37 +102,46 @@ CREATE TABLE time_slot
     time_slot_end           time        NOT NULL
 );
 
+CREATE TABLE booking
+(
+    booking_id              serial      NOT NULL PRIMARY KEY ,
+    date                    date        NOT NULL,
+    start_time              time        NOT NULL,
+    end_time                time        NOT NULL,
+    room_id                 int         NOT NULL REFERENCES "room"(room_id) ,
+    user_id                 int         NOT NULL REFERENCES "user"(user_id)
+);
 
 
 INSERT INTO user_type
-    (user_type_name, can_edit_users)
+    (user_type_name, can_edit_users, can_edit_rooms, max_booking_count)
 VALUES
-    /* 1 */ ('Admin', true),
-    /* 2 */ ('Medarbejder', true),
-    /* 3 */ ('Studerende', true),
-    /* 4 */ ('Studerende (Bachelor)', true);
+    /* id = 1 */ ('Skemalægger', true, true, 0),
+    /* id = 2 */ ('Medarbejder', false, false, 0),
+    /* id = 3 */ ('Studerende', false, false, 2),
+    /* id = 4 */ ('Studerende (Bachelor)', false, false, 2);
 
 INSERT INTO room_type
     (room_type_name)
 VALUES
-    /* 1 */ ('Grupperum'),
-    /* 2 */ ('Bachelorrum'),
-    /* 3 */ ('Medarbejderum'),
-    /* 4 */ ('Klasselokale'),
-    /* 5 */ ('Auditorium'),
-    /* 6 */ ('Laboratorium'),
-    /* 7 */ ('Hub');
+    /* id = 1 */ ('Grupperum'),
+    /* id = 2 */ ('Bachelorrum'),
+    /* id = 3 */ ('Medarbejderum'),
+    /* id = 4 */ ('Klasselokale'),
+    /* id = 5 */ ('Auditorium'),
+    /* id = 6 */ ('Laboratorium'),
+    /* id = 7 */ ('Hub');
 
 INSERT INTO user_type_allowed_room_type
     (user_type_id, room_type_id)
 VALUES
-    (1, 1), -- Admin, Grupperum
-    (1, 2), -- Admin, Bachelorum
-    (1, 3), -- Admin, Medarbejderum
-    (1, 4), -- Admin, Klasselokale
-    (1, 5), -- Admin, Auditorium
-    (1, 6), -- Admin, Laboratorium
-    (1, 7), -- Admin, Hub
+    (1, 1), -- Skemalægger, Grupperum
+    (1, 2), -- Skemalægger, Bachelorum
+    (1, 3), -- Skemalægger, Medarbejderum
+    (1, 4), -- Skemalægger, Klasselokale
+    (1, 5), -- Skemalægger, Auditorium
+    (1, 6), -- Skemalægger, Laboratorium
+    (1, 7), -- Skemalægger, Hub
 
     (2, 1), -- Medarbejder, Grupperum
     (2, 2), -- Medarbejder, Bachelorum
@@ -144,7 +168,4 @@ VALUES
     -- (4, 7), -- Studerende (Bachelor), Hub
     ;
 
-SELECT ut.user_type_name, rt.room_type_name
-FROM user_type_allowed_room_type utart
-INNER JOIN user_type ut ON utart.user_type_id = ut.user_type_id
-INNER JOIN room_type rt ON utart.room_type_id = rt.room_type_id;
+
