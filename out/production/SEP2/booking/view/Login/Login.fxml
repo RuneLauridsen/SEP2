@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="292.0" prefWidth="317.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.view.Login.LoginController">
+<AnchorPane prefHeight="292.0" prefWidth="317.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.view.login.LoginController">
    <children>
       <VBox layoutX="7.0" prefHeight="264.0" prefWidth="275.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
          <children>
@@ -24,8 +23,8 @@
                   </Label>
                </children>
             </HBox>
-            <Label text="Username " />
-            <TextField fx:id="txtUsername" />
+            <Label text="VIA ID" />
+            <TextField fx:id="txtVIAID" />
             <Label text="Password">
                <VBox.margin>
                   <Insets top="20.0" />

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="315.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.view.homeScreen.UserHomeScreen">
+   <children>
+      <VBox fx:id="mainVBox" layoutY="22.0" prefHeight="368.0" prefWidth="581.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Label text="Hello Name!">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <Line endX="200.49290466308594" startX="-100.0" />
+            <Label text="Active bookings:">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label text="There are no active bookings" />
+            <TableView fx:id="tblActiveBookings" prefHeight="200.0" prefWidth="386.0" visible="false">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Room" />
+                <TableColumn prefWidth="75.0" text="Date" />
+                  <TableColumn prefWidth="75.0" text="From" />
+                  <TableColumn prefWidth="75.0" text="To" />
+              </columns>
+            </TableView>
+            <Label text="Test" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
