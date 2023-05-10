@@ -2,7 +2,9 @@ package booking;
 
 import booking.core.User;
 import booking.view.userGUI.HomeScreen;
+import booking.database.Persistence;
 import booking.view.login.Login;
+import booking.view.userGUI.HomeScreenViewModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,11 +22,13 @@ public class ViewHandler
 
     private final Stage primaryStage;
     private final ViewModelFactory viewModelFactory;
+    private final Persistence persistence;
 
-    public ViewHandler(Stage primaryStage, ViewModelFactory viewModelFactory)
+    public ViewHandler(Stage primaryStage, ViewModelFactory viewModelFactory, Persistence persistence)
     {
         this.primaryStage = primaryStage;
         this.viewModelFactory = viewModelFactory;
+        this.persistence = persistence;
     }
 
     public void showLogin()
@@ -39,7 +43,7 @@ public class ViewHandler
             root = loader.load();
 
             Login view = loader.getController();
-            view.init(viewModelFactory.getLoginViewModel(this, null));
+            view.init(viewModelFactory.getLoginViewModel(this, persistence));
 
             scene = new Scene(root, 309, 238);
             primaryStage.setScene(scene);
@@ -62,8 +66,11 @@ public class ViewHandler
             loader.setLocation(getClass().getResource("view/userGUI/HomeScreen.fxml"));
             root = loader.load();
 
+            HomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this, persistence);
+            viewModel.setUser(user);
+            
             HomeScreen view = loader.getController();
-            view.init(viewModelFactory.getUserHomeScreenViewModel(this, null));
+            view.init(viewModel);
 
             scene = new Scene(root);
             primaryStage.setScene(scene);
@@ -75,14 +82,29 @@ public class ViewHandler
         }
     }
 
+    public void showInfo(String text)
+    {
+        showInfo(text, "");
+    }
+
     public void showInfo(String header, String content)
     {
         showAlert(Alert.AlertType.INFORMATION, DEFAULT_WINDOW_TITLE, header, content);
     }
 
+    public void showWarning(String text)
+    {
+        showWarning(text, "");
+    }
+
     public void showWarning(String header, String content)
     {
         showAlert(Alert.AlertType.WARNING, DEFAULT_WINDOW_TITLE, header, content);
+    }
+
+    public void showError(String text)
+    {
+        showError(text, "");
     }
 
     public void showError(String header, String content)

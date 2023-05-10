@@ -15,7 +15,7 @@
     <children>
         <VBox fx:id="mainVBox" layoutY="22.0" prefHeight="317.0" prefWidth="302.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
-                <Label text="Hello Name!">
+                <Label fx:id="lblName">
                     <font>
                         <Font size="21.0"/>
                     </font>
@@ -33,10 +33,10 @@
                 </Label>
                 <TableView fx:id="tblActiveBookings" prefHeight="200.0" prefWidth="386.0">
                     <columns>
-                        <TableColumn prefWidth="75.0" text="Room"/>
-                        <TableColumn prefWidth="75.0" text="Date"/>
-                        <TableColumn prefWidth="75.0" text="From"/>
-                        <TableColumn prefWidth="75.0" text="To"/>
+                        <TableColumn prefWidth="75.0" text="Room" fx:id="colRoom"/>
+                        <TableColumn prefWidth="75.0" text="Date" fx:id="colDate"/>
+                        <TableColumn prefWidth="75.0" text="From" fx:id="colFrom"/>
+                        <TableColumn prefWidth="75.0" text="To" fx:id="colTo"/>
                     </columns>
                 </TableView>
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="302.0">
