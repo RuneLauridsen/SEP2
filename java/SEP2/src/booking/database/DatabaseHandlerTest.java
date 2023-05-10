@@ -20,26 +20,23 @@ public class DatabaseHandlerTest
         var roomC0206 = allRooms.get(5);
         var userRune = allUsers.get(0);
 
-        var bookings1 = persistence.getActiveBookings(
-            userRune,
-            LocalDate.MIN,
-            LocalDate.MAX
-        );
+        //        persistence.insertBooking(
+        //            userRune,
+        //            roomC0206,
+        //            new BookingInterval(
+        //                LocalDate.of(2023, 5, 8),
+        //                LocalTime.of(19, 0),
+        //                LocalTime.of(21, 0)
+        //            )
+        //        );
 
-        persistence.insertBooking(
+        var rooms = persistence.getAvailableRooms(
             userRune,
-            roomC0206,
             new BookingInterval(
                 LocalDate.of(2023, 5, 8),
-                LocalTime.of(11, 0),
-                LocalTime.of(13, 0)
+                LocalTime.of(11, 10),
+                LocalTime.of(11, 20)
             )
-        );
-
-        var bookings2 = persistence.getActiveBookings(
-            allUsers.get(0),
-            LocalDate.MIN,
-            LocalDate.MAX
         );
 
         database.close();

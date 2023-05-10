@@ -33,4 +33,8 @@ public interface Persistence
 
     // Laver en ny booking. Checker ikke efter overlap, lokalets ledighed osv.
     public void insertBooking(User user, Room room, BookingInterval interval);
+
+    // Henter all ledige lokaler. Tager højde for brugertyper, dvs. hvis brugertype er studerende
+    // vil getAvailableRooms aldrig returnere medarbejderrum, selvom er eller flere medarbejderrum er ledige.
+    public List<Room> getAvailableRooms(User user, BookingInterval interval);
 }
