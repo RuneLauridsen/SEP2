@@ -13,7 +13,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.view.userGUI.UserBookRoom">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
@@ -33,7 +32,7 @@
                         <HBox prefHeight="41.0" prefWidth="294.0">
                            <children>
                               <Label text="Date:" />
-                              <DatePicker fx:id="dpDate">
+                              <DatePicker fx:id="dpDate" promptText="dd/mm/yyyy">
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>

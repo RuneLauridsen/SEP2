@@ -1,7 +1,7 @@
 package booking;
 
 import booking.core.User;
-import booking.view.userGUI.HomeScreen;
+import booking.view.userGUI.*;
 import booking.database.Persistence;
 import booking.view.login.Login;
 import booking.view.userGUI.HomeScreenViewModel;
@@ -40,11 +40,11 @@ public class ViewHandler
             FXMLLoader loader = new FXMLLoader();
             Parent root = null;
 
-            loader.setLocation(getClass().getResource("view/login/Login.fxml"));
+            loader.setLocation(getClass().getResource("view/userGUI/UserBookRoom.fxml"));
             root = loader.load();
 
-            Login view = loader.getController();
-            view.init(viewModelFactory.getLoginViewModel(this, persistence));
+            UserBookRoom view = loader.getController();
+            view.init(viewModelFactory.getUserBookRoomViewModel(this, persistence));
 
             scene = new Scene(root, 309, 238);
             primaryStage.setScene(scene);
@@ -67,7 +67,7 @@ public class ViewHandler
             loader.setLocation(getClass().getResource("view/userGUI/UserBookRoom.fxml"));
             root = loader.load();
 
-            HomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this, persistence);
+            UserBookRoomViewModel viewModel = viewModelFactory.getUserBookRoomViewModel(this, persistence);
             viewModel.setUser(user);
             
             UserBookRoom view = loader.getController();

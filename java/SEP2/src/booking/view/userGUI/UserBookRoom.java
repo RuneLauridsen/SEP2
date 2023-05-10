@@ -25,7 +25,7 @@ public class UserBookRoom
   ObservableList<String> timeIntervals = FXCollections.observableArrayList();
   ObservableList<String> buildings = FXCollections.observableArrayList();
   ObservableList<Integer> floors = FXCollections.observableArrayList();
-  public void init(HomeScreenViewModel viewModel){
+  public void init(UserBookRoomViewModel viewModel){
     timeIntervals.addAll(List.of("7:00","7:15","7:30","7:45","8:00","8:15","8:30","8:45","9:00","9:15","9:30","9:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00"));
     buildings.addAll(List.of("A","B","C"));
     //TODO only 5 floors for normal
