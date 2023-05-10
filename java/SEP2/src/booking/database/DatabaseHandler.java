@@ -7,6 +7,7 @@ import booking.core.RoomType;
 import booking.core.User;
 import booking.core.UserType;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -326,10 +327,26 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public List<Room> getAvailableRooms(User user, BookingInterval interval)
+    public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, String building, Integer floor)
     {
         Objects.requireNonNull(user);
         Objects.requireNonNull(interval);
+
+        String floorString = null;
+        if (floor != null)
+        {
+            floorString = floor.toString();
+        }
+
+        if (minCapacity == null)
+        {
+            minCapacity = Integer.MIN_VALUE;
+        }
+
+        if (maxCapacity == null)
+        {
+            maxCapacity = Integer.MAX_VALUE;
+        }
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
@@ -337,10 +354,14 @@ public class DatabaseHandler implements Persistence
             + "FROM sep2.room r "
             + "INNER JOIN sep2.\"user\" u ON u.user_id = ? "
             + "INNER JOIN sep2.user_type_allowed_room_type utart ON r.room_type_id = utart.room_type_id AND u.user_type_id = utart.user_type_id "
-            + "INNER JOIN sep2.booking b ON r.room_id = b.room_id "
-            + "WHERE (b.booking_date <> ?) OR NOT (b.booking_end_time > ? AND b.booking_start_time < ?) "
+            + "LEFT OUTER JOIN sep2.booking b ON r.room_id = b.room_id "
+            + "WHERE ((b.booking_id IS NULL) OR (b.booking_date <> ?) OR NOT (b.booking_end_time > ? AND b.booking_start_time < ?)) "
+            + "AND ((r.room_comfort_capacity >= ?))  "
+            + "AND ((r.room_comfort_capacity <= ?))  "
+            + "AND ((substr(r.room_name, 1, 1) = ?) OR (? IS NULL)) "
+            + "AND ((substr(r.room_name, 3, 1) = ?) OR (? IS NULL)) "
             + "GROUP BY r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id "
-            + "ORDER BY r.room_name ";
+            + "ORDER BY r.room_name;";
 
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -352,6 +373,12 @@ public class DatabaseHandler implements Persistence
             statement.setDate(2, Date.valueOf(interval.getDate()));
             statement.setTime(3, Time.valueOf(interval.getStart()));
             statement.setTime(4, Time.valueOf(interval.getEnd()));
+            statement.setInt(5, minCapacity);
+            statement.setInt(6, maxCapacity);
+            statement.setString(7, building);
+            statement.setString(8, building);
+            statement.setString(9, floorString);
+            statement.setString(10, floorString);
             resultSet = statement.executeQuery();
 
             List<Room> rooms = new ArrayList<>();
@@ -405,6 +432,7 @@ public class DatabaseHandler implements Persistence
             statement.setString(1, name);
             statement.setString(2, initials);
 
+            // TODO(rune): Brug setObject i stedet?
             if (viaid == null)
             {
                 statement.setNull(3, Types.INTEGER);
@@ -482,6 +510,18 @@ public class DatabaseHandler implements Persistence
                 // TODO(rune): Hvad gør vi hvis resultSet ikke kan lukkes?
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private static void statementSetInteger(int index, Integer value, PreparedStatement statement) throws SQLException
+    {
+        if (value == null)
+        {
+            statement.setNull(index, Types.INTEGER);
+        }
+        else
+        {
+            statement.setInt(index, value);
         }
     }
 }

@@ -1,9 +1,11 @@
 package booking.database;
 
+import booking.core.BookingInterval;
 import booking.core.User;
 
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class DatabaseHandlerTest
 {
@@ -19,33 +21,18 @@ public class DatabaseHandlerTest
         User gitte = persistence.getUser("Gitte");
         User simon = persistence.getUser("Simon");
 
-
-        /*
-
-        var allRooms = persistence.getAllRooms();
-        var userRune = persistence.getUser("Rune");
-
-        var roomC0206 = allRooms.get(5);
-
-        //        persistence.insertBooking(
-        //            userRune,
-        //            roomC0206,
-        //            new BookingInterval(
-        //                LocalDate.of(2023, 5, 8),
-        //                LocalTime.of(19, 0),
-        //                LocalTime.of(21, 0)
-        //            )
-        //        );
-
         var rooms = persistence.getAvailableRooms(
-            userRune,
+            rune,
             new BookingInterval(
-                LocalDate.of(2023, 5, 8),
-                LocalTime.of(11, 10),
-                LocalTime.of(11, 20)
-            )
+                LocalDate.of(2023, 5, 30),
+                LocalTime.of(10, 0),
+                LocalTime.of(16, 0)
+            ),
+            13,       // min cap
+            15,       // max cap
+            null,       // bygning
+            null        // etage
         );
-         */
 
         database.close();
     }

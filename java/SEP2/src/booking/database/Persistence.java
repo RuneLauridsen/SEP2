@@ -34,9 +34,11 @@ public interface Persistence
     // Tilføjer en ny booking. Checker ikke efter overlap, lokalets ledighed osv.
     public void createBooking(User user, Room room, BookingInterval interval);
 
-    // Henter all ledige lokaler. Tager højde for brugertyper, dvs. hvis brugertype er studerende
+    // Henter alle ledige lokaler.
+    // minCapacity, maxCapacity, building og floor kan sættes til null, hvis parameteret skal ignoreres.
+    // getAvailableRooms tager også højde for brugertyper, dvs. hvis brugertype er studerende
     // vil getAvailableRooms aldrig returnere medarbejderrum, selvom er eller flere medarbejderrum er ledige.
-    public List<Room> getAvailableRooms(User user, BookingInterval interval);
+    public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, String building, Integer floor);
 
     // Tilføjer en ny bruger. Returnere false hvis brugernavnet er optaget.
     public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type);
