@@ -45,6 +45,16 @@ public class LoginViewModel
     public void loginAction()
     {
         // TODO(rune): Bedre login. Server skal tjekke password.
+        // Lige nu tjekker den kun brugernavnet.
 
+        User user = persistence.getUser(username.get());
+        if (user != null)
+        {
+            viewHandler.showHomeScreen(user);
+        }
+        else
+        {
+            viewHandler.showInfo("Forkert brugernavn eller adgangskode");
+        }
     }
 }
