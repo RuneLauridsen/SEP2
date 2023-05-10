@@ -460,9 +460,16 @@ public class DatabaseHandler implements Persistence
 
     private static Connection openConnection() throws SQLException
     {
-        // TODO(rune): Forbinde til rigtig database, ikke bare localhost. Måske er måde at konfigurere
-        // hvilken connection string der skal bruges, f.eks. debug database eller prod database.
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "asdasd");
+        switch (System.getProperty("user.name"))
+        {
+            case "runel":
+                // TODO(rune): Forbinde til rigtig database, ikke bare localhost. Måske er måde at konfigurere
+                // hvilken connection string der skal bruges, f.eks. debug database eller prod database.
+                return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "asdasd");
+
+            default:
+                throw new RuntimeException("Unknown user");
+        }
     }
 
     private static void closeConnection(Connection connection)
