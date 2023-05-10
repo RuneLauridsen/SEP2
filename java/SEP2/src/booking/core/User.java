@@ -2,30 +2,60 @@ package booking.core;
 
 public class User
 {
-    private int viaId;
-    private UserType type;
+    private final int id;
+    private final String name;
+    private final String initials;    // NOTE(rune): Null hvis ikke medarbejder
+    private final Integer viaId;      // NOTE(rune): Null hvis ikke studerende
+    private final UserType type;
 
-    public User(int viaID, UserType type)
+    public User(int id, String name, String initials, Integer viaId, UserType type)
     {
-        this.viaId = viaID;
+        this.id = id;
+        this.name = name;
+        this.initials = initials;
+        this.viaId = viaId;
         this.type = type;
     }
 
-    public int getMaxNumberOfActiveBookings()
+    public int getId()
     {
-        switch (type)
+        return id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getInitials()
+    {
+        return initials;
+    }
+
+    public Integer getViaId()
+    {
+        return viaId;
+    }
+
+    public UserType getType()
+    {
+        return type;
+    }
+
+    @Override public boolean equals(Object obj)
+    {
+        if (obj instanceof User other)
         {
-            case USER_TYPE_STUDENT:
-                return 2;
-
-            case USER_TYPE_TEACHER:
-                return Integer.MAX_VALUE;
-
-            case USER_TYPE_ADMIN:
-                return Integer.MAX_VALUE;
-
-            default:
-                throw new IllegalArgumentException();
+            return this.id == other.id;
         }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override public String toString()
+    {
+        return name;
     }
 }

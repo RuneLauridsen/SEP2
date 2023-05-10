@@ -58,12 +58,11 @@ CREATE TABLE user_group
 );
 
 -- Hvilke brugere hører til hvilke hold/klasser
-CREATE TABLE user_group_users
+CREATE TABLE user_group_user
 (
     user_group_id           int         NOT NULL REFERENCES user_group(user_group_id),
     user_id                 int         NOT NULL REFERENCES "user"(user_id),
-    is_teacher              bool        NOT NULL,
-    
+
     PRIMARY KEY (user_group_id, user_id)
 );
 
@@ -105,9 +104,9 @@ CREATE TABLE time_slot
 CREATE TABLE booking
 (
     booking_id              serial      NOT NULL PRIMARY KEY ,
-    date                    date        NOT NULL,
-    start_time              time        NOT NULL,
-    end_time                time        NOT NULL,
+    booking_date            date        NOT NULL,
+    booking_start_time      time        NOT NULL,
+    booking_end_time        time        NOT NULL,
     room_id                 int         NOT NULL REFERENCES "room"(room_id) ,
     user_id                 int         NOT NULL REFERENCES "user"(user_id)
 );
@@ -169,3 +168,22 @@ VALUES
     ;
 
 
+INSERT INTO room
+    (room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id)
+VALUES
+    /* id = 1 */ ('C02.01', 123, 123, 123, '', 1),
+    /* id = 2 */ ('C02.02', 123, 123, 123, '', 1),
+    /* id = 3 */ ('C02.03', 123, 123, 123, '', 1),
+    /* id = 4 */ ('C02.04', 123, 123, 123, '', 1),
+    /* id = 5 */ ('C02.05', 123, 123, 123, '', 1),
+    /* id = 6 */ ('C02.06', 123, 123, 123, '', 1);
+
+INSERT INTO "user"
+    (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
+VALUES
+    ('Rune', 'RLAU', 331689, 0, 3);
+
+INSERT INTO "user"
+    (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
+VALUES
+    ('Rune2', 'RLAU2', 331689, 0, 3);

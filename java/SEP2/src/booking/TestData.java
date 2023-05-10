@@ -16,6 +16,7 @@ public class TestData
     {
         BookingSystem model = new BookingSystem();
 
+        /*
         User brugerA = new User(1, UserType.USER_TYPE_STUDENT);
         User brugerB = new User(1, UserType.USER_TYPE_STUDENT);
         User brugerC = new User(1, UserType.USER_TYPE_STUDENT);
@@ -49,7 +50,7 @@ public class TestData
                 LocalTime.of(18, 0, 0)),
             brugerB,
             roomB));
-
+        */
         return model;
     }
 }

@@ -7,14 +7,14 @@ import java.util.Objects;
 public class BookingInterval
 {
     private final LocalDate date;
-    private final LocalTime from;
-    private final LocalTime to;
+    private final LocalTime start;
+    private final LocalTime end;
 
     public BookingInterval(LocalDate date, LocalTime from, LocalTime to)
     {
         this.date = Objects.requireNonNull(date);
-        this.from = Objects.requireNonNull(from);
-        this.to = Objects.requireNonNull(to);
+        this.start = Objects.requireNonNull(from);
+        this.end = Objects.requireNonNull(to);
     }
 
     public LocalDate getDate()
@@ -22,20 +22,20 @@ public class BookingInterval
         return date;
     }
 
-    public LocalTime getFrom()
+    public LocalTime getStart()
     {
-        return from;
+        return start;
     }
 
-    public LocalTime getTo()
+    public LocalTime getEnd()
     {
-        return to;
+        return end;
     }
 
     public boolean isOverlapWith(LocalTime time)
     {
-        boolean isAfterFrom = time.isAfter(from) || time.equals(from);
-        boolean isBeforeTo = time.isBefore(to) || time.equals(to);
+        boolean isAfterFrom = time.isAfter(start) || time.equals(start);
+        boolean isBeforeTo = time.isBefore(end) || time.equals(end);
 
         if (isAfterFrom && isBeforeTo)
         {
@@ -60,16 +60,21 @@ public class BookingInterval
             return false;
         }
 
-        if (isOverlapWith(other.from))
+        if (isOverlapWith(other.start))
         {
             return false;
         }
 
-        if (isOverlapWith(other.to))
+        if (isOverlapWith(other.end))
         {
             return false;
         }
 
         return false;
+    }
+
+    @Override public String toString()
+    {
+        return date + " " + start + "-" + end;
     }
 }

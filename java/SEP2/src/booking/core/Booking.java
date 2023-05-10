@@ -2,36 +2,32 @@ package booking.core;
 
 public class Booking
 {
-    private BookingInterval interval;
-    private User bruger;
-    private Room room;
+    private final int id;
+    private final BookingInterval interval;
+    private final Room room;
+    private final User user;
 
-    public Booking(BookingInterval interval, User bruger, Room room)
+    public Booking(int id, BookingInterval interval, Room room, User user)
     {
+        this.id = id;
         this.interval = interval;
-        this.bruger = bruger;
+        this.user = user;
         this.room = room;
     }
 
-    // TODO(rune): Maybe add copy methods
+    public int getId()
+    {
+        return id;
+    }
+
     public BookingInterval getInterval()
     {
         return interval;
     }
 
-    public void setInterval(BookingInterval interval)
+    public User getUser()
     {
-        this.interval = interval;
-    }
-
-    public User getBruger()
-    {
-        return bruger;
-    }
-
-    public void setBruger(User bruger)
-    {
-        this.bruger = bruger;
+        return user;
     }
 
     public Room getRoom()
@@ -39,8 +35,8 @@ public class Booking
         return room;
     }
 
-    public void setRoom(Room room)
+    @Override public String toString()
     {
-        this.room = room;
+        return user + " " + room + " " + interval;
     }
 }
