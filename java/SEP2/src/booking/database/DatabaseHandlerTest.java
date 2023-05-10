@@ -1,5 +1,7 @@
 package booking.database;
 
+import booking.core.BookingInterval;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,31 +12,36 @@ public class DatabaseHandlerTest
     {
         var database = new DatabaseHandler();
         database.open();
+        var persistence = (Persistence) database;
 
-        var allRooms = database.getAllRooms();
-        var allUsers = database.getAllUsers();
+        var allRooms = persistence.getAllRooms();
+        var allUsers = persistence.getAllUsers();
 
         var roomC0206 = allRooms.get(5);
         var userRune = allUsers.get(0);
 
-        var bookings1 = database.getActiveBookings(
+        var bookings1 = persistence.getActiveBookings(
             userRune,
             LocalDate.MIN,
             LocalDate.MAX
         );
 
-        database.insertBooking(
+        persistence.insertBooking(
             userRune,
             roomC0206,
-            LocalDate.of(2023, 5, 8),
-            LocalTime.of(11, 0),
-            LocalTime.of(13, 0)
+            new BookingInterval(
+                LocalDate.of(2023, 5, 8),
+                LocalTime.of(11, 0),
+                LocalTime.of(13, 0)
+            )
         );
 
-        var bookings2 = database.getActiveBookings(
+        var bookings2 = persistence.getActiveBookings(
             allUsers.get(0),
             LocalDate.MIN,
             LocalDate.MAX
         );
+
+        database.close();
     }
 }

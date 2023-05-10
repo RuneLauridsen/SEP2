@@ -24,7 +24,9 @@ import java.util.Map;
 import java.util.Objects;
 
 // TODO(rune): Måske noget connection pooling?
-public class DatabaseHandler
+// TODO(rune): Er der en bedre måde at skrive lange SQL queries ind i java? Det kan
+// godt være lidt svært at finde rundt i, når de bare står som String literals.
+public class DatabaseHandler implements Persistence
 {
     private Connection connection;
 
@@ -85,10 +87,6 @@ public class DatabaseHandler
         }
     }
 
-    /**
-     * Henter all lokaletyper.
-     * Key = UserType.id, Value = UserType
-     */
     public Map<Integer, RoomType> getAllRoomTypes()
     {
         Statement statement = null;
@@ -167,10 +165,6 @@ public class DatabaseHandler
         }
     }
 
-    /**
-     * Henter all brugertyper og hvilke lokaletyper de må booke.
-     * Key = UserType.id, Value = UserType
-     */
     public Map<Integer, UserType> getAllUserTypes()
     {
         Statement statement = null;
@@ -233,9 +227,6 @@ public class DatabaseHandler
         }
     }
 
-    /**
-     * Henter alle bookinger for en bestemt bruger i et bestemt dato interval.
-     */
     public List<Booking> getActiveBookings(User user, LocalDate startDate, LocalDate endDate)
     {
         Objects.requireNonNull(user);
@@ -300,13 +291,11 @@ public class DatabaseHandler
         }
     }
 
-    public void insertBooking(User user, Room room, LocalDate date, LocalTime startTime, LocalTime endTime)
+    public void insertBooking(User user, Room room, BookingInterval interval)
     {
         Objects.requireNonNull(user);
         Objects.requireNonNull(room);
-        Objects.requireNonNull(date);
-        Objects.requireNonNull(startTime);
-        Objects.requireNonNull(endTime);
+        Objects.requireNonNull(interval);
 
         String query = "INSERT INTO sep2.booking "
             + " (booking_date, booking_start_time, booking_end_time, room_id, user_id) "
@@ -318,9 +307,9 @@ public class DatabaseHandler
         try
         {
             statement = connection.prepareStatement(query);
-            statement.setDate(1, Date.valueOf(date));
-            statement.setTime(2, Time.valueOf(startTime));
-            statement.setTime(3, Time.valueOf(endTime));
+            statement.setDate(1, Date.valueOf(interval.getDate()));
+            statement.setTime(2, Time.valueOf(interval.getStart()));
+            statement.setTime(3, Time.valueOf(interval.getEnd()));
             statement.setInt(4, room.getId());
             statement.setInt(5, user.getId());
             statement.execute();
@@ -337,7 +326,8 @@ public class DatabaseHandler
 
     private static Connection openConnection() throws SQLException
     {
-        // TODO(rune): Forbinde til rigtig database, ikke bare localhost
+        // TODO(rune): Forbinde til rigtig database, ikke bare localhost. Måske er måde at konfigurere
+        // hvilken connection string der skal bruges, f.eks. debug database eller prod database.
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "asdasd");
     }
 

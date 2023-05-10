@@ -10,11 +10,11 @@ public class BookingInterval
     private final LocalTime start;
     private final LocalTime end;
 
-    public BookingInterval(LocalDate date, LocalTime from, LocalTime to)
+    public BookingInterval(LocalDate date, LocalTime start, LocalTime end)
     {
         this.date = Objects.requireNonNull(date);
-        this.start = Objects.requireNonNull(from);
-        this.end = Objects.requireNonNull(to);
+        this.start = Objects.requireNonNull(start);
+        this.end = Objects.requireNonNull(end);
     }
 
     public LocalDate getDate()
