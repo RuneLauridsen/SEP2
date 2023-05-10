@@ -1,7 +1,7 @@
 package booking;
 
 import booking.core.User;
-import booking.view.homeScreen.HomeScreen;
+import booking.view.userGUI.HomeScreen;
 import booking.view.login.Login;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -59,7 +59,7 @@ public class ViewHandler
             FXMLLoader loader = new FXMLLoader();
             Parent root = null;
 
-            loader.setLocation(getClass().getResource("view/homeScreen/HomeScreen.fxml"));
+            loader.setLocation(getClass().getResource("view/userGUI/HomeScreen.fxml"));
             root = loader.load();
 
             HomeScreen view = loader.getController();

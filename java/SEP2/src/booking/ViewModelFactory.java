@@ -1,7 +1,7 @@
 package booking;
 
 import booking.database.Persistence;
-import booking.view.homeScreen.HomeScreenViewModel;
+import booking.view.userGUI.HomeScreenViewModel;
 import booking.view.login.LoginViewModel;
 
 import javax.swing.text.View;

@@ -1,4 +1,4 @@
-package booking.view.homeScreen;
+package booking.view.userGUI;
 
 import booking.ViewHandler;
 import booking.database.Persistence;
