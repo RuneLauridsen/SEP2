@@ -1,20 +1,19 @@
 package booking;
 
-import booking.view.chooseDate.ChooseDateView;
-import booking.view.chooseDate.ChooseDateViewModel;
-import booking.view.homeScreen.UserHomeScreen;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class App extends Application
 {
     @Override public void start(Stage primaryStage) throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/homeScreen/UserHomeScreen.fxml"));
+        ViewModelFactory viewModelFactory = new ViewModelFactory();
+        ViewHandler viewHandler = new ViewHandler(primaryStage, viewModelFactory);
+        viewHandler.showHomeScreen(null);
+        viewHandler.showLogin();
+
+        /*
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/homeScreen/HomeScreen.fxml"));
         Scene scene = null;
         try
         {
@@ -26,12 +25,14 @@ public class App extends Application
         }
 
         //ChooseDateViewModel viewModel = new ChooseDateViewModel();
-        UserHomeScreen controller = fxmlLoader.getController();
+        HomeScreen controller = fxmlLoader.getController();
         controller.init();
         //controller.init(viewModel);
 
         primaryStage.setTitle("Booking");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+         */
     }
 }

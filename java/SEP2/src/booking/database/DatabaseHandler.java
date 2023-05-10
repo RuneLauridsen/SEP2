@@ -15,8 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.sql.Types;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +26,7 @@ import java.util.Objects;
 // TODO(rune): Måske noget connection pooling?
 // TODO(rune): Er der en bedre måde at skrive lange SQL queries ind i java? Det kan
 // godt være lidt svært at finde rundt i, når de bare står som String literals.
+// TODO(rune): Dette er en stor klasse, skal den deles op i mindre dele?
 public class DatabaseHandler implements Persistence
 {
     private Connection connection;
@@ -44,37 +45,38 @@ public class DatabaseHandler implements Persistence
         closeConnection(connection);
     }
 
-    public List<User> getAllUsers()
+    public User getUser(String username)
     {
-        Statement statement = null;
+        Objects.requireNonNull(username);
+
+        Map<Integer, UserType> userTypes = getUserTypes();
+
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try
         {
-            Map<Integer, UserType> userTypes = getAllUserTypes();
+            String query = "SELECT u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid FROM sep2.\"user\" u WHERE u.user_name = ?";
 
-            String query = "SELECT  "
-                + " u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid "
-                + "FROM sep2.\"user\" u";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            resultSet = statement.executeQuery();
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
-
-            List<User> users = new ArrayList<>();
-            while (resultSet.next())
+            if (resultSet.next())
             {
                 // Map resultSet til User objekt
-                users.add(new User(
+                return new User(
                     resultSet.getInt("user_id"),
                     resultSet.getString("user_name"),
                     resultSet.getString("user_initials"),
-                    resultSet.getInt("user_viaid"), // NOTE(rune): Hvis user_viaid er NULL, retunere resulSet.getInt 0.
+                    resultSet.getInt("user_viaid"), // NOTE(rune): Hvis user_viaid er NULL, returnere resulSet.getInt 0.
                     userTypes.get(resultSet.getInt("user_type_id"))
-                ));
+                );
             }
-
-            return users;
-
+            else
+            {
+                return null;
+            }
         }
         catch (SQLException e)
         {
@@ -87,7 +89,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public Map<Integer, RoomType> getAllRoomTypes()
+    public Map<Integer, RoomType> getRoomTypes()
     {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -124,9 +126,9 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public List<Room> getAllRooms()
+    public List<Room> getRooms()
     {
-        Map<Integer, RoomType> roomTypes = getAllRoomTypes();
+        Map<Integer, RoomType> roomTypes = getRoomTypes();
 
         Statement statement = null;
         ResultSet resultSet = null;
@@ -165,14 +167,14 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public Map<Integer, UserType> getAllUserTypes()
+    public Map<Integer, UserType> getUserTypes()
     {
         Statement statement = null;
         ResultSet resultSet = null;
 
         try
         {
-            Map<Integer, RoomType> roomTypes = getAllRoomTypes();
+            Map<Integer, RoomType> roomTypes = getRoomTypes();
 
             String query = "SELECT "
                 + "    ut.user_type_id, "
@@ -233,7 +235,7 @@ public class DatabaseHandler implements Persistence
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
 
-        Map<Integer, RoomType> roomTypes = getAllRoomTypes();
+        Map<Integer, RoomType> roomTypes = getRoomTypes();
 
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -291,7 +293,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public void insertBooking(User user, Room room, BookingInterval interval)
+    public void createBooking(User user, Room room, BookingInterval interval)
     {
         Objects.requireNonNull(user);
         Objects.requireNonNull(room);
@@ -329,7 +331,7 @@ public class DatabaseHandler implements Persistence
         Objects.requireNonNull(user);
         Objects.requireNonNull(interval);
 
-        Map<Integer, RoomType> roomTypes = getAllRoomTypes();
+        Map<Integer, RoomType> roomTypes = getRoomTypes();
 
         String query = "SELECT r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id "
             + "FROM sep2.room r "
@@ -377,6 +379,53 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
+
+    public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type)
+    {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(passwordHash);
+        Objects.requireNonNull(type);
+
+        User userWithSameName = getUser(name);
+        if (userWithSameName != null)
+        {
+            // Brugernavn er optaget.
+            return false;
+        }
+
+        PreparedStatement statement = null;
+
+        try
+        {
+            String query = "INSERT INTO sep2.\"user\" (user_name, user_initials, user_viaid, user_password_hash, user_type_id) VALUES (?, ?, ?, ?, ?);";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setString(2, initials);
+
+            if (viaid == null)
+            {
+                statement.setNull(3, Types.INTEGER);
+            }
+            else
+            {
+                statement.setInt(3, viaid);
+            }
+
+            statement.setString(4, passwordHash);
+            statement.setInt(5, type.getId());
+
+            statement.execute();
+            return true;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
             closeStatement(statement);
         }
     }

@@ -1,10 +1,9 @@
 package booking.database;
 
-import booking.core.BookingInterval;
+import booking.core.User;
 
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class DatabaseHandlerTest
 {
@@ -14,11 +13,19 @@ public class DatabaseHandlerTest
         database.open();
         var persistence = (Persistence) database;
 
+        var userTypes = persistence.getUserTypes();
+
+        User rune = persistence.getUser("Rune");
+        User gitte = persistence.getUser("Gitte");
+        User simon = persistence.getUser("Simon");
+
+
+        /*
+
         var allRooms = persistence.getAllRooms();
-        var allUsers = persistence.getAllUsers();
+        var userRune = persistence.getUser("Rune");
 
         var roomC0206 = allRooms.get(5);
-        var userRune = allUsers.get(0);
 
         //        persistence.insertBooking(
         //            userRune,
@@ -38,6 +45,7 @@ public class DatabaseHandlerTest
                 LocalTime.of(11, 20)
             )
         );
+         */
 
         database.close();
     }
