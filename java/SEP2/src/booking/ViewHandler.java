@@ -5,6 +5,7 @@ import booking.view.userGUI.HomeScreen;
 import booking.database.Persistence;
 import booking.view.login.Login;
 import booking.view.userGUI.HomeScreenViewModel;
+import booking.view.userGUI.UserBookRoom;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -63,13 +64,13 @@ public class ViewHandler
             FXMLLoader loader = new FXMLLoader();
             Parent root = null;
 
-            loader.setLocation(getClass().getResource("view/userGUI/HomeScreen.fxml"));
+            loader.setLocation(getClass().getResource("view/userGUI/UserBookRoom.fxml"));
             root = loader.load();
 
             HomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this, persistence);
             viewModel.setUser(user);
             
-            HomeScreen view = loader.getController();
+            UserBookRoom view = loader.getController();
             view.init(viewModel);
 
             scene = new Scene(root);
