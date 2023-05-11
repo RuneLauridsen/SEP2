@@ -9,11 +9,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
 
-public class HomeScreenViewModel
+public class UserHomeScreenViewModel
 {
     private final StringProperty username;
 
@@ -25,7 +24,7 @@ public class HomeScreenViewModel
     private Persistence persistence;
     private User user;
 
-    public HomeScreenViewModel(ViewHandler viewHandler, Persistence persistence)
+    public UserHomeScreenViewModel(ViewHandler viewHandler, Persistence persistence)
     {
         this.viewHandler = viewHandler;
         this.persistence = persistence;

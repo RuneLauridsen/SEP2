@@ -1,26 +1,46 @@
 package booking;
 
 import booking.database.Persistence;
+import booking.view.roomInfo.RoomInfoViewModel;
 import booking.view.userGUI.*;
 import booking.view.login.LoginViewModel;
 
 public class ViewModelFactory
 {
+    private LoginViewModel loginViewModel;
+    private UserBookRoomViewModel userBookRoomViewModel;
+    private UserHomeScreenViewModel userHomeScreenViewModel;
+
+    private RoomInfoViewModel roomInfoViewModel;
     public ViewModelFactory()
     {
     }
 
     public LoginViewModel getLoginViewModel(ViewHandler viewHandler, Persistence persistence)
     {
-        return new LoginViewModel(viewHandler, persistence);
+        if (loginViewModel == null){
+            loginViewModel = new LoginViewModel(viewHandler, persistence);
+        }
+        return loginViewModel;
     }
 
-    public HomeScreenViewModel getUserHomeScreenViewModel(ViewHandler viewHandler, Persistence persistence)
+    public UserHomeScreenViewModel getUserHomeScreenViewModel(ViewHandler viewHandler, Persistence persistence)
     {
-        return new HomeScreenViewModel(viewHandler, persistence);
+        if (userHomeScreenViewModel == null)
+            userHomeScreenViewModel = new UserHomeScreenViewModel(viewHandler, persistence);
+        return userHomeScreenViewModel;
     }
     public UserBookRoomViewModel getUserBookRoomViewModel(ViewHandler viewHandler, Persistence persistence)
     {
-        return new UserBookRoomViewModel(viewHandler, persistence);
+        if (userBookRoomViewModel == null)
+            userBookRoomViewModel = new UserBookRoomViewModel(viewHandler, persistence);
+        return userBookRoomViewModel;
+    }
+
+    public RoomInfoViewModel getRoomInfoViewModel (ViewHandler viewHandler, Persistence persistence)
+    {
+        if (roomInfoViewModel == null)
+            roomInfoViewModel = new RoomInfoViewModel(viewHandler, persistence);
+        return roomInfoViewModel;
     }
 }
