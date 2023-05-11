@@ -341,7 +341,7 @@ public class DatabaseHandler implements Persistence
         String buildingString = null;
         if (building != null)
         {
-            buildingString = buildingString.toString();
+            buildingString = building.toString();
         }
 
         if (minCapacity == null)
