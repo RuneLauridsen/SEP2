@@ -1,24 +1,17 @@
 package booking.view.userGUI;
 
-import booking.ViewHandler;
 import booking.core.Booking;
 import booking.core.Room;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableObjectValue;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Locale;
 
 public class HomeScreen
 {
@@ -31,9 +24,9 @@ public class HomeScreen
     @FXML private Label lblNoBookings;
     @FXML private Label lblName;
 
-    private HomeScreenViewModel viewModel;
+    private UserHomeScreenViewModel viewModel;
 
-    public void init(HomeScreenViewModel viewModel)
+    public void init(UserHomeScreenViewModel viewModel)
     {
         this.viewModel = viewModel;
 
