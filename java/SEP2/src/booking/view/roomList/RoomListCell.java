@@ -7,19 +7,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 
+import java.util.function.Consumer;
+
 public class RoomListCell extends ListCell<Room>
 {
     private final Label label;
     private final Button button;
     private final HBox hbox;
 
-    public RoomListCell()
+    public RoomListCell(String buttonText, Consumer<Room> onRoomClicked)
     {
         super();
 
         label = new Label();
-        button = new Button("Book");
-        button.setOnAction(event -> System.out.println("clicked"));
+        button = new Button(buttonText);
+        button.setOnAction(event -> onRoomClicked.accept(getItem()));
 
         hbox = new HBox();
         hbox.setSpacing(10);

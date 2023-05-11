@@ -14,7 +14,7 @@ public class RoomListView
     {
         this.viewModel = viewModel;
 
-        listView.setCellFactory(listView -> new RoomListCell());
+        //        listView.setCellFactory(listView -> new RoomListCell());
         listView.setItems(viewModel.getRoomList());
     }
 }

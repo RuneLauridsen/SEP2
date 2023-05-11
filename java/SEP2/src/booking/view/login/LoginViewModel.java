@@ -50,7 +50,7 @@ public class LoginViewModel
         User user = persistence.getUser(username.get());
         if (user != null)
         {
-            viewHandler.showHomeScreen(user);
+            viewHandler.showUserBookRoom(user);
         }
         else
         {

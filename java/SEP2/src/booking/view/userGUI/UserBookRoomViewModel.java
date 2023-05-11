@@ -136,6 +136,19 @@ public class UserBookRoomViewModel
         return roomList;
     }
 
+    public void bookRoom(Room room)
+    {
+        // TODO(rune): timeIntervals liste kunne evt. være med <LocalTime> i stedet,
+        // så vi slipper for at parse her.
+        LocalTime startTime = parseLocalDateTime(selectedFromTime.get());
+        LocalTime endTime = parseLocalDateTime(selectedToTime.get());
+        BookingInterval requestedInterval = new BookingInterval(selectedDate.get(), startTime, endTime);
+
+        persistence.createBooking(user, room, requestedInterval);
+
+        viewHandler.showInfo("Lokale " + room + " er booking til " + requestedInterval);
+    }
+
     private static LocalTime parseLocalDateTime(String s)
     {
         // TODO(rune): Argument validation

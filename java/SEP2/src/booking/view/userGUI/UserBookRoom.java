@@ -44,7 +44,7 @@ public class UserBookRoom
         cbbBuilding.valueProperty().bindBidirectional(viewModel.selectedBuildingProperty());
         cbbFloor.valueProperty().bindBidirectional(viewModel.selectedFloorProperty());
 
-        //lvRooms.setCellFactory(listView -> new RoomListCell());
+        lvRooms.setCellFactory(listView -> new RoomListCell("Book", viewModel::bookRoom));
         lvRooms.setItems(viewModel.getRoomList());
     }
 

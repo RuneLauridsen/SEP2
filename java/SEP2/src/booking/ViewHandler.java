@@ -3,8 +3,6 @@ package booking;
 import booking.core.User;
 import booking.view.userGUI.*;
 import booking.database.Persistence;
-import booking.view.login.Login;
-import booking.view.userGUI.HomeScreenViewModel;
 import booking.view.userGUI.UserBookRoom;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -56,7 +54,7 @@ public class ViewHandler
         }
     }
 
-    public void showHomeScreen(User user)
+    public void showUserBookRoom(User user)
     {
         try
         {
@@ -71,6 +69,33 @@ public class ViewHandler
             viewModel.setUser(user);
 
             UserBookRoom view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showHomeScreen(User user)
+    {
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
+
+            loader.setLocation(getClass().getResource("view/userGUI/HomeScreen.fxml"));
+            root = loader.load();
+
+            HomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this, persistence);
+            viewModel.setUser(user);
+
+            HomeScreen view = loader.getController();
             view.init(viewModel);
 
             scene = new Scene(root);
