@@ -6,6 +6,8 @@ import booking.core.Room;
 import booking.core.RoomType;
 import booking.core.User;
 import booking.database.Persistence;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +27,7 @@ public class UserHomeScreenViewModel
     private ViewHandler viewHandler;
     private Persistence persistence;
     private User user;
+    private final ObjectProperty<String> selctedFromSearch;
 
     public UserHomeScreenViewModel(ViewHandler viewHandler, Persistence persistence)
     {
@@ -32,6 +35,7 @@ public class UserHomeScreenViewModel
         this.persistence = persistence;
 
         username = new SimpleStringProperty();
+        selctedFromSearch = new SimpleObjectProperty<>();
         activeBookings = FXCollections.observableArrayList();
     }
 
@@ -54,6 +58,10 @@ public class UserHomeScreenViewModel
         return activeBookings;
     }
 
+    public ObjectProperty<String> getSearchProperty(){
+        return selctedFromSearch;
+    }
+
   public void ChangeToBooking()
   {
       viewHandler.showUserBookRoom(user);
@@ -61,6 +69,6 @@ public class UserHomeScreenViewModel
 
     public void ChangeToSearch()
     {
-        viewHandler.showRoomInfo(new Room(10,"B05.17",10,4,8,null, (new RoomType(4,"Classroom"))));
+        viewHandler.showRoomInfo(persistence.getRoom(selctedFromSearch.get()));
     }
 }

@@ -22,6 +22,7 @@ public interface Persistence
     // Returnerer null hvis der ikke findes nogen bruger med brugernavnet.
     public User getUser(String username);
 
+    public Room getRoom(String room);
     // Henter all lokaletyper. Key = RoomType.id.
     public Map<Integer, RoomType> getRoomTypes();
 

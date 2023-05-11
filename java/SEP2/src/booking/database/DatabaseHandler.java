@@ -90,6 +90,56 @@ public class DatabaseHandler implements Persistence
         }
     }
 
+
+
+
+    public Room getRoom(String roomName)
+    {
+        Objects.requireNonNull(roomName);
+
+        Map<Integer, RoomType> roomTypes = getRoomTypes();
+
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment r.room_type_id FROM sep2.\"room\" r WHERE r.room_name = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, roomName);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+            {
+                // Map resultSet til User objekt
+                return new Room(
+                resultSet.getInt("room_id"),
+                resultSet.getString("room_name"),
+                resultSet.getInt("room_size"),
+                resultSet.getInt("room_comfort_capacity"),
+                resultSet.getInt("room_fire_capacity"),
+                resultSet.getString("room_comment"),
+                roomTypes.get(resultSet.getInt("room_type_id"))
+                );
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
+
+
     public Map<Integer, RoomType> getRoomTypes()
     {
         Statement statement = null;

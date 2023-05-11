@@ -123,7 +123,7 @@ public class ViewHandler
             loader.setLocation(getClass().getResource("view/roomInfo/RoomInfo.fxml"));
             root = loader.load();
 
-            RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence);
+            RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence, room);
 
             RoomInfo view = loader.getController();
             view.init(viewModel);

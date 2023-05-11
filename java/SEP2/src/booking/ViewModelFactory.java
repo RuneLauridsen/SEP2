@@ -1,5 +1,6 @@
 package booking;
 
+import booking.core.Room;
 import booking.database.Persistence;
 import booking.view.roomInfo.RoomInfoViewModel;
 import booking.view.userGUI.*;
@@ -37,10 +38,11 @@ public class ViewModelFactory
         return userBookRoomViewModel;
     }
 
-    public RoomInfoViewModel getRoomInfoViewModel (ViewHandler viewHandler, Persistence persistence)
+    public RoomInfoViewModel getRoomInfoViewModel (ViewHandler viewHandler, Persistence persistence,
+        Room room)
     {
         if (roomInfoViewModel == null)
-            roomInfoViewModel = new RoomInfoViewModel(viewHandler, persistence);
+            roomInfoViewModel = new RoomInfoViewModel(viewHandler, persistence, room);
         return roomInfoViewModel;
     }
 }

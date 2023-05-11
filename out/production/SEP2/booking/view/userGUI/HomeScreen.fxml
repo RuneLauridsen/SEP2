@@ -51,7 +51,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Line>
-                  <TextField prefHeight="26.0" prefWidth="82.0" promptText="eg. C04.17" />
+                  <TextField fx:id="txtSearch" prefHeight="26.0" prefWidth="82.0" promptText="eg. C04.17" />
                         <Button mnemonicParsing="false" onAction="#searchRoomClick" text="Search Room">
                             <HBox.margin>
                                 <Insets left="10.0" />

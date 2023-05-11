@@ -14,7 +14,7 @@
    <children>
       <VBox layoutY="7.0" prefHeight="383.0" prefWidth="518.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="7.0">
          <children>
-            <Label fx:id="lblType" text="RoomName" underline="true">
+            <Label fx:id="lblName" text="RoomName" underline="true">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>
@@ -31,7 +31,7 @@
               </rowConstraints>
                <children>
                   <Label text="Type:" />
-                  <Label prefHeight="18.0" prefWidth="33.0" text="Label" GridPane.columnIndex="1" />
+                  <Label fx:id="lblType" prefHeight="18.0" prefWidth="33.0" text="Label" GridPane.columnIndex="1" />
                   <Label text="Capacity:" GridPane.rowIndex="1" />
                   <Label fx:id="lblCapacity" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Status:" GridPane.rowIndex="2" />

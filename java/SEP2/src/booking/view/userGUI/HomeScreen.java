@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.time.LocalTime;
 
 public class HomeScreen
 {
+    public TextField txtSearch;
     @FXML private TableColumn<Booking, Room> colRoom;
     @FXML private TableColumn<Booking, LocalDate> colDate;
     @FXML private TableColumn<Booking, LocalTime> colFrom;
@@ -46,6 +48,7 @@ public class HomeScreen
         colDate.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getDate()));
         colFrom.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getStart()));
         colTo.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getEnd()));
+        txtSearch.textProperty().bindBidirectional(viewModel.getSearchProperty());
     }
 
     public void findAvailableRoomClick(ActionEvent actionEvent)
