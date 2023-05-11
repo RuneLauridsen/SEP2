@@ -338,6 +338,12 @@ public class DatabaseHandler implements Persistence
             floorString = floor.toString();
         }
 
+        String buildingString = null;
+        if (building != null)
+        {
+            buildingString = buildingString.toString();
+        }
+
         if (minCapacity == null)
         {
             minCapacity = Integer.MIN_VALUE;
@@ -375,8 +381,8 @@ public class DatabaseHandler implements Persistence
             statement.setTime(4, Time.valueOf(interval.getEnd()));
             statement.setInt(5, minCapacity);
             statement.setInt(6, maxCapacity);
-            statement.setString(7, building.toString());
-            statement.setString(8, building.toString());
+            statement.setString(7, buildingString);
+            statement.setString(8, buildingString);
             statement.setString(9, floorString);
             statement.setString(10, floorString);
             resultSet = statement.executeQuery();
