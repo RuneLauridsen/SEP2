@@ -1,4 +1,4 @@
-package booking.view.roomList;
+package booking.view.userGUI;
 
 import booking.core.Room;
 import javafx.geometry.Pos;
