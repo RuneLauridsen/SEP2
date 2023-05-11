@@ -2,6 +2,8 @@ package booking.view.userGUI;
 
 import booking.ViewHandler;
 import booking.core.Booking;
+import booking.core.Room;
+import booking.core.RoomType;
 import booking.core.User;
 import booking.database.Persistence;
 import javafx.beans.property.SimpleStringProperty;
@@ -50,5 +52,15 @@ public class UserHomeScreenViewModel
     public ObservableList<Booking> getActiveBookings()
     {
         return activeBookings;
+    }
+
+  public void ChangeToBooking()
+  {
+      viewHandler.showUserBookRoom(user);
+  }
+
+    public void ChangeToSearch()
+    {
+        viewHandler.showRoomInfo(new Room(10,"B05.17",10,4,8,null, (new RoomType(4,"Classroom"))));
     }
 }

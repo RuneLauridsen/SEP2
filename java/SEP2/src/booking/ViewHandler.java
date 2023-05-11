@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 // TODO(rune): Meget gentaget kode i showXYZ metoder.
+//TODO(Julie): Muligvis ændre User persistance til singleton klasser.
 public class ViewHandler
 {
     private static final String DEFAULT_WINDOW_TITLE = "Bookingsystem";
@@ -102,8 +103,9 @@ public class ViewHandler
             view.init(viewModel);
 
             scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            Stage bookingStage = new Stage();
+            bookingStage.setScene(scene);
+            bookingStage.show();
         }
         catch (IOException ex)
         {
