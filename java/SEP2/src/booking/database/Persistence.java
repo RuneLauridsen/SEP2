@@ -38,7 +38,7 @@ public interface Persistence
     // minCapacity, maxCapacity, building og floor kan sættes til null, hvis parameteret skal ignoreres.
     // getAvailableRooms tager også højde for brugertyper, dvs. hvis brugertype er studerende
     // vil getAvailableRooms aldrig returnere medarbejderrum, selvom er eller flere medarbejderrum er ledige.
-    public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, String building, Integer floor);
+    public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor);
 
     // Tilføjer en ny bruger. Returnere false hvis brugernavnet er optaget.
     public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type);

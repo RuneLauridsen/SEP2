@@ -327,7 +327,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, String building, Integer floor)
+    public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor)
     {
         Objects.requireNonNull(user);
         Objects.requireNonNull(interval);
@@ -375,8 +375,8 @@ public class DatabaseHandler implements Persistence
             statement.setTime(4, Time.valueOf(interval.getEnd()));
             statement.setInt(5, minCapacity);
             statement.setInt(6, maxCapacity);
-            statement.setString(7, building);
-            statement.setString(8, building);
+            statement.setString(7, building.toString());
+            statement.setString(8, building.toString());
             statement.setString(9, floorString);
             statement.setString(10, floorString);
             resultSet = statement.executeQuery();

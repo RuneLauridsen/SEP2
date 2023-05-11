@@ -16,6 +16,9 @@ import java.util.List;
 public class HomeScreenViewModel
 {
     private final StringProperty username;
+
+    // TODO(rune): MVVM -> Må view godt kende til Booking klassen?
+    // Det synes jeg godt, men måske er Micheal ikke enig.
     private final ObservableList<Booking> activeBookings;
 
     private ViewHandler viewHandler;

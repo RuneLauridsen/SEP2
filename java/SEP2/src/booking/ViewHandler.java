@@ -40,13 +40,13 @@ public class ViewHandler
             FXMLLoader loader = new FXMLLoader();
             Parent root = null;
 
-            loader.setLocation(getClass().getResource("view/userGUI/UserBookRoom.fxml"));
+            loader.setLocation(getClass().getResource("view/userGUI/Login.fxml"));
             root = loader.load();
 
             UserBookRoom view = loader.getController();
             view.init(viewModelFactory.getUserBookRoomViewModel(this, persistence));
 
-            scene = new Scene(root, 309, 238);
+            scene = new Scene(root, 600, 400);
             primaryStage.setScene(scene);
             primaryStage.show();
         }
@@ -69,7 +69,7 @@ public class ViewHandler
 
             UserBookRoomViewModel viewModel = viewModelFactory.getUserBookRoomViewModel(this, persistence);
             viewModel.setUser(user);
-            
+
             UserBookRoom view = loader.getController();
             view.init(viewModel);
 
