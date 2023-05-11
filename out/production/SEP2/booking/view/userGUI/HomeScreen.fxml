@@ -42,7 +42,7 @@
                 </TableView>
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="302.0">
                     <children>
-                        <Button mnemonicParsing="false" text="Find available room">
+                        <Button mnemonicParsing="false" onAction="#findAvailableRoomClick" text="Find available room">
                      <HBox.margin>
                         <Insets right="60.0" />
                      </HBox.margin></Button>
@@ -52,7 +52,7 @@
                      </HBox.margin>
                   </Line>
                   <TextField prefHeight="26.0" prefWidth="82.0" promptText="eg. C04.17" />
-                        <Button mnemonicParsing="false" text="Search Room">
+                        <Button mnemonicParsing="false" onAction="#searchRoomClick" text="Search Room">
                             <HBox.margin>
                                 <Insets left="10.0" />
                             </HBox.margin>

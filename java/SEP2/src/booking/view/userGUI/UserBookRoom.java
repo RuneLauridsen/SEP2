@@ -25,6 +25,7 @@ public class UserBookRoom
 
     public void init(UserBookRoomViewModel viewModel)
     {
+        refresh();
         this.viewModel = viewModel;
 
         cbbFromTime.setItems(viewModel.getTimeIntervals());
@@ -58,6 +59,16 @@ public class UserBookRoom
             lblNoRooms.setManaged(true);
         }
         vbAvailableRooms.setVisible(true);
+    }
+
+    private void refresh(){
+        dpDate.setValue(null);
+        txtMaxCap.clear();
+        txtMinCap.clear();
+        cbbToTime.setValue(null);
+        cbbFromTime.setValue(null);
+        cbbBuilding.setValue(null);
+        cbbFloor.setValue(null);
     }
 }
 

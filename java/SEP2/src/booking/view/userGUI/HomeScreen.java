@@ -4,6 +4,7 @@ import booking.core.Booking;
 import booking.core.Room;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -45,5 +46,15 @@ public class HomeScreen
         colDate.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getDate()));
         colFrom.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getStart()));
         colTo.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getEnd()));
+    }
+
+    public void findAvailableRoomClick(ActionEvent actionEvent)
+    {
+        viewModel.ChangeToBooking();
+    }
+
+    public void searchRoomClick(ActionEvent actionEvent)
+    {
+        viewModel.ChangeToSearch();
     }
 }
