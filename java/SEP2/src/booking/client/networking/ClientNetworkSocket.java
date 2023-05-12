@@ -9,6 +9,7 @@ import booking.shared.socketMessages.ConnectionResponse;
 import booking.core.Booking;
 import booking.core.BookingInterval;
 import booking.core.Room;
+import booking.shared.socketMessages.ErrorResponse;
 import booking.shared.socketMessages.Request;
 import booking.shared.socketMessages.Response;
 
@@ -24,7 +25,8 @@ public class ClientNetworkSocket implements ClientNetwork
     private ObjectOutputStream outToServer;
     private ObjectInputStream inFromServer;
 
-    @Override public User connect(String username, String password) throws ClientNetworkException
+    @Override public User connect(String username, String password)
+        throws ClientNetworkException, ClientResponseException
     {
         try
         {
@@ -43,11 +45,13 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public void disconnect()
+        throws ClientNetworkException, ClientResponseException
     {
         // TODO(rune): Disconnect
     }
 
-    @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters) throws ClientNetworkException
+    @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
+        throws ClientNetworkException, ClientResponseException
     {
         sendRequest(new AvailableRoomsRequest(parameters));
         AvailableRoomsResponse response = (AvailableRoomsResponse) readResponse();
@@ -55,16 +59,19 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public List<Booking> getActiveBookings()
+        throws ClientNetworkException, ClientResponseException
     {
         return null;
     }
 
     @Override public void createBooking(Room room, BookingInterval interval)
+        throws ClientNetworkException, ClientResponseException
     {
 
     }
 
-    private void sendRequest(Request request) throws ClientNetworkException
+    private void sendRequest(Request request)
+        throws ClientNetworkException, ClientResponseException
     {
         try
         {
@@ -76,11 +83,21 @@ public class ClientNetworkSocket implements ClientNetwork
         }
     }
 
-    private Response readResponse() throws ClientNetworkException
+    private Response readResponse()
+        throws ClientNetworkException, ClientResponseException
     {
         try
         {
-            return (Response) inFromServer.readObject();
+            Response response = (Response) inFromServer.readObject();
+            
+            if (response instanceof ErrorResponse errorResponse)
+            {
+                throw new ClientResponseException(errorResponse.getReason());
+            }
+            else
+            {
+                return response;
+            }
         }
         catch (IOException e)
         {

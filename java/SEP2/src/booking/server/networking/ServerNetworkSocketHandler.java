@@ -7,6 +7,8 @@ import booking.shared.socketMessages.AvailableRoomsRequest;
 import booking.shared.socketMessages.AvailableRoomsResponse;
 import booking.shared.socketMessages.ConnectionRequest;
 import booking.shared.socketMessages.ConnectionResponse;
+import booking.shared.socketMessages.ErrorResponse;
+
 import booking.shared.socketMessages.Request;
 import booking.shared.socketMessages.Response;
 
@@ -15,6 +17,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+
+import static booking.shared.socketMessages.ErrorResponseReason.*;
 
 public class ServerNetworkSocketHandler implements Runnable
 {
@@ -51,19 +55,20 @@ public class ServerNetworkSocketHandler implements Runnable
             User user = model.getUser(connectionRequest.getUsername());
             if (user != null)
             {
-                sendResponse(new ConnectionResponse(true, user));
+                sendResponse(new ConnectionResponse(user));
             }
             else
             {
-                sendResponse(new ConnectionResponse(false, null));
+                sendResponse(new ErrorResponse(ERROR_RESPONSE_REASON_INVALID_CREDENTIALS));
 
-                // Ved at afvise connection og return med det samme, slipper vi for at skulle
-                // håndtere error case'en bruger-er-ikke-logget-på, når vi behandler andre requests.
+                // NOTE(rune): Ved at afvise connection of return før message-loopet, slipper vi
+                // for at skulle håndtere error case'en bruger-er-ikke-logget-på, når vi behandler
+                // andre requests.
                 return;
             }
 
             //
-            // Request loop indtil client logger af eller mister forbindelse
+            // Message loop indtil client logger af eller mister forbindelse
             //
             while (true)
             {
@@ -80,7 +85,7 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
                 else
                 {
-                    throw new RuntimeException("Invalid request type: " + request.getClass().getName());
+                    sendResponse(new ErrorResponse(ERROR_RESPONSE_REASON_INVALID_REQUEST_TYPE));
                 }
             }
         }
@@ -112,13 +117,13 @@ public class ServerNetworkSocketHandler implements Runnable
         {
             return (Request) inFromClient.readObject();
         }
+        catch (ClassNotFoundException e)
+        {
+            return null; // Caller handles null and returns ErrorResponse
+        }
         catch (IOException e)
         {
             throw new ServerNetworkException("IO error when receiving request.", e);
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new ServerNetworkException("Client sent an unknown class.", e);
         }
     }
 

@@ -11,17 +11,17 @@ import java.util.List;
 public interface ClientNetwork
 {
     public User connect(String username, String password)
-        throws ClientNetworkException;
+        throws ClientNetworkException, ClientResponseException;
 
     public void disconnect()
-        throws ClientNetworkException;
+        throws ClientNetworkException, ClientResponseException;
 
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
-        throws ClientNetworkException;
+        throws ClientNetworkException, ClientResponseException;
 
     public List<Booking> getActiveBookings()
-        throws ClientNetworkException;
+        throws ClientNetworkException, ClientResponseException;
 
     public void createBooking(Room room, BookingInterval interval)
-        throws ClientNetworkException;
+        throws ClientNetworkException, ClientResponseException;
 }

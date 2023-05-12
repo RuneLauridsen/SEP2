@@ -2,20 +2,15 @@ package booking.shared.socketMessages;
 
 import booking.core.User;
 
+import java.util.Objects;
+
 public class ConnectionResponse extends Response
 {
-    private final boolean ok;
     private final User user;
 
-    public ConnectionResponse(boolean ok, User user)
+    public ConnectionResponse(User user)
     {
-        this.ok = ok;
-        this.user = user;
-    }
-
-    public boolean isOk()
-    {
-        return ok;
+        this.user = Objects.requireNonNull(user);
     }
 
     public User getUser()

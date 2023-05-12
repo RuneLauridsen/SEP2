@@ -1,5 +1,7 @@
 package booking.shared.socketMessages;
 
+import java.util.Objects;
+
 public class ConnectionRequest extends Request
 {
     private final String username;
@@ -7,8 +9,8 @@ public class ConnectionRequest extends Request
 
     public ConnectionRequest(String username, String password)
     {
-        this.username = username;
-        this.password = password;
+        this.username = Objects.requireNonNull(username);
+        this.password = Objects.requireNonNull(password);
     }
 
     public String getUsername()

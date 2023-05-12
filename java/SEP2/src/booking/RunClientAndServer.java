@@ -1,5 +1,6 @@
 package booking;
 
+import booking.client.logic.ClientModelImpl;
 import booking.client.networking.ClientNetworkSocket;
 import booking.database.DatabaseHandler;
 import booking.server.model.ServerModelImpl;
@@ -33,8 +34,10 @@ public class RunClientAndServer
         var clientThread = new Thread(() -> {
             try
             {
-                var client = new ClientNetworkSocket();
-                var user = client.connect("Rune", "asdasd");
+                var clientNetwork = new ClientNetworkSocket();
+                var clientModel = new ClientModelImpl(clientNetwork);
+
+                clientModel.login("Rune123", "asdasd");
 
                 var p = new GetAvailableRoomsParameters(
                     LocalDate.of(2023, 5, 8),
@@ -42,9 +45,9 @@ public class RunClientAndServer
                     LocalTime.of(16, 0)
                 );
 
-                var rooms = client.getAvailableRooms(p);
+                var rooms = clientModel.getAvailableRooms(p);
 
-                System.out.println(user);
+                System.out.println(clientModel.getUser());
             }
             catch (Exception e)
             {

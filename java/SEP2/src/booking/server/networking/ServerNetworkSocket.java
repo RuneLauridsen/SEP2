@@ -1,13 +1,10 @@
 package booking.server.networking;
 
-import booking.core.User;
 import booking.server.model.ServerModel;
 
-import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.SocketHandler;
 
 public class ServerNetworkSocket implements Runnable
 {

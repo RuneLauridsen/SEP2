@@ -2,19 +2,8 @@ package booking.shared.socketMessages;
 
 import java.io.Serializable;
 
-// NOTE(rune): Parent klasse til andre XyzResponse klasser,
-// da de alle skal kunne at returnere fejlbeskeder.
+// TODO(rune): Har alle response nogle fælles træk?
+// Måske noget om response time, debug information osv.?
 public abstract class Response implements Serializable
 {
-    private String errorMessage;
-
-    public String getErrorMessage()
-    {
-        return errorMessage;
-    }
-
-    public boolean isOk()
-    {
-        return errorMessage == null;
-    }
 }
