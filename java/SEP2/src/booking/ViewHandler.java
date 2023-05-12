@@ -123,7 +123,10 @@ public class ViewHandler
             loader.setLocation(getClass().getResource("view/roomInfo/RoomInfo.fxml"));
             root = loader.load();
 
-            RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence, room);
+
+            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
+            //RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence, room);
+            RoomInfoViewModel  viewModel = new RoomInfoViewModel(this,persistence,room);
 
             RoomInfo view = loader.getController();
             view.init(viewModel);
