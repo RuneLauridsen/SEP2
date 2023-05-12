@@ -29,17 +29,21 @@ public class HomeScreen
 
     private UserHomeScreenViewModel viewModel;
 
+    //TODO gør sådan at listen bliver opdateret
     public void init(UserHomeScreenViewModel viewModel)
     {
         this.viewModel = viewModel;
 
-        //Only remove if no bookings
-        mainVBox.getChildren().remove(tblActiveBookings);
-        mainVBox.getChildren().add(4, tblActiveBookings);
-
-        //Only remove if active bookings
-        mainVBox.getChildren().remove(lblNoBookings);
-        mainVBox.getChildren().add(4, lblNoBookings);
+        if (viewModel.getActiveBookings().size() > 0)
+        {
+            tblActiveBookings.setManaged(true);
+            lblNoBookings.setManaged(false);
+        }
+        else
+        {
+            tblActiveBookings.setManaged(false);
+            lblNoBookings.setManaged(true);
+        }
 
         lblName.textProperty().bind(Bindings.concat("Hello ").concat(viewModel.usernameProperty()));
         tblActiveBookings.setItems(viewModel.getActiveBookings());
