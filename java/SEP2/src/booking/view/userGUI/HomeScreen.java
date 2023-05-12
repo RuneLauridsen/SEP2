@@ -59,5 +59,6 @@ public class HomeScreen
     public void searchRoomClick(ActionEvent actionEvent)
     {
         viewModel.ChangeToSearch();
+        txtSearch.textProperty().set(null);
     }
 }

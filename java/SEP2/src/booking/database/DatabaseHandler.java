@@ -114,7 +114,7 @@ public class DatabaseHandler implements Persistence
             while (resultSet.next())
             {
                 BookingInterval bookingInterval = new BookingInterval(resultSet.getDate("booking_date").toLocalDate(),resultSet.getTime("booking_start_time").toLocalTime(),resultSet.getTime("booking_end_time").toLocalTime());
-                if (bookingInterval.getDate().equals(LocalDate.now()) && bookingInterval.isOverlapWith(LocalTime.now()));
+                if ( bookingInterval.getDate().equals(LocalDate.now()) && bookingInterval.isOverlapWith(LocalTime.now()) )
                     return false;
             }
             return true;
@@ -332,10 +332,11 @@ public class DatabaseHandler implements Persistence
         try
         {
             String query = "SELECT  "
-                + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time, "
+                + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time "
                 + "FROM sep2.booking b "
                 + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
-                + "WHERE r.room_name = ?;";
+                + "WHERE r.room_name = ? "
+                + "ORDER BY  b.booking_date, b.booking_start_time;";
 
             statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -386,7 +387,8 @@ public class DatabaseHandler implements Persistence
                 + "FROM sep2.booking b "
                 + "INNER JOIN sep2.\"user\" u ON b.user_id = u.user_id "
                 + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
-                + "WHERE u.user_id = ?;";
+                + "WHERE u.user_id = ? "
+                +"ORDER BY  b.booking_date, b.booking_start_time;";
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, user.getId());

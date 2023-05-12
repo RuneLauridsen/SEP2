@@ -31,11 +31,11 @@
               </rowConstraints>
                <children>
                   <Label text="Type:" />
-                  <Label fx:id="lblType" prefHeight="18.0" prefWidth="33.0" text="Label" GridPane.columnIndex="1" />
+                  <Label fx:id="lblType" prefHeight="18.0" prefWidth="196.0" text="Label" GridPane.columnIndex="1" />
                   <Label text="Capacity:" GridPane.rowIndex="1" />
-                  <Label fx:id="lblCapacity" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="lblCapacity" prefHeight="18.0" prefWidth="198.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Status:" GridPane.rowIndex="2" />
-                  <Label fx:id="lblStatus" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="lblStatus" prefHeight="18.0" prefWidth="212.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <Label text="Booking scedule:">
@@ -43,7 +43,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
-            <ListView prefHeight="200.0" prefWidth="200.0">
+            <ListView fx:id="lvRoomBookings" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets top="2.0" />
                </VBox.margin>
