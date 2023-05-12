@@ -38,7 +38,7 @@ public class ClientNetworkSocket implements ClientNetwork
             ConnectionResponse connectionResponse = (ConnectionResponse) readResponse();
             return connectionResponse.getUser();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
@@ -89,7 +89,7 @@ public class ClientNetworkSocket implements ClientNetwork
         try
         {
             Response response = (Response) inFromServer.readObject();
-            
+
             if (response instanceof ErrorResponse errorResponse)
             {
                 throw new ClientResponseException(errorResponse.getReason());
