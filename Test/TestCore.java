@@ -10,57 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCore {
 
-    //TODO Database skal også testes og sættes ind (Sprøg), GITHub
+    //TODO Database skal også testes og sættes ind (Sprøg)
+    //TODO Skemalægger del. Hvis der skabes duplicate af unikke værdier skal der være fejl
 
 
-
-    @Test
-    public void ConstructorOfUser()
-    {
-        List<RoomType> userBob = new ArrayList<>();
-        UserType student = new UserType(1,"student",false,false,2,userBob);
-        User bob = new User(1,"Bob","",123456,student);
-
-        assertEquals(bob, new User(1,"Bob","",123456,student));
-        assertNotEquals(bob, new User(2,"Jens","",234567,student));
-    }
-
-    @Test
-    public void BookingCreate()
-    {
-        List<RoomType> groupList = new ArrayList<>();
-        UserType student = new UserType(1,"student",false,false,2,groupList);
-        User bob = new User(1,"Bob","",123456,student);
-
-        RoomType group = new RoomType(1,"Group");
-        Room C0207 = new Room(1,"C02.07",15,4,7,"",group);
-
-        BookingInterval bookingInterval = new BookingInterval(LocalDate.of(2023,5,11), LocalTime.of(9,15),LocalTime.of(16,30));
-        Booking booking1 = new Booking(1,bookingInterval,C0207,bob);
-
-        assertEquals(bob,booking1.getUser());
-        assertEquals(1,(booking1.getId()));
-        assertEquals(bookingInterval,booking1.getInterval());
-    }
-
-
-    @Test
-    public void UserMaxRooms()
-    {
-        List<RoomType> groupList = new ArrayList<>();
-        UserType student = new UserType(1,"student",false,false,2,groupList);
-        User bob = new User(1,"Bob","",123456,student);
-
-        RoomType group = new RoomType(1,"Group");
-        Room C0207 = new Room(1,"C02.07",15,4,7,"",group);
-        Room C0208 = new Room(2,"C02.08",15,4,7,"",group);
-
-        BookingInterval bookingInterval = new BookingInterval(LocalDate.now(), LocalTime.now(),LocalTime.of(20,30));
-        Booking booking1 = new Booking(1,bookingInterval,C0207,bob);
-        Booking booking2 = new Booking(1,bookingInterval,C0208,bob);
-
-        //TODO Ikke færdig, Sæt databasen ind så kan man tjekke den.
-    }
+    //Course og Room
 
     @Test
     public void Course()
@@ -71,6 +25,7 @@ public class TestCore {
         assertEquals(SDJ2.getName(),"SDJ");
         assertEquals(SDJ2.getTimeSlotCount(),4);
     }
+
 
     @Test
     public void RoomTypesGroup()
@@ -101,11 +56,116 @@ public class TestCore {
     }
 
     @Test
-    public void RoomTypesBa()
+    public void RoomTypesBachelor()
     {
-        RoomType Bahlor = new RoomType(4, "Baherlor");
+        RoomType bachelor = new RoomType(4, "Bachelor");
+        Room C0606 = new Room(5,"C06.06",15,4,8,"",bachelor);
+
+        assertEquals(C0606.getType(),bachelor);
     }
 
+
+
+
+    //Booking
+
+    @Test
+    public void RemoveBooking()
+    {
+
+    }
+
+    @Test
+    public void RemoveBookingWhenThereIsNone()
+    {
+
+    }
+
+    @Test
+    public void BookingIntervalOverlap()
+    {
+
+        BookingInterval bookingInterval = new BookingInterval(LocalDate.of(2023,5,12), LocalTime.of(9,15),LocalTime.of(16,30));
+        BookingInterval bookingInterval1 = new BookingInterval(LocalDate.of(2023,5,12), LocalTime.of(8,15),LocalTime.of(15,30));
+        BookingInterval bookingInterval2 = new BookingInterval(LocalDate.of(2023,5,12), LocalTime.of(8,15),LocalTime.of(17,30));
+        BookingInterval bookingInterval3 = new BookingInterval(LocalDate.of(2023,5,12), LocalTime.of(10,15),LocalTime.of(15,30));
+        BookingInterval bookingInterval4 = new BookingInterval(LocalDate.of(2023,5,12), LocalTime.of(10,15),LocalTime.of(17,30));
+
+        assertFalse(bookingInterval.isOverlapWith(bookingInterval1));
+        assertFalse(bookingInterval.isOverlapWith(bookingInterval2));
+        assertFalse(bookingInterval.isOverlapWith(bookingInterval3));
+        assertFalse(bookingInterval.isOverlapWith(bookingInterval4));
+
+
+    }
+
+    @Test
+    public void BookingMaksRooms()
+    {
+        List<RoomType> groupList = new ArrayList<>();
+        UserType student = new UserType(1,"student",false,false,2,groupList);
+        User bob = new User(1,"Bob","",123456,student);
+
+        RoomType group = new RoomType(1,"Group");
+        Room C0207 = new Room(1,"C02.07",15,4,7,"",group);
+        Room C0208 = new Room(2,"C02.08",15,4,7,"",group);
+        Room C0209a = new Room(2,"C02.09a",15,4,7,"",group);
+
+        BookingInterval bookingInterval = new BookingInterval(LocalDate.now(), LocalTime.now(),LocalTime.of(20,30));
+        Booking booking1 = new Booking(1,bookingInterval,C0207,bob);
+        Booking booking2 = new Booking(1,bookingInterval,C0208,bob);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> new Booking(1,bookingInterval,C0209a,bob));
+    }
+
+    @Test
+    public void BookingCreate()
+    {
+        List<RoomType> groupList = new ArrayList<>();
+        UserType student = new UserType(1,"student",false,false,2,groupList);
+        User bob = new User(1,"Bob","",123456,student);
+
+        RoomType group = new RoomType(1,"Group");
+        Room C0207 = new Room(1,"C02.07",15,4,7,"",group);
+
+        BookingInterval bookingInterval = new BookingInterval(LocalDate.of(2023,5,11), LocalTime.of(9,15),LocalTime.of(16,30));
+        Booking booking1 = new Booking(1,bookingInterval,C0207,bob);
+
+        assertEquals(bob,booking1.getUser());
+        assertEquals(1,(booking1.getId()));
+        assertEquals(bookingInterval,booking1.getInterval());
+    }
+
+
+    //User and UserGroup
+
+    @Test
+    public void RemoveUserFromUserGroup()
+    {
+        // Kan vi det? Hvis så tjek andre del af slette
+    }
+
+    @Test
+    public void AddUserToUserGroup()
+    {
+        Course SDJ = new Course(1,"SDJ",8);
+
+        List<RoomType> groupList= new ArrayList();
+        UserType student = new UserType(1,"Student",false,false,2,groupList);
+        List<User> SW = new ArrayList<>();
+
+        User bob = new User(1,"Bob","",123456,student);
+        UserGroup SWSDJ = new UserGroup(1,"SW-SDJ",SDJ,SW);
+
+        //Ikke færdig da jeg ikke er sikker på hvordan det fungere
+
+    }
+
+    @Test
+    public void AddMoreUsersToUserGroup()
+    {
+
+    }
 
     @Test
     public void UserGroup()
@@ -113,20 +173,20 @@ public class TestCore {
         List<User> SDJClass = new ArrayList<>();
         Course SDJ = new Course(1,"SDJ",4);
         UserGroup SW = new UserGroup(1,"SW",SDJ,SDJClass);
+
+        assertEquals(SDJ, SW.getCourse());
+        assertEquals(SDJClass,SW.getUsers());
     }
 
     @Test
-    public void BookingOverlap()
+    public void ConstructorOfUser()
     {
+        List<RoomType> userBob = new ArrayList<>();
+        UserType student = new UserType(1,"student",false,false,2,userBob);
+        User bob = new User(1,"Bob","",123456,student);
 
+        assertEquals(bob, new User(1,"Bob","",123456,student));
+        assertNotEquals(bob, new User(2,"Jens","",234567,student));
     }
-
-    @Test
-    public void jjkk()
-    {
-
-    }
-
-
 
 }
