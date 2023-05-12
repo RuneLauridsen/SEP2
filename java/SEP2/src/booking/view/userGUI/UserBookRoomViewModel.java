@@ -159,5 +159,9 @@ public class UserBookRoomViewModel
 
         return LocalTime.of(hour, minute);
     }
+    public void ChangeToSearch(String roomName)
+    {
+        viewHandler.showRoomInfo(persistence.getRoom(roomName));
+    }
 
 }

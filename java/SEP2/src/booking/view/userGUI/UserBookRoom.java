@@ -70,6 +70,11 @@ public class UserBookRoom
         cbbBuilding.setValue(null);
         cbbFloor.setValue(null);
     }
+
+    public void listViewClicked(MouseEvent mouseEvent)
+    {
+        viewModel.ChangeToSearch(lvRooms.getSelectionModel().getSelectedItem().getName());
+    }
 }
 
 
