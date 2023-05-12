@@ -2,9 +2,7 @@ package booking.shared.socketMessages;
 
 import booking.core.User;
 
-import java.io.Serializable;
-
-public class ConnectionResponse implements Serializable
+public class ConnectionResponse extends Response
 {
     private final boolean ok;
     private final User user;

@@ -2,9 +2,7 @@ package booking.shared.socketMessages;
 
 import booking.shared.GetAvailableRoomsParameters;
 
-import java.io.Serializable;
-
-public class AvailableRoomsRequest implements Serializable
+public class AvailableRoomsRequest extends Request
 {
     private final GetAvailableRoomsParameters parameters;
 

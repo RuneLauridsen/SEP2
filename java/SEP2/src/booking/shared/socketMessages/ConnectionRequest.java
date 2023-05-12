@@ -1,8 +1,6 @@
 package booking.shared.socketMessages;
 
-import java.io.Serializable;
-
-public class ConnectionRequest implements Serializable
+public class ConnectionRequest extends Request
 {
     private final String username;
     private final String password;

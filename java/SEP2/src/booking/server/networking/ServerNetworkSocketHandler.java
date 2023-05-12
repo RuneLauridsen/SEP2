@@ -3,11 +3,12 @@ package booking.server.networking;
 import booking.core.Room;
 import booking.core.User;
 import booking.server.model.ServerModel;
-import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.socketMessages.AvailableRoomsRequest;
 import booking.shared.socketMessages.AvailableRoomsResponse;
 import booking.shared.socketMessages.ConnectionRequest;
 import booking.shared.socketMessages.ConnectionResponse;
+import booking.shared.socketMessages.Request;
+import booking.shared.socketMessages.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -93,31 +94,31 @@ public class ServerNetworkSocketHandler implements Runnable
         }
     }
 
-    private void sendResponse(Object request) throws ServerNetworkException
+    private void sendResponse(Response response) throws ServerNetworkException
     {
         try
         {
-            outToClient.writeObject(request);
+            outToClient.writeObject(response);
         }
         catch (IOException e)
         {
-            throw new ServerNetworkException("IO error when sending request.", e);
+            throw new ServerNetworkException("IO error when sending response.", e);
         }
     }
 
-    private Object readRequest() throws ServerNetworkException
+    private Request readRequest() throws ServerNetworkException
     {
         try
         {
-            return inFromClient.readObject();
+            return (Request) inFromClient.readObject();
         }
         catch (IOException e)
         {
-            throw new ServerNetworkException("IO error when receiving response.", e);
+            throw new ServerNetworkException("IO error when receiving request.", e);
         }
         catch (ClassNotFoundException e)
         {
-            throw new ServerNetworkException("Server returned unknown class.", e);
+            throw new ServerNetworkException("Client sent an unknown class.", e);
         }
     }
 

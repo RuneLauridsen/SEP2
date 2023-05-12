@@ -9,6 +9,8 @@ import booking.shared.socketMessages.ConnectionResponse;
 import booking.core.Booking;
 import booking.core.BookingInterval;
 import booking.core.Room;
+import booking.shared.socketMessages.Request;
+import booking.shared.socketMessages.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,7 +33,7 @@ public class ClientNetworkSocket implements ClientNetwork
             inFromServer = new ObjectInputStream(socket.getInputStream());
 
             sendRequest(new ConnectionRequest(username, password));
-            ConnectionResponse connectionResponse = readResponse();
+            ConnectionResponse connectionResponse = (ConnectionResponse) readResponse();
             return connectionResponse.getUser();
         }
         catch (Exception e)
@@ -48,7 +50,7 @@ public class ClientNetworkSocket implements ClientNetwork
     @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters) throws ClientNetworkException
     {
         sendRequest(new AvailableRoomsRequest(parameters));
-        AvailableRoomsResponse response = readResponse();
+        AvailableRoomsResponse response = (AvailableRoomsResponse) readResponse();
         return response.getRooms();
     }
 
@@ -62,7 +64,7 @@ public class ClientNetworkSocket implements ClientNetwork
 
     }
 
-    private void sendRequest(Object request) throws ClientNetworkException
+    private void sendRequest(Request request) throws ClientNetworkException
     {
         try
         {
@@ -74,13 +76,11 @@ public class ClientNetworkSocket implements ClientNetwork
         }
     }
 
-    private <TResponse> TResponse readResponse() throws ClientNetworkException
+    private Response readResponse() throws ClientNetworkException
     {
         try
         {
-            // This is an unchecked cast, but it is okay since the caller always
-            // casts to TResponse anyway.
-            return (TResponse) inFromServer.readObject();
+            return (Response) inFromServer.readObject();
         }
         catch (IOException e)
         {
@@ -88,7 +88,7 @@ public class ClientNetworkSocket implements ClientNetwork
         }
         catch (ClassNotFoundException e)
         {
-            throw new ClientNetworkException("Server returned unknown class.", e);
+            throw new ClientNetworkException("Server returned an unknown class.", e);
         }
     }
 }

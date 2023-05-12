@@ -2,10 +2,9 @@ package booking.shared.socketMessages;
 
 import booking.core.Room;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class AvailableRoomsResponse implements Serializable
+public class AvailableRoomsResponse extends Response
 {
     private List<Room> rooms;
 
