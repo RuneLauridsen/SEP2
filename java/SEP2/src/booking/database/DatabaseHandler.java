@@ -18,6 +18,8 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +93,44 @@ public class DatabaseHandler implements Persistence
     }
 
 
+    public boolean isAvailable (String roomName){
+
+        Map<Integer, RoomType> roomTypes = getRoomTypes();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT  "
+                + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time, "
+                + " r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id "
+                + "FROM sep2.booking b "
+                + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
+                + "WHERE r. = ?;";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, roomName);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next())
+            {
+                BookingInterval bookingInterval = new BookingInterval(resultSet.getDate("booking_date").toLocalDate(),resultSet.getTime("booking_start_time").toLocalTime(),resultSet.getTime("booking_end_time").toLocalTime());
+                if (bookingInterval.getDate().equals(LocalDate.now()) && bookingInterval.isOverlapWith(LocalTime.now()));
+                    return false;
+            }
+            return true;
+
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
 
 
     public Room getRoom(String roomName)
