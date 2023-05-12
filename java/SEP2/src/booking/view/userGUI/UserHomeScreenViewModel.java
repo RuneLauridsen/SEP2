@@ -2,8 +2,6 @@ package booking.view.userGUI;
 
 import booking.ViewHandler;
 import booking.core.Booking;
-import booking.core.Room;
-import booking.core.RoomType;
 import booking.core.User;
 import booking.database.Persistence;
 import javafx.beans.property.ObjectProperty;
@@ -44,7 +42,7 @@ public class UserHomeScreenViewModel
         this.user = user;
         username.set(user.getName());
 
-        List<Booking> bookings = persistence.getActiveBookings(user, LocalDate.now(), LocalDate.MAX);
+        List<Booking> bookings = persistence.getBookingsForUser(user, LocalDate.now(), LocalDate.MAX);
         activeBookings.addAll(bookings);
     }
 
@@ -58,14 +56,15 @@ public class UserHomeScreenViewModel
         return activeBookings;
     }
 
-    public ObjectProperty<String> getSearchProperty(){
+    public ObjectProperty<String> getSearchProperty()
+    {
         return selctedFromSearch;
     }
 
-  public void ChangeToBooking()
-  {
-      viewHandler.showUserBookRoom(user);
-  }
+    public void ChangeToBooking()
+    {
+        viewHandler.showUserBookRoom(user);
+    }
 
     public void ChangeToSearch()
     {

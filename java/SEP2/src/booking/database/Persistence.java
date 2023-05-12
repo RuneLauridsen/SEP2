@@ -20,7 +20,7 @@ public interface Persistence
 
     public List<BookingInterval> getBookingsFromRoomName(String roomName);
 
-    public boolean isAvailable (String roomName);
+    public boolean isAvailable(String roomName);
 
     // Henter bruger ud fra brugernavn. Flere brugere kan ikke have samme brugernavn.
     // Returnerer null hvis der ikke findes nogen bruger med brugernavnet.
@@ -34,7 +34,10 @@ public interface Persistence
     public List<Room> getRooms();
 
     // Henter all bookinger for en bestemt bruger, i et bestemt dato interval.
-    public List<Booking> getActiveBookings(User user, LocalDate startDate, LocalDate endDate);
+    public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate);
+
+    // Henter alle booking for et bestemt lokale, i et bestemt dato interval.
+    public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate);
 
     // Tilføjer en ny booking. Checker ikke efter overlap, lokalets ledighed osv.
     public void createBooking(User user, Room room, BookingInterval interval);
@@ -45,7 +48,6 @@ public interface Persistence
     // minCapacity, maxCapacity, building og floor kan sættes til null, hvis parameteret skal ignoreres.
     // getAvailableRooms tager også højde for brugertyper, dvs. hvis brugertype er studerende
     // vil getAvailableRooms aldrig returnere medarbejderrum, selvom er eller flere medarbejderrum er ledige.
-    // TODO(rune): Lav en ny getActiveBookings funktion, som henter booking for et bestemt lokaler.
     public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor);
 
     // Tilføjer en ny bruger. Returnere false hvis brugernavnet er optaget.

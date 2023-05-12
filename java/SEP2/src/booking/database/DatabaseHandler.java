@@ -92,8 +92,8 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-
-    public boolean isAvailable (String roomName){
+    public boolean isAvailable(String roomName)
+    {
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
         PreparedStatement statement = null;
@@ -113,8 +113,8 @@ public class DatabaseHandler implements Persistence
 
             while (resultSet.next())
             {
-                BookingInterval bookingInterval = new BookingInterval(resultSet.getDate("booking_date").toLocalDate(),resultSet.getTime("booking_start_time").toLocalTime(),resultSet.getTime("booking_end_time").toLocalTime());
-                if ( bookingInterval.getDate().equals(LocalDate.now()) && bookingInterval.isOverlapWith(LocalTime.now()) )
+                BookingInterval bookingInterval = new BookingInterval(resultSet.getDate("booking_date").toLocalDate(), resultSet.getTime("booking_start_time").toLocalTime(), resultSet.getTime("booking_end_time").toLocalTime());
+                if (bookingInterval.getDate().equals(LocalDate.now()) && bookingInterval.isOverlapWith(LocalTime.now()))
                     return false;
             }
             return true;
@@ -130,7 +130,6 @@ public class DatabaseHandler implements Persistence
             closeStatement(statement);
         }
     }
-
 
     public Room getRoom(String roomName)
     {
@@ -153,13 +152,13 @@ public class DatabaseHandler implements Persistence
             {
                 // Map resultSet til User objekt
                 return new Room(
-                resultSet.getInt("room_id"),
-                resultSet.getString("room_name"),
-                resultSet.getInt("room_size"),
-                resultSet.getInt("room_comfort_capacity"),
-                resultSet.getInt("room_fire_capacity"),
-                resultSet.getString("room_comment"),
-                roomTypes.get(resultSet.getInt("room_type_id"))
+                    resultSet.getInt("room_id"),
+                    resultSet.getString("room_name"),
+                    resultSet.getInt("room_size"),
+                    resultSet.getInt("room_comfort_capacity"),
+                    resultSet.getInt("room_fire_capacity"),
+                    resultSet.getString("room_comment"),
+                    roomTypes.get(resultSet.getInt("room_type_id"))
                 );
             }
             else
@@ -177,7 +176,6 @@ public class DatabaseHandler implements Persistence
             closeStatement(statement);
         }
     }
-
 
     public Map<Integer, RoomType> getRoomTypes()
     {
@@ -271,6 +269,7 @@ public class DatabaseHandler implements Persistence
                 + "    ut.user_type_name, "
                 + "    ut.can_edit_rooms, "
                 + "    ut.can_edit_users, "
+                + "    ut.can_edit_bookings, "
                 + "    ut.max_booking_count, "
                 + "    rt.room_type_id, "
                 + "    rt.room_type_name "
@@ -296,6 +295,7 @@ public class DatabaseHandler implements Persistence
                         resultSet.getString("user_type_name"),
                         resultSet.getBoolean("can_edit_rooms"),
                         resultSet.getBoolean("can_edit_users"),
+                        resultSet.getBoolean("can_edit_bookings"),
                         resultSet.getInt("max_booking_count"),
                         new ArrayList<>()
                     );
@@ -319,12 +319,10 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-
     //TODO måske optimere på dette
     @Override public List<BookingInterval> getBookingsFromRoomName(String roomName)
     {
         Objects.requireNonNull(roomName);
-
 
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -347,12 +345,12 @@ public class DatabaseHandler implements Persistence
             {
                 // Map resultSet til Booking objekt
                 bookings.add(
-                        new BookingInterval(
-                            resultSet.getDate("booking_date").toLocalDate(),
-                            resultSet.getTime("booking_start_time").toLocalTime(),
-                            resultSet.getTime("booking_end_time").toLocalTime()
-                        )
-                    );
+                    new BookingInterval(
+                        resultSet.getDate("booking_date").toLocalDate(),
+                        resultSet.getTime("booking_start_time").toLocalTime(),
+                        resultSet.getTime("booking_end_time").toLocalTime()
+                    )
+                );
             }
 
             return bookings;
@@ -368,7 +366,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public List<Booking> getActiveBookings(User user, LocalDate startDate, LocalDate endDate)
+    public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate)
     {
         Objects.requireNonNull(user);
         Objects.requireNonNull(startDate);
@@ -388,7 +386,7 @@ public class DatabaseHandler implements Persistence
                 + "INNER JOIN sep2.\"user\" u ON b.user_id = u.user_id "
                 + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
                 + "WHERE u.user_id = ? "
-                +"ORDER BY  b.booking_date, b.booking_start_time;";
+                + "ORDER BY  b.booking_date, b.booking_start_time;";
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, user.getId());
@@ -416,6 +414,69 @@ public class DatabaseHandler implements Persistence
                             roomTypes.get(resultSet.getInt("room_type_id"))
                         ),
                         user
+                    )
+                );
+            }
+
+            return bookings;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
+
+    @Override public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate)
+    {
+        Objects.requireNonNull(room);
+        Objects.requireNonNull(startDate);
+        Objects.requireNonNull(endDate);
+
+        Map<Integer, UserType> userTypes = getUserTypes();
+
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT  "
+                + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time, "
+                + " u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid "
+                + "FROM sep2.booking b "
+                + "INNER JOIN sep2.\"user\" u ON b.user_id = u.user_id "
+                + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
+                + "WHERE r.room_id = ? "
+                + "ORDER BY  b.booking_date, b.booking_start_time;";
+
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, room.getId());
+            resultSet = statement.executeQuery();
+
+            List<Booking> bookings = new ArrayList<>();
+            while (resultSet.next())
+            {
+                // Map resultSet til Booking objekt
+                bookings.add(
+                    new Booking(
+                        resultSet.getInt("booking_id"),
+                        new BookingInterval(
+                            resultSet.getDate("booking_date").toLocalDate(),
+                            resultSet.getTime("booking_start_time").toLocalTime(),
+                            resultSet.getTime("booking_end_time").toLocalTime()
+                        ),
+                        room,
+                        new User(
+                            resultSet.getInt("user_id"),
+                            resultSet.getString("user_name"),
+                            resultSet.getString("user_initials"),
+                            resultSet.getInt("user_viaid"),
+                            userTypes.get(resultSet.getInt("user_type_id"))
+                        )
                     )
                 );
             }

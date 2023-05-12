@@ -1,11 +1,9 @@
 package booking.database;
 
-import booking.core.BookingInterval;
 import booking.core.User;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class DatabaseHandlerTest
 {
@@ -21,7 +19,7 @@ public class DatabaseHandlerTest
         User gitte = persistence.getUser("Gitte");
         User simon = persistence.getUser("Simon");
 
-        var bookings = persistence.getActiveBookings(
+        var bookings = persistence.getBookingsForUser(
             rune,
             LocalDate.MIN,
             LocalDate.MAX
@@ -29,7 +27,7 @@ public class DatabaseHandlerTest
 
         persistence.deleteBooking(bookings.get(3));
 
-        var bookings2 = persistence.getActiveBookings(
+        var bookings2 = persistence.getBookingsForUser(
             rune,
             LocalDate.MIN,
             LocalDate.MAX

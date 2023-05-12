@@ -1,14 +1,24 @@
 package booking.server.networking;
 
+import booking.core.Booking;
 import booking.core.Room;
 import booking.core.User;
 import booking.server.model.ServerModel;
 import booking.shared.socketMessages.AvailableRoomsRequest;
 import booking.shared.socketMessages.AvailableRoomsResponse;
+import booking.shared.socketMessages.BookingsForRoomRequest;
+import booking.shared.socketMessages.BookingsForRoomResponse;
+import booking.shared.socketMessages.BookingsForUserRequest;
+import booking.shared.socketMessages.BookingsForUserResponse;
 import booking.shared.socketMessages.ConnectionRequest;
 import booking.shared.socketMessages.ConnectionResponse;
+import booking.shared.socketMessages.CreateBookingRequest;
+import booking.shared.socketMessages.CreateBookingResponse;
+import booking.shared.socketMessages.DeleteBookingRequest;
+import booking.shared.socketMessages.DeleteBookingResponse;
 import booking.shared.socketMessages.ErrorResponse;
 
+import booking.shared.socketMessages.ErrorResponseReason;
 import booking.shared.socketMessages.Request;
 import booking.shared.socketMessages.Response;
 
@@ -78,11 +88,86 @@ public class ServerNetworkSocketHandler implements Runnable
                 // hvordan man finder response. Hælder mest til nr. 2.
                 Object request = readRequest();
 
+                //
+                // Get available rooms
+                //
                 if (request instanceof AvailableRoomsRequest availableRoomsRequest)
                 {
                     List<Room> availableRooms = model.getAvailableRooms(user, availableRoomsRequest.getParameters());
                     sendResponse(new AvailableRoomsResponse(availableRooms));
                 }
+
+                //
+                // Get bookings for room
+                //
+                else if (request instanceof BookingsForRoomRequest bookingsForRoomRequest)
+                {
+                    List<Booking> bookingsForRoom = model.getBookingsForRoom(
+                        bookingsForRoomRequest.getRoomName(),
+                        bookingsForRoomRequest.getFrom(),
+                        bookingsForRoomRequest.getTo());
+
+                    sendResponse(new BookingsForRoomResponse(bookingsForRoom));
+                }
+
+                //
+                // Get bookings for user
+                //
+                else if (request instanceof BookingsForUserRequest bookingsForUserRequest)
+                {
+                    List<Booking> bookingsForUser = model.getBookingsForUser(
+                        bookingsForUserRequest.getUsername(),
+                        bookingsForUserRequest.getFrom(),
+                        bookingsForUserRequest.getTo()
+                    );
+
+                    sendResponse(new BookingsForUserResponse(bookingsForUser));
+                }
+
+                //
+                // Create booking
+                //
+                else if (request instanceof CreateBookingRequest createBookingRequest)
+                {
+                    ErrorResponseReason createBookingResult = model.createBooking(
+                        user,
+                        createBookingRequest.getRoom(),
+                        createBookingRequest.getInterval()
+                    );
+
+                    if (createBookingResult == ERROR_RESPONSE_REASON_NONE)
+                    {
+                        sendResponse(new CreateBookingResponse());
+                    }
+                    else
+                    {
+                        sendResponse(new ErrorResponse(createBookingResult));
+                    }
+                }
+
+                //
+                // Delete booking
+                //
+                else if (request instanceof DeleteBookingRequest deleteBookingRequest)
+                {
+                    ErrorResponseReason deleteBookingResult = model.deleteBooking(
+                        user,
+                        deleteBookingRequest.getBooking()
+                    );
+
+                    if (deleteBookingResult == ERROR_RESPONSE_REASON_NONE)
+                    {
+                        sendResponse(new DeleteBookingResponse());
+                    }
+                    else
+                    {
+                        sendResponse(new ErrorResponse(deleteBookingResult));
+                    }
+                }
+
+                //
+                // Unknown request
+                //
                 else
                 {
                     sendResponse(new ErrorResponse(ERROR_RESPONSE_REASON_INVALID_REQUEST_TYPE));
