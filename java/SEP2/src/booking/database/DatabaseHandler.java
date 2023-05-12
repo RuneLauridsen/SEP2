@@ -104,7 +104,7 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment r.room_type_id FROM sep2.\"room\" r WHERE r.room_name = ?";
+            String query = "SELECT room_id, room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id FROM sep2.room WHERE room_name = ?;";
 
             statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
