@@ -25,7 +25,7 @@ public class TestCore {
         assertEquals(SDJ2.getName(),"SDJ");
         assertEquals(SDJ2.getTimeSlotCount(),4);
     }
-
+    //TODO Test unik id og ingen duplicate
 
     @Test
     public void RoomTypesGroup()
@@ -35,6 +35,7 @@ public class TestCore {
 
         assertEquals(C0207.getType(),group);
     }
+    //TODO Test unik id og ingen duplicate
 
     @Test
     public void RoomTypesCoWorker()
@@ -179,6 +180,17 @@ public class TestCore {
     }
 
     @Test
+    public void ConstructorOfUserType()
+    {
+        List<RoomType> userBob = new ArrayList<>();
+        UserType student = new UserType(1,"student",false,false,2,userBob);
+
+        assertEquals(student, new UserType(1,"student",false,false,2,userBob));
+        assertNotEquals(student, new UserType(2,"student",false,false,2,userBob));
+    }
+    //TODO Test unik id og ingen duplicate
+
+    @Test
     public void ConstructorOfUser()
     {
         List<RoomType> userBob = new ArrayList<>();
@@ -188,5 +200,7 @@ public class TestCore {
         assertEquals(bob, new User(1,"Bob","",123456,student));
         assertNotEquals(bob, new User(2,"Jens","",234567,student));
     }
+    //TODO Test unik id og ingen duplicate
+
 
 }
