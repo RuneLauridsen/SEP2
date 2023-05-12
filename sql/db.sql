@@ -17,6 +17,7 @@ CREATE TABLE user_type
     user_type_name          varchar(50) NOT NULL UNIQUE ,
     can_edit_users          bool        NOT NULL ,
     can_edit_rooms          bool        NOT NULL ,
+    can_edit_bookings       bool        NOT NULL , -- kan redigere/slette andre folks bookinger
     max_booking_count       int         NOT NULL
 );
 

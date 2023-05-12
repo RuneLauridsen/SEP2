@@ -9,15 +9,17 @@ public class UserType implements Serializable
     private final String name;
     private final boolean canEditUsers;
     private final boolean canEditRooms;
+    private final boolean canEditBookings; // NOTE(rune): Kan ændre andre folks bookinger
     private final int maxBookingCount;
     private final List<RoomType> allowedRoomTypes;
 
-    public UserType(int id, String name, boolean canEditUsers, boolean canEditRooms, int maxBookingCount, List<RoomType> allowedRoomTypes)
+    public UserType(int id, String name, boolean canEditUsers, boolean canEditRooms, boolean canEditBookings, int maxBookingCount, List<RoomType> allowedRoomTypes)
     {
         this.id = id;
         this.name = name;
         this.canEditUsers = canEditUsers;
         this.canEditRooms = canEditRooms;
+        this.canEditBookings = canEditBookings;
         this.maxBookingCount = maxBookingCount;
         this.allowedRoomTypes = allowedRoomTypes;
     }
@@ -40,6 +42,11 @@ public class UserType implements Serializable
     public boolean canEditRooms()
     {
         return canEditRooms;
+    }
+
+    public boolean canEditBookings()
+    {
+        return canEditBookings;
     }
 
     public int getMaxBookingCount()
