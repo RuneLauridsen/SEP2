@@ -1,6 +1,8 @@
 package booking.core;
 
-public class Booking
+import java.io.Serializable;
+
+public class Booking implements Serializable
 {
     private final int id;
     private final BookingInterval interval;

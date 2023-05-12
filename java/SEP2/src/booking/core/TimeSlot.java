@@ -1,8 +1,9 @@
 package booking.core;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
-public class TimeSlot
+public class TimeSlot implements Serializable
 {
     private final int id;
     private final LocalTime start;

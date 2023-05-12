@@ -43,4 +43,6 @@ public interface Persistence
 
     // Tilføjer en ny bruger. Returnere false hvis brugernavnet er optaget.
     public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type);
+
+    // TODO(rune): Lav en ny getActiveBookings funktion, som henter booking for et bestemt lokaler.
 }

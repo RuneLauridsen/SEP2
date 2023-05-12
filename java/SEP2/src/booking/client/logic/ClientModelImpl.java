@@ -1,0 +1,87 @@
+package booking.client.logic;
+
+import booking.client.networking.ClientNetwork;
+import booking.client.networking.ClientNetworkException;
+import booking.core.Booking;
+import booking.core.BookingInterval;
+import booking.core.Room;
+import booking.core.User;
+import booking.shared.GetAvailableRoomsParameters;
+
+import java.util.List;
+
+public class ClientModelImpl implements ClientModel
+{
+    private final ClientNetwork networkLayer;
+    private User user;
+
+    public ClientModelImpl(ClientNetwork networkLayer)
+    {
+        this.networkLayer = networkLayer;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    @Override public void login(String username, String password)
+    {
+        try
+        {
+            user = networkLayer.connect(username, password);
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public void logout()
+    {
+        try
+        {
+            networkLayer.disconnect();
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
+    {
+        try
+        {
+            return networkLayer.getAvailableRooms(parameters);
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override public List<Booking> getActiveBookings()
+    {
+        try
+        {
+            return networkLayer.getActiveBookings();
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override public void createBooking(Room room, BookingInterval interval)
+    {
+        try
+        {
+            networkLayer.createBooking(room, interval);
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+}

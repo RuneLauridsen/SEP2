@@ -1,6 +1,8 @@
 package booking.core;
 
-public class UserRoomData
+import java.io.Serializable;
+
+public class UserRoomData implements Serializable
 {
     private final User user;
     private final Room room;
