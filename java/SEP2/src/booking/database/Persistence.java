@@ -18,6 +18,10 @@ public interface Persistence
     // Henter all brugertyper. Key = UserType.id.
     public Map<Integer, UserType> getUserTypes();
 
+    public List<BookingInterval> getBookingsFromRoomName(String roomName);
+
+    public boolean isAvailable (String roomName);
+
     // Henter bruger ud fra brugernavn. Flere brugere kan ikke have samme brugernavn.
     // Returnerer null hvis der ikke findes nogen bruger med brugernavnet.
     public User getUser(String username);

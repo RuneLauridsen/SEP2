@@ -102,11 +102,10 @@ public class DatabaseHandler implements Persistence
         try
         {
             String query = "SELECT  "
-                + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time, "
-                + " r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id "
+                + " b.booking_date, b.booking_start_time, b.booking_end_time "
                 + "FROM sep2.booking b "
                 + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
-                + "WHERE r. = ?;";
+                + "WHERE r.room_name = ?;";
 
             statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -320,6 +319,54 @@ public class DatabaseHandler implements Persistence
         }
     }
 
+
+    //TODO måske optimere på dette
+    @Override public List<BookingInterval> getBookingsFromRoomName(String roomName)
+    {
+        Objects.requireNonNull(roomName);
+
+
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT  "
+                + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time, "
+                + "FROM sep2.booking b "
+                + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
+                + "WHERE r.room_name = ?;";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, roomName);
+            resultSet = statement.executeQuery();
+
+            List<BookingInterval> bookings = new ArrayList<>();
+            while (resultSet.next())
+            {
+                // Map resultSet til Booking objekt
+                bookings.add(
+                        new BookingInterval(
+                            resultSet.getDate("booking_date").toLocalDate(),
+                            resultSet.getTime("booking_start_time").toLocalTime(),
+                            resultSet.getTime("booking_end_time").toLocalTime()
+                        )
+                    );
+            }
+
+            return bookings;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
+
     public List<Booking> getActiveBookings(User user, LocalDate startDate, LocalDate endDate)
     {
         Objects.requireNonNull(user);
@@ -415,6 +462,11 @@ public class DatabaseHandler implements Persistence
         {
             closeStatement(statement);
         }
+    }
+
+    @Override public void deleteBooking(Booking booking)
+    {
+
     }
 
     public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor)

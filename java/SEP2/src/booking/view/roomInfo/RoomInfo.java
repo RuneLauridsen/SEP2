@@ -13,6 +13,7 @@ public class RoomInfo
     lblName.textProperty().set(viewModel.getRoom().getName());
     lblType.textProperty().set(viewModel.getRoom().getType().getName());
     lblCapacity.textProperty().set(String.valueOf(viewModel.getRoom().getComfortCapacity()));
-    //Todo julie show status and bookings
+    lblStatus.textProperty().set(viewModel.isAvailable());
+    //Todo Julie show bookings
   }
 }
