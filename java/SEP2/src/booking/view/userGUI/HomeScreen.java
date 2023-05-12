@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
@@ -48,6 +49,8 @@ public class HomeScreen
         lblName.textProperty().bind(Bindings.concat("Hello ").concat(viewModel.usernameProperty()));
         tblActiveBookings.setItems(viewModel.getActiveBookings());
 
+
+
         colRoom.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getRoom()));
         colDate.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getDate()));
         colFrom.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getStart()));
@@ -62,7 +65,12 @@ public class HomeScreen
 
     public void searchRoomClick(ActionEvent actionEvent)
     {
-        viewModel.ChangeToSearch();
+        viewModel.ChangeToSearch(txtSearch.textProperty().get());
         txtSearch.textProperty().set(null);
+    }
+
+    public void tableViewClicked(MouseEvent mouseEvent)
+    {
+        viewModel.ChangeToSearch(tblActiveBookings.getSelectionModel().getSelectedItem().getRoom().getName());
     }
 }

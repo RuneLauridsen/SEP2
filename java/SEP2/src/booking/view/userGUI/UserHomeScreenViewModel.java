@@ -67,8 +67,8 @@ public class UserHomeScreenViewModel
       viewHandler.showUserBookRoom(user);
   }
 
-    public void ChangeToSearch()
+    public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(persistence.getRoom(selctedFromSearch.get()));
+        viewHandler.showRoomInfo(persistence.getRoom(roomName));
     }
 }

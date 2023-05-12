@@ -32,7 +32,7 @@
                         <Insets bottom="30.0" />
                     </VBox.margin>
                 </Label>
-                <TableView fx:id="tblActiveBookings" prefHeight="200.0" prefWidth="386.0">
+                <TableView fx:id="tblActiveBookings" onMouseClicked="#tableViewClicked" prefHeight="200.0" prefWidth="386.0">
                     <columns>
                         <TableColumn fx:id="colRoom" prefWidth="120.0000057220459" text="Room" />
                         <TableColumn fx:id="colDate" prefWidth="117.5999755859375" text="Date" />
