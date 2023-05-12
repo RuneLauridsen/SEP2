@@ -1,10 +1,11 @@
 package booking.core;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class BookingInterval
+public class BookingInterval implements Serializable
 {
     private final LocalDate date;
     private final LocalTime start;

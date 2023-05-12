@@ -1,8 +1,9 @@
 package booking.core;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class UserType
+public class UserType implements Serializable
 {
     private final int id;
     private final String name;

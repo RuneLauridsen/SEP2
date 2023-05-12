@@ -21,17 +21,18 @@ public class DatabaseHandlerTest
         User gitte = persistence.getUser("Gitte");
         User simon = persistence.getUser("Simon");
 
-        var rooms = persistence.getAvailableRooms(
+        var bookings = persistence.getActiveBookings(
             rune,
-            new BookingInterval(
-                LocalDate.of(2023, 5, 30),
-                LocalTime.of(10, 0),
-                LocalTime.of(16, 0)
-            ),
-            13,       // min cap
-            15,       // max cap
-            null,       // bygning
-            null        // etage
+            LocalDate.MIN,
+            LocalDate.MAX
+        );
+
+        persistence.deleteBooking(bookings.get(3));
+
+        var bookings2 = persistence.getActiveBookings(
+            rune,
+            LocalDate.MIN,
+            LocalDate.MAX
         );
 
         database.close();

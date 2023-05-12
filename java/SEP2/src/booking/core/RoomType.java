@@ -1,6 +1,8 @@
 package booking.core;
 
-public class RoomType
+import java.io.Serializable;
+
+public class RoomType implements Serializable
 {
     private final int id;
     private final String name;

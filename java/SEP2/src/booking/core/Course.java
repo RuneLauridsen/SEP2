@@ -1,6 +1,8 @@
 package booking.core;
 
-public class Course
+import java.io.Serializable;
+
+public class Course implements Serializable
 {
     private final int id;
     private final String name;
