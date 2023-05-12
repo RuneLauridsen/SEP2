@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-// TODO(rune): Måske noget connection pooling?
+// TODO(rune): Måske noget connection pooling? Connection factory?
 // TODO(rune): Er der en bedre måde at skrive lange SQL queries ind i java? Det kan
 // godt være lidt svært at finde rundt i, når de bare står som String literals.
 // TODO(rune): Dette er en stor klasse, skal den deles op i mindre dele?
@@ -90,9 +90,6 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-
-
-
     public Room getRoom(String roomName)
     {
         Objects.requireNonNull(roomName);
@@ -114,13 +111,13 @@ public class DatabaseHandler implements Persistence
             {
                 // Map resultSet til User objekt
                 return new Room(
-                resultSet.getInt("room_id"),
-                resultSet.getString("room_name"),
-                resultSet.getInt("room_size"),
-                resultSet.getInt("room_comfort_capacity"),
-                resultSet.getInt("room_fire_capacity"),
-                resultSet.getString("room_comment"),
-                roomTypes.get(resultSet.getInt("room_type_id"))
+                    resultSet.getInt("room_id"),
+                    resultSet.getString("room_name"),
+                    resultSet.getInt("room_size"),
+                    resultSet.getInt("room_comfort_capacity"),
+                    resultSet.getInt("room_fire_capacity"),
+                    resultSet.getString("room_comment"),
+                    roomTypes.get(resultSet.getInt("room_type_id"))
                 );
             }
             else
@@ -138,7 +135,6 @@ public class DatabaseHandler implements Persistence
             closeStatement(statement);
         }
     }
-
 
     public Map<Integer, RoomType> getRoomTypes()
     {
@@ -370,6 +366,30 @@ public class DatabaseHandler implements Persistence
         catch (SQLException e)
         {
             throw new RuntimeException(e);  // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeStatement(statement);
+        }
+    }
+
+    public void deleteBooking(Booking booking)
+    {
+        Objects.requireNonNull(booking);
+
+        String query = "DELETE FROM sep2.booking WHERE booking_id = ?";
+
+        PreparedStatement statement = null;
+
+        try
+        {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, booking.getId());
+            statement.execute();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TOOD(rune): Bedre error handling
         }
         finally
         {
