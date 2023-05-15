@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.client.view.userGUI.UserBookRoom">
+    <children>
+        <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+            <children>
+                <Label text="Book Room">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" />
+                    </VBox.margin>
+                </Label>
+                <HBox prefHeight="77.0" prefWidth="600.0">
+                    <children>
+                        <VBox prefHeight="130.0" prefWidth="293.0">
+                            <children>
+                                <HBox prefHeight="41.0" prefWidth="294.0">
+                                    <children>
+                                        <Label text="Date:" />
+                                        <DatePicker fx:id="dpDate" promptText="dd/mm/yyyy">
+                                            <HBox.margin>
+                                                <Insets left="10.0" />
+                                            </HBox.margin>
+                                        </DatePicker>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </HBox>
+                                <HBox prefHeight="41.0" prefWidth="294.0">
+                                    <children>
+                                        <Label text="From:" />
+                                        <ComboBox fx:id="cbbFromTime" prefHeight="26.0" prefWidth="87.0">
+                                            <HBox.margin>
+                                                <Insets left="10.0" />
+                                            </HBox.margin>
+                                        </ComboBox>
+                                        <Label text="To:">
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                        </Label>
+                                        <ComboBox fx:id="cbbToTime" prefHeight="26.0" prefWidth="89.0">
+                                            <HBox.margin>
+                                                <Insets left="10.0" />
+                                            </HBox.margin>
+                                        </ComboBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                        <Line endX="-100.0" endY="90.0" startX="-100.0" stroke="#00000021" />
+                        <VBox prefHeight="70.0" prefWidth="288.0">
+                            <children>
+                                <HBox prefHeight="33.0" prefWidth="298.0">
+                                    <children>
+                                        <Label text="min. capacity" />
+                                        <TextField fx:id="txtMinCap" prefHeight="26.0" prefWidth="46.0">
+                                            <HBox.margin>
+                                                <Insets left="10.0" />
+                                            </HBox.margin>
+                                        </TextField>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" />
+                                    </VBox.margin>
+                                </HBox>
+                                <HBox prefHeight="40.0" prefWidth="298.0">
+                                    <children>
+                                        <Label text="max. capacity" />
+                                        <TextField fx:id="txtMaxCap" prefHeight="26.0" prefWidth="47.0">
+                                            <HBox.margin>
+                                                <Insets left="10.0" />
+                                            </HBox.margin>
+                                        </TextField>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" />
+                                    </VBox.margin>
+                                </HBox>
+                                <HBox prefHeight="40.0" prefWidth="298.0">
+                                    <children>
+                                        <Label text="Building:">
+                                            <HBox.margin>
+                                                <Insets right="10.0" />
+                                            </HBox.margin>
+                                        </Label>
+                                        <ComboBox fx:id="cbbBuilding" prefHeight="26.0" prefWidth="26.0" />
+                                        <Label text="Floor:">
+                                            <HBox.margin>
+                                                <Insets left="20.0" right="10.0" />
+                                            </HBox.margin>
+                                        </Label>
+                                        <ComboBox fx:id="cbbFloor" prefHeight="26.0" prefWidth="26.0" />
+                                    </children>
+                                </HBox>
+                            </children>
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox prefHeight="33.0" prefWidth="582.0">
+                    <children>
+                        <Label fx:id="lblError" prefHeight="18.0" prefWidth="505.0" text="Error message " textFill="#c12222" visible="false">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="btnSearch" mnemonicParsing="false" onMouseClicked="#btnSearchClicked" text="Search" />
+                    </children>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </HBox>
+                <Line endX="560.0" stroke="#0000009e">
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" />
+                    </VBox.margin>
+                </Line>
+                <VBox fx:id="vbAvailableRooms" prefHeight="200.0" prefWidth="100.0" visible="false">
+                    <children>
+                        <Label text="Available rooms:">
+                            <font>
+                                <Font size="19.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblNoRooms" text="There are no available rooms with the given information." />
+                        <ListView fx:id="lvRooms" onMouseClicked="#listViewClicked" prefHeight="200.0" prefWidth="200.0" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

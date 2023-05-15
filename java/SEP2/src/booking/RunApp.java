@@ -1,23 +1,36 @@
 package booking;
 
-import booking.core.Booking;
-import booking.core.User;
-import booking.core.UserType;
 import booking.database.DatabaseHandler;
+import booking.server.Server;
+import booking.server.model.ServerModel;
+import booking.server.model.ServerModelImpl;
+import booking.server.networking.ServerNetworkSocket;
 import javafx.application.Application;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
+import java.sql.SQLException;
 
 public class RunApp
 {
     public static void main(String[] args)
     {
+        Thread serverThread = new Thread(() -> {
+            try
+            {
+                DatabaseHandler db = new DatabaseHandler();
+                db.open();
+
+                ServerModel serverModel = new ServerModelImpl(db);
+                ServerNetworkSocket socketServer = new ServerNetworkSocket(serverModel);
+                socketServer.run();
+            }
+            catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            }
+        });
+
+        serverThread.start();
+
         Application.launch(App.class, args);
     }
 }

@@ -1,4 +1,4 @@
-import booking.core.*;
+import booking.shared.objects.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -104,7 +104,7 @@ public class TestCore {
     public void BookingMaksRooms()
     {
         List<RoomType> groupList = new ArrayList<>();
-        UserType student = new UserType(1,"student",false,false,2,groupList);
+        UserType student = new UserType(1,"student",false,false,false, 2,groupList);
         User bob = new User(1,"Bob","",123456,student);
 
         RoomType group = new RoomType(1,"Group");
@@ -123,7 +123,7 @@ public class TestCore {
     public void BookingCreate()
     {
         List<RoomType> groupList = new ArrayList<>();
-        UserType student = new UserType(1,"student",false,false,2,groupList);
+        UserType student = new UserType(1,"student",false,false, false, 2,groupList);
         User bob = new User(1,"Bob","",123456,student);
 
         RoomType group = new RoomType(1,"Group");
@@ -152,7 +152,7 @@ public class TestCore {
         Course SDJ = new Course(1,"SDJ",8);
 
         List<RoomType> groupList= new ArrayList();
-        UserType student = new UserType(1,"Student",false,false,2,groupList);
+        UserType student = new UserType(1,"Student",false,false, false, 2,groupList);
         List<User> SW = new ArrayList<>();
 
         User bob = new User(1,"Bob","",123456,student);
@@ -183,10 +183,10 @@ public class TestCore {
     public void ConstructorOfUserType()
     {
         List<RoomType> userBob = new ArrayList<>();
-        UserType student = new UserType(1,"student",false,false,2,userBob);
+        UserType student = new UserType(1,"student",false,false, false, 2,userBob);
 
-        assertEquals(student, new UserType(1,"student",false,false,2,userBob));
-        assertNotEquals(student, new UserType(2,"student",false,false,2,userBob));
+        assertEquals(student, new UserType(1,"student",false,false, false, 2,userBob));
+        assertNotEquals(student, new UserType(2,"student",false,false,false, 2,userBob));
     }
     //TODO Test unik id og ingen duplicate
 
@@ -194,7 +194,7 @@ public class TestCore {
     public void ConstructorOfUser()
     {
         List<RoomType> userBob = new ArrayList<>();
-        UserType student = new UserType(1,"student",false,false,2,userBob);
+        UserType student = new UserType(1,"student",false,false, false, 2,userBob);
         User bob = new User(1,"Bob","",123456,student);
 
         assertEquals(bob, new User(1,"Bob","",123456,student));

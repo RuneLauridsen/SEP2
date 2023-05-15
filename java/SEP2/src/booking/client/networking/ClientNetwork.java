@@ -1,11 +1,12 @@
 package booking.client.networking;
 
-import booking.core.User;
+import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.core.Booking;
-import booking.core.BookingInterval;
-import booking.core.Room;
+import booking.shared.objects.Booking;
+import booking.shared.objects.BookingInterval;
+import booking.shared.objects.Room;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ClientNetwork
@@ -19,9 +20,14 @@ public interface ClientNetwork
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
         throws ClientNetworkException, ClientResponseException;
 
-    public List<Booking> getActiveBookings()
+    public List<Booking> getActiveBookings(LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException;
 
     public void createBooking(Room room, BookingInterval interval)
+        throws ClientNetworkException, ClientResponseException;
+    public void getRoom(String room, User activeUser)
+        throws ClientNetworkException, ClientResponseException;
+
+    public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException;
 }

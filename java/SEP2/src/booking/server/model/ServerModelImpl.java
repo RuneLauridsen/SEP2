@@ -1,9 +1,9 @@
 package booking.server.model;
 
-import booking.core.Booking;
-import booking.core.BookingInterval;
-import booking.core.Room;
-import booking.core.User;
+import booking.shared.objects.Booking;
+import booking.shared.objects.BookingInterval;
+import booking.shared.objects.Room;
+import booking.shared.objects.User;
 import booking.database.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.socketMessages.ErrorResponseReason;

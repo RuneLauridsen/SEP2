@@ -1,4 +1,4 @@
-import booking.core.BookingInterval;
+import booking.shared.objects.BookingInterval;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

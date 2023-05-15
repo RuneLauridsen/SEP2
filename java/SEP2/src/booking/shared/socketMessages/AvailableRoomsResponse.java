@@ -1,6 +1,6 @@
 package booking.shared.socketMessages;
 
-import booking.core.Room;
+import booking.shared.objects.Room;
 
 import java.util.List;
 
