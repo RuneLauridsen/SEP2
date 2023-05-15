@@ -114,12 +114,12 @@ CREATE TABLE booking
 
 
 INSERT INTO user_type
-    (user_type_name, can_edit_users, can_edit_rooms, max_booking_count)
+    (user_type_name, can_edit_users, can_edit_rooms, can_edit_bookings, max_booking_count)
 VALUES
-    /* id = 1 */ ('Skemalægger', true, true, 99999),
-    /* id = 2 */ ('Medarbejder', false, false, 99999),
-    /* id = 3 */ ('Studerende', false, false, 2),
-    /* id = 4 */ ('Studerende (Bachelor)', false, false, 2);
+    /* id = 1 */ ('Skemalægger',            true,  true,  true,  99999),
+    /* id = 2 */ ('Medarbejder',            false, false, false, 99999),
+    /* id = 3 */ ('Studerende',             false, false, false, 2),
+    /* id = 4 */ ('Studerende (Bachelor)',  false, false, false, 2);
 
 INSERT INTO room_type
     (room_type_name)
