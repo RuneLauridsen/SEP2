@@ -42,7 +42,7 @@ public class UserHomeScreenViewModel
         this.user = user;
         username.set(user.getName());
 
-        List<Booking> bookings = persistence.getBookingsForUser(user, LocalDate.now(), LocalDate.MAX);
+        List<Booking> bookings = persistence.getBookingsForUser(user, LocalDate.now(), LocalDate.MAX, null);
         activeBookings.addAll(bookings);
     }
 
@@ -68,6 +68,6 @@ public class UserHomeScreenViewModel
 
     public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(persistence.getRoom(roomName));
+        viewHandler.showRoomInfo(persistence.getRoom(roomName, null));
     }
 }

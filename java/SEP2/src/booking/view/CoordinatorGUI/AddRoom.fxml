@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="308.0" prefWidth="290.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.view.skemalaeggerGUI.AddRoom">
+<AnchorPane prefHeight="308.0" prefWidth="290.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.view.CoordinatorGUI.AddRoom">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>

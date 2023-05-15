@@ -2,6 +2,8 @@ package booking;
 
 import booking.core.Room;
 import booking.core.User;
+import booking.view.CoordinatorGUI.AddRoom;
+import booking.view.CoordinatorGUI.AddRoomViewModel;
 import booking.view.roomInfo.RoomInfo;
 import booking.view.roomInfo.RoomInfoViewModel;
 import booking.view.userGUI.*;
@@ -85,7 +87,7 @@ public class ViewHandler
         }
     }
 
-    public void showHomeScreen(User user)
+    public void showUserHomeScreen(User user)
     {
         try
         {
@@ -112,6 +114,35 @@ public class ViewHandler
             ex.printStackTrace();
         }
     }
+
+    public void showAddRoom(){
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
+
+            loader.setLocation(getClass().getResource("view/CoordinatorGUI/AddRoom.fxml"));
+            root = loader.load();
+
+
+            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
+            AddRoomViewModel viewModel = new AddRoomViewModel(this,persistence);
+
+            AddRoom view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            Stage infoStage = new Stage();
+            infoStage.setScene(scene);
+            infoStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void showRoomInfo(Room room)
     {
         try

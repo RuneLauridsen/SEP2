@@ -3,6 +3,7 @@ package booking;
 import booking.core.Room;
 import booking.database.Persistence;
 import booking.view.roomInfo.RoomInfoViewModel;
+import booking.view.CoordinatorGUI.CoordinatorHomeScreenViewModel;
 import booking.view.userGUI.*;
 import booking.view.login.LoginViewModel;
 
@@ -11,6 +12,8 @@ public class ViewModelFactory
     private LoginViewModel loginViewModel;
     private UserBookRoomViewModel userBookRoomViewModel;
     private UserHomeScreenViewModel userHomeScreenViewModel;
+
+    private CoordinatorHomeScreenViewModel coordinatorHomeScreenViewModel;
 
     private RoomInfoViewModel roomInfoViewModel;
     public ViewModelFactory()
@@ -44,5 +47,11 @@ public class ViewModelFactory
         if (roomInfoViewModel == null)
             roomInfoViewModel = new RoomInfoViewModel(viewHandler, persistence, room);
         return roomInfoViewModel;
+    }
+
+    public CoordinatorHomeScreenViewModel getCoordinatorHomescreenViewModel (ViewHandler viewHandler, Persistence persistence){
+        if (coordinatorHomeScreenViewModel == null)
+            coordinatorHomeScreenViewModel = new CoordinatorHomeScreenViewModel(viewHandler, persistence);
+        return coordinatorHomeScreenViewModel;
     }
 }

@@ -16,7 +16,7 @@ public class App extends Application
 
         ViewModelFactory viewModelFactory = new ViewModelFactory();
         ViewHandler viewHandler = new ViewHandler(primaryStage, viewModelFactory, database);
-        viewHandler.showHomeScreen(user);
+        viewHandler.showUserHomeScreen(user);
 
     }
 }

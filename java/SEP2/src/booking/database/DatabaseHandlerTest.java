@@ -22,7 +22,8 @@ public class DatabaseHandlerTest
         var bookings = persistence.getBookingsForUser(
             rune,
             LocalDate.MIN,
-            LocalDate.MAX
+            LocalDate.MAX,
+            null
         );
 
         persistence.deleteBooking(bookings.get(3));
@@ -30,7 +31,8 @@ public class DatabaseHandlerTest
         var bookings2 = persistence.getBookingsForUser(
             rune,
             LocalDate.MIN,
-            LocalDate.MAX
+            LocalDate.MAX,
+            null
         );
 
         database.close();

@@ -48,10 +48,10 @@ public class UserBookRoomViewModel
             "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45",
             "15:00", "15:15", "15:30", "15:45", "16:00");
 
-        buildings = FXCollections.observableArrayList(null,'A', 'B', 'C');
+        buildings = FXCollections.observableArrayList(null, 'A', 'B', 'C');
 
         //TODO only 5 floors for normal
-        floors = FXCollections.observableArrayList(null,1, 2, 3, 4, 5, 6);
+        floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5, 6);
 
         selectedDate = new SimpleObjectProperty<>();
         selectedFromTime = new SimpleObjectProperty<>();
@@ -159,9 +159,10 @@ public class UserBookRoomViewModel
 
         return LocalTime.of(hour, minute);
     }
+
     public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(persistence.getRoom(roomName));
+        viewHandler.showRoomInfo(persistence.getRoom(roomName, null));
     }
 
 }

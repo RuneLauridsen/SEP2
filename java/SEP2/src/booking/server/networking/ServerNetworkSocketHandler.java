@@ -105,7 +105,8 @@ public class ServerNetworkSocketHandler implements Runnable
                     List<Booking> bookingsForRoom = model.getBookingsForRoom(
                         bookingsForRoomRequest.getRoomName(),
                         bookingsForRoomRequest.getFrom(),
-                        bookingsForRoomRequest.getTo());
+                        bookingsForRoomRequest.getTo(),
+                        user);
 
                     sendResponse(new BookingsForRoomResponse(bookingsForRoom));
                 }
@@ -118,7 +119,8 @@ public class ServerNetworkSocketHandler implements Runnable
                     List<Booking> bookingsForUser = model.getBookingsForUser(
                         bookingsForUserRequest.getUsername(),
                         bookingsForUserRequest.getFrom(),
-                        bookingsForUserRequest.getTo()
+                        bookingsForUserRequest.getTo(),
+                        user
                     );
 
                     sendResponse(new BookingsForUserResponse(bookingsForUser));
