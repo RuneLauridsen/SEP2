@@ -627,6 +627,10 @@ public class DatabaseHandler implements Persistence
         }
     }
 
+    /*public boolean createRoom(String name, ){
+
+    }*/
+
     public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type)
     {
         Objects.requireNonNull(name);
