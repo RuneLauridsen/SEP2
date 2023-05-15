@@ -23,7 +23,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Book Room" textAlignment="CENTER">
+                        <Button fx:id="btnBookRoom" mnemonicParsing="false" text="Book Room" textAlignment="CENTER">
                            <VBox.margin>
                               <Insets bottom="20.0" top="10.0" />
                            </VBox.margin>
@@ -31,7 +31,7 @@
                               <Insets bottom="5.0" left="14.0" right="14.0" top="5.0" />
                            </padding>
                         </Button>
-                        <Button mnemonicParsing="false" text="Insert File" textAlignment="CENTER">
+                        <Button fx:id="btnInsertFile" mnemonicParsing="false" text="Insert File" textAlignment="CENTER">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>
@@ -44,13 +44,13 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </VBox>
-                  <VBox prefHeight="94.0" prefWidth="370.0">
+                  <VBox fx:id="VBoxFile" prefHeight="94.0" prefWidth="370.0">
                      <children>
                         <Label text="Inserted File:" underline="true" />
-                        <Label text="[File]" />
+                        <Label fx:id="lblFileName" text="[File]" />
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="370.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Cancel">
+                              <Button fx:id="btnCancelFile" mnemonicParsing="false" text="Cancel">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="50.0" right="30.0" top="5.0" />
                                  </HBox.margin>
@@ -58,7 +58,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Button>
-                              <Button mnemonicParsing="false" text="Confirm">
+                              <Button fx:id="btnConfirmFile" mnemonicParsing="false" text="Confirm">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="30.0" right="50.0" top="5.0" />
                                  </HBox.margin>
