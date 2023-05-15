@@ -12,7 +12,11 @@ public class Room implements Serializable
     private final String comment;
     private final RoomType type;
 
-    public Room(int id, String name, int size, int comfortCapacity, int fireCapacity, String comment, RoomType type)
+    // NOTE(rune): Bruger-specifik
+    private final String userComment;
+    private final int userColor;
+
+    public Room(int id, String name, int size, int comfortCapacity, int fireCapacity, String comment, RoomType type, String userComment, int userColor)
     {
         this.id = id;
         this.name = name;
@@ -21,6 +25,8 @@ public class Room implements Serializable
         this.fireCapacity = fireCapacity;
         this.comment = comment;
         this.type = type;
+        this.userComment = userComment;
+        this.userColor = userColor;
     }
 
     public int getId()

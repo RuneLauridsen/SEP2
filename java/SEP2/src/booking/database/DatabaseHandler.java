@@ -131,9 +131,11 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public Room getRoom(String roomName)
+    public Room getRoom(String roomName, User activeUser)
     {
         Objects.requireNonNull(roomName);
+
+        int userId = activeUser == null ? 0 : activeUser.getId();
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
@@ -142,10 +144,17 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT room_id, room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id FROM sep2.room WHERE room_name = ?;";
+            String query = "SELECT "
+                + "r.room_id, r.room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id, "
+                + "COALESCE(urd.comment, '') AS user_data_comment, "
+                + "COALESCE(urd.color, CAST(x'ffffffff' AS int)) as user_data_color "
+                + "FROM sep2.room r "
+                + "LEFT OUTER JOIN sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? "
+                + "WHERE r.room_name = ? ";
 
             statement = connection.prepareStatement(query);
-            statement.setString(1, roomName);
+            statement.setInt(1, userId);
+            statement.setString(2, roomName);
             resultSet = statement.executeQuery();
 
             if (resultSet.next())
@@ -158,7 +167,9 @@ public class DatabaseHandler implements Persistence
                     resultSet.getInt("room_comfort_capacity"),
                     resultSet.getInt("room_fire_capacity"),
                     resultSet.getString("room_comment"),
-                    roomTypes.get(resultSet.getInt("room_type_id"))
+                    roomTypes.get(resultSet.getInt("room_type_id")),
+                    resultSet.getString("user_data_comment"),
+                    resultSet.getInt("user_data_color")
                 );
             }
             else
@@ -214,19 +225,28 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public List<Room> getRooms()
+    public List<Room> getRooms(User activeUser)
     {
+        int userId = activeUser == null ? 0 : activeUser.getId();
+
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try
         {
-            String query = "SELECT room_id, room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id FROM sep2.room;";
+            String query = "SELECT "
+                + "r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id, "
+                + "COALESCE(urd.comment, '') AS user_data_comment, "
+                + "COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color "
+                + "FROM sep2.room r "
+                + "LEFT OUTER JOIN sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? ;";
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userId);
+
+            resultSet = statement.executeQuery();
 
             List<Room> rooms = new ArrayList<>();
             while (resultSet.next())
@@ -238,8 +258,10 @@ public class DatabaseHandler implements Persistence
                     resultSet.getInt("room_comfort_capacity"),
                     resultSet.getInt("room_fire_capacity"),
                     resultSet.getString("room_comment"),
-                    roomTypes.get(resultSet.getInt("room_type_id"))
-                ));
+                    roomTypes.get(resultSet.getInt("room_type_id")),
+                    resultSet.getString("user_data_comment"),
+                    resultSet.getInt("user_data_color"))
+                );
             }
 
             return rooms;
@@ -366,11 +388,13 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate)
+    public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate, User activeUser)
     {
         Objects.requireNonNull(user);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
+
+        int userId = activeUser == null ? 0 : activeUser.getId();
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
@@ -381,18 +405,22 @@ public class DatabaseHandler implements Persistence
         {
             String query = "SELECT  "
                 + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time, "
-                + " r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id "
+                + " r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id, "
+                + " COALESCE(urd.comment, '') AS user_data_comment, "
+                + " COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color "
                 + "FROM sep2.booking b "
                 + "INNER JOIN sep2.\"user\" u ON b.user_id = u.user_id "
                 + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
+                + "LEFT OUTER JOIN sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? "
                 + "WHERE u.user_id = ? "
                 + "AND b.booking_date BETWEEN ? AND ? "
                 + "ORDER BY  b.booking_date, b.booking_start_time;";
 
             statement = connection.prepareStatement(query);
-            statement.setInt(1, user.getId());
-            statement.setDate(2, truncateToSqlDate(startDate));
-            statement.setDate(3, truncateToSqlDate(endDate));
+            statement.setInt(1, userId);
+            statement.setInt(2, user.getId());
+            statement.setDate(3, truncateToSqlDate(startDate));
+            statement.setDate(4, truncateToSqlDate(endDate));
             resultSet = statement.executeQuery();
 
             List<Booking> bookings = new ArrayList<>();
@@ -414,7 +442,9 @@ public class DatabaseHandler implements Persistence
                             resultSet.getInt("room_comfort_capacity"),
                             resultSet.getInt("room_fire_capacity"),
                             resultSet.getString("room_comment"),
-                            roomTypes.get(resultSet.getInt("room_type_id"))
+                            roomTypes.get(resultSet.getInt("room_type_id")),
+                            resultSet.getString("user_data_comment"),
+                            resultSet.getInt("user_data_color")
                         ),
                         user
                     )
@@ -434,7 +464,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate)
+    @Override public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate, User activeUser)
     {
         Objects.requireNonNull(room);
         Objects.requireNonNull(startDate);
@@ -500,9 +530,9 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public void createBooking(User user, Room room, BookingInterval interval)
+    public void createBooking(User activeUser, Room room, BookingInterval interval)
     {
-        Objects.requireNonNull(user);
+        Objects.requireNonNull(activeUser);
         Objects.requireNonNull(room);
         Objects.requireNonNull(interval);
 
@@ -520,7 +550,7 @@ public class DatabaseHandler implements Persistence
             statement.setTime(2, Time.valueOf(interval.getStart()));
             statement.setTime(3, Time.valueOf(interval.getEnd()));
             statement.setInt(4, room.getId());
-            statement.setInt(5, user.getId());
+            statement.setInt(5, activeUser.getId());
             statement.execute();
         }
         catch (SQLException e)
@@ -538,9 +568,11 @@ public class DatabaseHandler implements Persistence
 
     }
 
-    public List<Room> getAvailableRooms(User user, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor)
+    // TODO(rune): Måske fjern denne funktion, men udvid getRooms til at tage minCap osv.
+    // Dato checkene kan gøres i modellen.
+    public List<Room> getAvailableRooms(User activeUser, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor)
     {
-        Objects.requireNonNull(user);
+        Objects.requireNonNull(activeUser);
         Objects.requireNonNull(interval);
 
         String floorString = null;
@@ -567,17 +599,20 @@ public class DatabaseHandler implements Persistence
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
-        String query = "SELECT r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id "
+        String query = "SELECT r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id, "
+            + "COALESCE(urd.comment, '') AS user_data_comment, "
+            + "COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color "
             + "FROM sep2.room r "
             + "INNER JOIN sep2.\"user\" u ON u.user_id = ? "
             + "INNER JOIN sep2.user_type_allowed_room_type utart ON r.room_type_id = utart.room_type_id AND u.user_type_id = utart.user_type_id "
             + "LEFT OUTER JOIN sep2.booking b ON r.room_id = b.room_id "
+            + "LEFT OUTER JOIN sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? "
             + "WHERE ((b.booking_id IS NULL) OR (b.booking_date <> ?) OR NOT (b.booking_end_time > ? AND b.booking_start_time < ?)) "
             + "AND ((r.room_comfort_capacity >= ?))  "
             + "AND ((r.room_comfort_capacity <= ?))  "
             + "AND ((substr(r.room_name, 1, 1) = ?) OR (? IS NULL)) "
             + "AND ((substr(r.room_name, 3, 1) = ?) OR (? IS NULL)) "
-            + "GROUP BY r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id "
+            + "GROUP BY r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id, urd.comment, urd.color "
             + "ORDER BY r.room_name;";
 
         PreparedStatement statement = null;
@@ -586,16 +621,17 @@ public class DatabaseHandler implements Persistence
         try
         {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, user.getId());
-            statement.setDate(2, Date.valueOf(interval.getDate()));
-            statement.setTime(3, Time.valueOf(interval.getStart()));
-            statement.setTime(4, Time.valueOf(interval.getEnd()));
-            statement.setInt(5, minCapacity);
-            statement.setInt(6, maxCapacity);
-            statement.setString(7, buildingString);
+            statement.setInt(1, activeUser.getId());
+            statement.setInt(2, activeUser.getId());
+            statement.setDate(3, Date.valueOf(interval.getDate()));
+            statement.setTime(4, Time.valueOf(interval.getStart()));
+            statement.setTime(5, Time.valueOf(interval.getEnd()));
+            statement.setInt(6, minCapacity);
+            statement.setInt(7, maxCapacity);
             statement.setString(8, buildingString);
-            statement.setString(9, floorString);
+            statement.setString(9, buildingString);
             statement.setString(10, floorString);
+            statement.setString(11, floorString);
             resultSet = statement.executeQuery();
 
             List<Room> rooms = new ArrayList<>();
@@ -609,7 +645,9 @@ public class DatabaseHandler implements Persistence
                         resultSet.getInt("room_comfort_capacity"),
                         resultSet.getInt("room_fire_capacity"),
                         resultSet.getString("room_comment"),
-                        roomTypes.get(resultSet.getInt("room_type_id"))
+                        roomTypes.get(resultSet.getInt("room_type_id")),
+                        resultSet.getString("user_data_comment"),
+                        resultSet.getInt("user_data_color")
                     )
                 );
             }
