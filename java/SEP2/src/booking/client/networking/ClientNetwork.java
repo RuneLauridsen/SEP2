@@ -25,9 +25,13 @@ public interface ClientNetwork
 
     public void createBooking(Room room, BookingInterval interval)
         throws ClientNetworkException, ClientResponseException;
-    public void getRoom(String room, User activeUser)
+
+    public Room getRoom(String room, User activeUser)
         throws ClientNetworkException, ClientResponseException;
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
+        throws ClientNetworkException, ClientResponseException;
+
+    public Room getRoom(String roomName)
         throws ClientNetworkException, ClientResponseException;
 }

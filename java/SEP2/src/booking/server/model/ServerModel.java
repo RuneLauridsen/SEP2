@@ -15,6 +15,8 @@ public interface ServerModel
     // TODO(rune): Password checking
     public User getUser(String username);
 
+    public Room getRoom(String roomName, User activeUser);
+
     public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters);
 
     // NOTE(rune): Returnerer en fejlkode, hvis bruger ikke har adgang til at booke lokaler,

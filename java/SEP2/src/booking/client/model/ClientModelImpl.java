@@ -110,8 +110,9 @@ public class ClientModelImpl implements ClientModel
 
     @Override public Room getRoom(String room, User activeUser)
     {
-        try{
-            networkLayer.getRoom(room, activeUser);
+        try
+        {
+            return networkLayer.getRoom(room, activeUser);
         }
         catch (ClientResponseException e)
         {
@@ -121,7 +122,6 @@ public class ClientModelImpl implements ClientModel
         {
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
-        return null; //TODO(julie): måske noget andet her
     }
 
 

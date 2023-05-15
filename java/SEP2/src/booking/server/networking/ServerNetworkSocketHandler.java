@@ -173,6 +173,16 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
 
                 //
+                // Room
+                //
+                else if(request instanceof RoomRequest roomRequest)
+                {
+                    Room room = model.getRoom(roomRequest.getRoomName(), user);
+
+                    sendResponse(new RoomResponse(room));
+                }
+
+                //
                 // Unknown request
                 //
                 else

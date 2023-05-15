@@ -99,9 +99,8 @@ public class ViewHandler
             loader.setLocation(getClass().getResource("../view/userGUI/UserHomeScreen.fxml"));
             root = loader.load();
 
-            UserHomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this,
-                model);
-            viewModel.setUser(user);
+            UserHomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this,  model);
+            viewModel.refreshActiveBookings();
 
             UserHomeScreen view = loader.getController();
             view.init(viewModel);

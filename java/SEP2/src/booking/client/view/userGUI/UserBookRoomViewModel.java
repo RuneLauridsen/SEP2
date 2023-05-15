@@ -18,9 +18,9 @@ import java.util.List;
 
 public class UserBookRoomViewModel
 {
-    private ObservableList<String> timeIntervals;
-    private ObservableList<Character> buildings;
-    private ObservableList<Integer> floors;
+    private final ObservableList<String> timeIntervals;
+    private final ObservableList<Character> buildings;
+    private final ObservableList<Integer> floors;
 
     private final ObjectProperty<LocalDate> selectedDate;
     private final ObjectProperty<String> selectedFromTime;
@@ -28,12 +28,10 @@ public class UserBookRoomViewModel
     private final ObjectProperty<Character> selectedBuilding;
     private final ObjectProperty<Integer> selectedFloor;
 
-    private ViewHandler viewHandler;
-    private ClientModel model;
+    private final ViewHandler viewHandler;
+    private final ClientModel model;
 
-    private User user;
-
-    private ObservableList<Room> roomList;
+    private final ObservableList<Room> roomList;
 
     public UserBookRoomViewModel(ViewHandler viewHandler, ClientModel model)
     {

@@ -68,10 +68,12 @@ public class ClientNetworkSocket implements ClientNetwork
         CreateBookingResponse response = (CreateBookingResponse) readResponse();
     }
 
-    @Override public void getRoom(String room, User activeUser)
+    @Override public Room getRoom(String room, User activeUser)
         throws ClientNetworkException, ClientResponseException
     {
-
+        sendRequest(new RoomRequest(room));
+        RoomResponse response = (RoomResponse)readResponse();
+        return response.getRoom();
     }
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
@@ -80,6 +82,14 @@ public class ClientNetworkSocket implements ClientNetwork
         sendRequest(new BookingsForRoomRequest(roomName, start, end));
         BookingsForRoomResponse response = (BookingsForRoomResponse) readResponse();
         return response.getBookings();
+    }
+
+    public Room getRoom(String roomName)
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new RoomRequest(roomName));
+        RoomResponse response = (RoomResponse) readResponse();
+        return response.getRoom();
     }
 
     private void sendRequest(Request request)

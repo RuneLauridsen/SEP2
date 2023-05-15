@@ -27,6 +27,11 @@ public class ServerModelImpl implements ServerModel
         return persistence.getUser(username);
     }
 
+    @Override public Room getRoom(String roomName, User activeUser)
+    {
+        return persistence.getRoom(roomName, activeUser);
+    }
+
     @Override public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters)
     {
         return persistence.getAvailableRooms(
