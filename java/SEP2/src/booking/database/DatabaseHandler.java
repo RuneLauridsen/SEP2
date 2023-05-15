@@ -386,10 +386,13 @@ public class DatabaseHandler implements Persistence
                 + "INNER JOIN sep2.\"user\" u ON b.user_id = u.user_id "
                 + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
                 + "WHERE u.user_id = ? "
+                + "AND b.booking_date BETWEEN ? AND ? "
                 + "ORDER BY  b.booking_date, b.booking_start_time;";
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, user.getId());
+            statement.setDate(2, truncateToSqlDate(startDate));
+            statement.setDate(3, truncateToSqlDate(endDate));
             resultSet = statement.executeQuery();
 
             List<Booking> bookings = new ArrayList<>();
@@ -451,10 +454,13 @@ public class DatabaseHandler implements Persistence
                 + "INNER JOIN sep2.\"user\" u ON b.user_id = u.user_id "
                 + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
                 + "WHERE r.room_id = ? "
+                + "AND b.booking_date BETWEEN ? AND ? "
                 + "ORDER BY  b.booking_date, b.booking_start_time;";
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, room.getId());
+            statement.setDate(2, truncateToSqlDate(startDate));
+            statement.setDate(3, truncateToSqlDate(endDate));
             resultSet = statement.executeQuery();
 
             List<Booking> bookings = new ArrayList<>();
@@ -744,6 +750,28 @@ public class DatabaseHandler implements Persistence
         else
         {
             statement.setInt(index, value);
+        }
+    }
+
+    private static Date truncateToSqlDate(LocalDate localDate)
+    {
+        // NOTE(rune): Postgres' dato type har ikke ligeså stor range som Java's LocalDate.
+        // Vi bruger LocalDate.MIN og LocalDate.MAX når man f.eks. vil finde ALLE bookinger,
+        // med getBookingsForRoom, så denne funktion sørger for, at de ikke overskrider
+        // Postgres' dato types grænser. Håndterer ikke BCE.
+        // https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-DATETIME-TABLE
+
+        if (localDate.getYear() <= 0)
+        {
+            return Date.valueOf(LocalDate.of(0, 1, 1));
+        }
+        else if (localDate.getYear() > 5874897)
+        {
+            return Date.valueOf(LocalDate.of(5874897, 1, 1));
+        }
+        else
+        {
+            return Date.valueOf(localDate);
         }
     }
 }
