@@ -27,10 +27,10 @@ public class ServerModelImpl implements ServerModel
         return persistence.getUser(username);
     }
 
-    @Override public List<Room> getAvailableRooms(User user, GetAvailableRoomsParameters parameters)
+    @Override public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters)
     {
         return persistence.getAvailableRooms(
-            user,
+            activeUser,
             parameters.getInterval(),
             parameters.getMinCapacity(),
             parameters.getMaxCapacity(),
@@ -51,8 +51,9 @@ public class ServerModelImpl implements ServerModel
         {
             List<Booking> activeBookings = persistence.getBookingsForUser(
                 user,
-                LocalDate.now(),
-                LocalDate.MAX
+                LocalDate.now(), // TODO(rune): Lav om så det kan unit testes
+                LocalDate.MAX,
+                user
             );
 
             if (activeBookings.size() < user.getType().getMaxBookingCount())
@@ -71,9 +72,9 @@ public class ServerModelImpl implements ServerModel
         }
     }
 
-    @Override public ErrorResponseReason deleteBooking(User user, Booking booking)
+    @Override public ErrorResponseReason deleteBooking(User activeUser, Booking booking)
     {
-        if (user.getType().canEditBookings() || user.equals(booking.getUser()))
+        if (activeUser.getType().canEditBookings() || activeUser.equals(booking.getUser()))
         {
             persistence.deleteBooking(booking);
             return ERROR_RESPONSE_REASON_NONE;
@@ -84,12 +85,14 @@ public class ServerModelImpl implements ServerModel
         }
     }
 
-    @Override public List<Booking> getBookingsForUser(String userName, LocalDate from, LocalDate to)
+    @Override public List<Booking> getBookingsForUser(String userName, LocalDate from, LocalDate to, User activeUser)
     {
+        // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
+
         User user = persistence.getUser(userName);
         if (user != null)
         {
-            return persistence.getBookingsForUser(user, from, to);
+            return persistence.getBookingsForUser(user, from, to, activeUser);
         }
         else
         {
@@ -97,17 +100,16 @@ public class ServerModelImpl implements ServerModel
         }
     }
 
-    @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate from, LocalDate to)
+    @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate from, LocalDate to, User activeUser)
     {
-        Room room = persistence.getRoom(roomName);
+        Room room = persistence.getRoom(roomName, activeUser);
         if (room != null)
         {
-            return persistence.getBookingsForRoom(room, from, to);
+            return persistence.getBookingsForRoom(room, from, to, activeUser);
         }
         else
         {
             return List.of();
         }
     }
-
 }

@@ -2,6 +2,7 @@ package booking.core;
 
 import java.io.Serializable;
 
+// TODO(rune): Fjern fra UML, bruges ikke længere
 public class UserRoomData implements Serializable
 {
     private final User user;
