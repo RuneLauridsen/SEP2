@@ -15,6 +15,9 @@ public class HomeScreen
   public TableColumn tcolBook;
   public TableColumn tcolAlter;
 
+  public void init(){
+
+  }
   public void AddRoomClicked(MouseEvent mouseEvent)
   {
   }
@@ -24,6 +27,10 @@ public class HomeScreen
   }
 
   public void BookingsClicked(MouseEvent mouseEvent)
+  {
+  }
+
+  public void tableViewClicked(MouseEvent mouseEvent)
   {
   }
 }

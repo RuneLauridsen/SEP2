@@ -26,7 +26,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Line>
-            <TableView fx:id="tvtRooms" prefHeight="243.0" prefWidth="335.0">
+            <TableView fx:id="tvtRooms" onMouseClicked="#tableViewClicked" prefHeight="243.0" prefWidth="335.0">
               <columns>
                 <TableColumn fx:id="tcolName" prefWidth="88.0" text="Navn" />
                 <TableColumn fx:id="tcolType" prefWidth="151.99993896484375" text="Type" />
