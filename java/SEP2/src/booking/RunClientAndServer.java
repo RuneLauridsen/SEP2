@@ -1,16 +1,14 @@
 package booking;
 
-import booking.client.logic.ClientModelImpl;
+import booking.client.model.ClientModelImpl;
 import booking.client.networking.ClientNetworkSocket;
-import booking.core.BookingInterval;
+import booking.shared.objects.BookingInterval;
 import booking.database.DatabaseHandler;
 import booking.server.model.ServerModelImpl;
 import booking.server.networking.ServerNetworkSocket;
 import booking.shared.GetAvailableRoomsParameters;
-import com.sun.source.tree.IdentifierTree;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class RunClientAndServer

@@ -1,6 +1,6 @@
 package booking.shared.socketMessages;
 
-import booking.core.User;
+import booking.shared.objects.User;
 
 import java.util.Objects;
 

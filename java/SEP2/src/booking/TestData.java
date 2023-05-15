@@ -1,14 +1,6 @@
 package booking;
 
-import booking.core.Booking;
-import booking.core.BookingInterval;
-import booking.core.BookingSystem;
-import booking.core.User;
-import booking.core.UserType;
-import booking.core.Room;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+import booking.shared.objects.BookingSystem;
 
 public class TestData
 {

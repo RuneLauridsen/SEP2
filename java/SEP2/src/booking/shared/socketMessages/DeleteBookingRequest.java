@@ -1,6 +1,6 @@
 package booking.shared.socketMessages;
 
-import booking.core.Booking;
+import booking.shared.objects.Booking;
 
 public class DeleteBookingRequest extends Request
 {

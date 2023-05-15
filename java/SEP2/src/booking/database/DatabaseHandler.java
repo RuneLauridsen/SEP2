@@ -1,13 +1,12 @@
 package booking.database;
 
-import booking.core.Booking;
-import booking.core.BookingInterval;
-import booking.core.Room;
-import booking.core.RoomType;
-import booking.core.User;
-import booking.core.UserType;
+import booking.shared.objects.Booking;
+import booking.shared.objects.BookingInterval;
+import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
+import booking.shared.objects.User;
+import booking.shared.objects.UserType;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -18,7 +17,6 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Types;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;

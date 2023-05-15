@@ -1,6 +1,6 @@
 package booking.database;
 
-import booking.core.User;
+import booking.shared.objects.User;
 
 import java.sql.SQLException;
 import java.time.LocalDate;

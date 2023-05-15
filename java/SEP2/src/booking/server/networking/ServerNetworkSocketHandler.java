@@ -1,31 +1,16 @@
 package booking.server.networking;
 
-import booking.core.Booking;
-import booking.core.Room;
-import booking.core.User;
+import booking.shared.objects.Booking;
+import booking.shared.objects.Room;
+import booking.shared.objects.User;
 import booking.server.model.ServerModel;
-import booking.shared.socketMessages.AvailableRoomsRequest;
-import booking.shared.socketMessages.AvailableRoomsResponse;
-import booking.shared.socketMessages.BookingsForRoomRequest;
-import booking.shared.socketMessages.BookingsForRoomResponse;
-import booking.shared.socketMessages.BookingsForUserRequest;
-import booking.shared.socketMessages.BookingsForUserResponse;
-import booking.shared.socketMessages.ConnectionRequest;
-import booking.shared.socketMessages.ConnectionResponse;
-import booking.shared.socketMessages.CreateBookingRequest;
-import booking.shared.socketMessages.CreateBookingResponse;
-import booking.shared.socketMessages.DeleteBookingRequest;
-import booking.shared.socketMessages.DeleteBookingResponse;
-import booking.shared.socketMessages.ErrorResponse;
-
-import booking.shared.socketMessages.ErrorResponseReason;
-import booking.shared.socketMessages.Request;
-import booking.shared.socketMessages.Response;
+import booking.shared.socketMessages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.List;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
@@ -165,6 +150,26 @@ public class ServerNetworkSocketHandler implements Runnable
                     {
                         sendResponse(new ErrorResponse(deleteBookingResult));
                     }
+                }
+
+                //
+                // Available rooms
+                //
+                else if(request instanceof AvailableRoomsRequest availableRoomsRequest)
+                {
+                    List<Room> availableRooms = model.getAvailableRooms(user, availableRoomsRequest.getParameters());
+                    sendResponse(new AvailableRoomsResponse(availableRooms));
+                }
+
+                //
+                // Active rooms
+                //
+                else if(request instanceof ActiveBookingsRequest activeBookingsRequest)
+                {
+                    List<Booking> availableRooms = model.getBookingsForUser(
+                        user.getName(), LocalDate.now(), LocalDate.MAX, user);
+
+                    sendResponse(new ActiveBookingsResponse(availableRooms));
                 }
 
                 //

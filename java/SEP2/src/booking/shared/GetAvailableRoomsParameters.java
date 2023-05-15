@@ -1,6 +1,6 @@
 package booking.shared;
 
-import booking.core.BookingInterval;
+import booking.shared.objects.BookingInterval;
 
 import java.io.Serializable;
 import java.time.LocalDate;

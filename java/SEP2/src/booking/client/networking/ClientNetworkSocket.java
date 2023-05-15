@@ -1,22 +1,17 @@
 package booking.client.networking;
 
-import booking.core.User;
+import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.socketMessages.AvailableRoomsRequest;
-import booking.shared.socketMessages.AvailableRoomsResponse;
-import booking.shared.socketMessages.ConnectionRequest;
-import booking.shared.socketMessages.ConnectionResponse;
-import booking.core.Booking;
-import booking.core.BookingInterval;
-import booking.core.Room;
-import booking.shared.socketMessages.ErrorResponse;
-import booking.shared.socketMessages.Request;
-import booking.shared.socketMessages.Response;
+import booking.shared.socketMessages.*;
+import booking.shared.objects.Booking;
+import booking.shared.objects.BookingInterval;
+import booking.shared.objects.Room;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ClientNetworkSocket implements ClientNetwork
@@ -58,16 +53,33 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getRooms();
     }
 
-    @Override public List<Booking> getActiveBookings()
+    @Override public List<Booking> getActiveBookings(LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException
     {
-        return null;
+        sendRequest(new ActiveBookingsRequest(start, end));
+        ActiveBookingsResponse response = (ActiveBookingsResponse) readResponse();
+        return response.getBookings();
     }
 
     @Override public void createBooking(Room room, BookingInterval interval)
         throws ClientNetworkException, ClientResponseException
     {
+        sendRequest(new CreateBookingRequest(room, interval));
+        CreateBookingResponse response = (CreateBookingResponse) readResponse();
+    }
 
+    @Override public void getRoom(String room, User activeUser)
+        throws ClientNetworkException, ClientResponseException
+    {
+
+    }
+
+    public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new BookingsForRoomRequest(roomName, start, end));
+        BookingsForRoomResponse response = (BookingsForRoomResponse) readResponse();
+        return response.getBookings();
     }
 
     private void sendRequest(Request request)
