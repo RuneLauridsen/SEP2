@@ -1,5 +1,6 @@
-package booking.view.skemalaeggerGUI;
+package booking.view.CoordinatorGUI;
 
+import booking.core.RoomType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
@@ -15,10 +16,10 @@ public class AddRoom
   public TextArea txaComment;
   public CheckBox cbIsDoubleRoom;
   public TextField txtDoubleRoomName;
-  public ComboBox cbbRoomType;
+  public ComboBox<RoomType> cbbRoomType;
 
-  public void init(){
-    
+  public void init(AddRoomViewModel viewModel){
+
   }
   public void saveButtonClick(MouseEvent mouseEvent)
   {

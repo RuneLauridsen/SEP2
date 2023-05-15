@@ -1,4 +1,4 @@
-package booking.view.skemalaeggerGUI;
+package booking.view.CoordinatorGUI;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -15,8 +15,9 @@ public class HomeScreen
   public TableColumn tcolBook;
   public TableColumn tcolAlter;
 
-  public void init(){
-
+  CoordinatorHomeScreenViewModel viewModel;
+  public void init(CoordinatorHomeScreenViewModel viewModel){
+    this.viewModel = viewModel;
   }
   public void AddRoomClicked(MouseEvent mouseEvent)
   {
