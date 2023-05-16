@@ -3,6 +3,7 @@ package booking.client.view.userGUI;
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
 import booking.shared.objects.Booking;
+import booking.shared.objects.Room;
 import booking.shared.objects.User;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -24,7 +25,6 @@ public class UserHomeScreenViewModel
 
     private ViewHandler viewHandler;
     private ClientModel model;
-    private User user;
     private final ObjectProperty<String> selctedFromSearch;
 
     public UserHomeScreenViewModel(ViewHandler viewHandler, ClientModel model)
@@ -37,11 +37,9 @@ public class UserHomeScreenViewModel
         activeBookings = FXCollections.observableArrayList();
     }
 
-    // TODO(rune): Model holder styr på User nu
-    public void setUser(User user)
+    public void refreshActiveBookings()
     {
-        this.user = user;
-        username.set(user.getName());
+        username.set(model.getUser().getName());
 
         List<Booking> bookings = model.getActiveBookings(LocalDate.now(), LocalDate.MAX);
         activeBookings.addAll(bookings);
@@ -69,6 +67,6 @@ public class UserHomeScreenViewModel
 
     public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(model.getRoom(roomName, null));
+        viewHandler.showRoomInfo(model.getRoom(roomName));
     }
 }

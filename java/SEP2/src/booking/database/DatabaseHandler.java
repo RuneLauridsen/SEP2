@@ -2,9 +2,12 @@ package booking.database;
 
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
+import booking.shared.objects.Course;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
+import booking.shared.objects.UserGroup;
 import booking.shared.objects.UserType;
 
 import java.sql.Connection;
@@ -715,6 +718,177 @@ public class DatabaseHandler implements Persistence
         }
     }
 
+    @Override public List<UserGroup> getUserGroups()
+    {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT ug.user_group_id, ug.user_group_name, c.course_id, c.course_name, c.course_time_slot_count "
+                + "FROM sep2.course c "
+                + "INNER JOIN sep2.user_group ug ON c.course_id = ug.course_id; ";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+
+            List<UserGroup> userGroups = new ArrayList<>();
+            while (resultSet.next())
+            {
+                userGroups.add(
+                    new UserGroup(
+                        resultSet.getInt("user_group_id"),
+                        resultSet.getString("user_group_name"),
+                        new Course(
+                            resultSet.getInt("course_id"),
+                            resultSet.getString("course_name"),
+                            resultSet.getInt("course_time_slot_count")
+                        )
+                    )
+                );
+            }
+
+            return userGroups;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
+
+    @Override public List<User> getUserGroupUsers(UserGroup userGroup)
+    {
+        Objects.requireNonNull(userGroup);
+
+        Map<Integer, UserType> userTypes = getUserTypes();
+
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid "
+                + "FROM sep2.user_group_user ugu "
+                + "INNER JOIN sep2.\"user\" u ON u.user_id = ugu.user_id "
+                + "WHERE ugu.user_group_id = ? ";
+
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userGroup.getId());
+            resultSet = statement.executeQuery();
+
+            List<User> users = new ArrayList<>();
+            while (resultSet.next())
+            {
+                // Map resultSet til User objekt
+                users.add(
+                    new User(
+                        resultSet.getInt("user_id"),
+                        resultSet.getString("user_name"),
+                        resultSet.getString("user_initials"),
+                        resultSet.getInt("user_viaid"),
+                        userTypes.get(resultSet.getInt("user_type_id"))
+                    )
+                );
+            }
+
+            return users;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
+
+    @Override public void updateUserRoomData(User user, Room room, String comment, int color)
+    {
+        Objects.requireNonNull(user);
+        Objects.requireNonNull(room);
+        Objects.requireNonNull(comment);
+
+        PreparedStatement statement = null;
+
+        try
+        {
+            // TODO(rune): Er der en bedre måde at lave "INSERT el. UPDATE hvis række findes i forvejen" på?
+            // NOTE(rune): https://stackoverflow.com/a/11135767
+            String query = " "
+                + "UPDATE sep2.user_room_data SET comment = ?, color = ? WHERE user_id = ? AND room_id = ?; "
+                + "INSERT INTO sep2.user_room_data (user_id, room_id, comment, color) "
+                + "SELECT ?, ?, ?, ? WHERE NOT EXISTS(SELECT 1 FROM sep2.user_room_data WHERE user_id = ? AND room_id = ?);";
+
+            statement = connection.prepareStatement(query);
+
+            // UPDATE
+            statement.setString(1, comment);
+            statement.setInt(2, color);
+            statement.setInt(3, user.getId());
+            statement.setInt(4, room.getId());
+
+            // INSERT+SELECT
+            statement.setInt(5, user.getId());
+            statement.setInt(6, room.getId());
+            statement.setString(7, comment);
+            statement.setInt(8, color);
+            statement.setInt(9, user.getId());
+            statement.setInt(10, room.getId());
+
+            statement.execute();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeStatement(statement);
+        }
+    }
+
+    @Override public List<TimeSlot> getTimeSlots()
+    {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT time_slot_id, time_slot_start, time_slot_end FROM sep2.time_slot ORDER BY time_slot_start; ";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+
+            List<TimeSlot> timeSlots = new ArrayList<>();
+            while (resultSet.next())
+            {
+                timeSlots.add(new TimeSlot(
+                    resultSet.getInt("time_slot_id"),
+                    resultSet.getTime("time_slot_start").toLocalTime(),
+                    resultSet.getTime("time_slot_end").toLocalTime()
+                ));
+            }
+
+            return timeSlots;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
+            closeStatement(statement);
+        }
+    }
+
     private static Connection openConnection() throws SQLException
     {
         switch (System.getProperty("user.name"))
@@ -781,21 +955,9 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    private static void statementSetInteger(int index, Integer value, PreparedStatement statement) throws SQLException
-    {
-        if (value == null)
-        {
-            statement.setNull(index, Types.INTEGER);
-        }
-        else
-        {
-            statement.setInt(index, value);
-        }
-    }
-
     private static Date truncateToSqlDate(LocalDate localDate)
     {
-        // NOTE(rune): Postgres' dato type har ikke ligeså stor range som Java's LocalDate.
+        // NOTE(rune): Postgres' dato type har ikke lige så stor range som Java's LocalDate.
         // Vi bruger LocalDate.MIN og LocalDate.MAX når man f.eks. vil finde ALLE bookinger,
         // med getBookingsForRoom, så denne funktion sørger for, at de ikke overskrider
         // Postgres' dato types grænser. Håndterer ikke BCE.

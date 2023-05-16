@@ -8,13 +8,6 @@ public class BookingsForRoomRequest extends Request
     private final LocalDate from;
     private final LocalDate to;
 
-    public BookingsForRoomRequest(String roomName)
-    {
-        this.roomName = roomName;
-        this.from = LocalDate.MIN;
-        this.to = LocalDate.MAX;
-    }
-
     public BookingsForRoomRequest(String roomName, LocalDate from, LocalDate to)
     {
         this.roomName = roomName;

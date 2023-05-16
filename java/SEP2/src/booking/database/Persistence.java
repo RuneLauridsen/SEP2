@@ -4,7 +4,9 @@ import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
+import booking.shared.objects.UserGroup;
 import booking.shared.objects.UserType;
 
 import java.time.LocalDate;
@@ -55,4 +57,8 @@ public interface Persistence
     // Tilføjer en ny bruger. Returnere false hvis brugernavnet er optaget.
     public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type);
 
+    public List<UserGroup> getUserGroups();
+    public List<User> getUserGroupUsers(UserGroup userGroup);
+    public void updateUserRoomData(User user, Room room, String comment, int color);
+    public List<TimeSlot> getTimeSlots();
 }

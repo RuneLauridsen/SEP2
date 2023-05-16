@@ -8,14 +8,16 @@ public class UserGroup implements Serializable
     private final int id;
     private final String name;
     private final Course course;
-    private final List<User> users;
 
-    public UserGroup(int id, String name, Course course, List<User> users)
+    // NOTE(rune): I databasen linker UserGroup til en liste af Users, men i Java-land har
+    // UserGroup objektet ikke selv en liste af Users, da man skal bruge UserGroupUsersRequest
+    // i stedet.
+
+    public UserGroup(int id, String name, Course course)
     {
         this.id = id;
         this.name = name;
         this.course = course;
-        this.users = users;
     }
 
     public int getId()
@@ -31,11 +33,6 @@ public class UserGroup implements Serializable
     public Course getCourse()
     {
         return course;
-    }
-
-    public List<User> getUsers()
-    {
-        return users;
     }
 
     @Override public boolean equals(Object obj)
