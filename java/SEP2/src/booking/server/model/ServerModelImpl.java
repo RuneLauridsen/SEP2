@@ -6,6 +6,7 @@ import booking.shared.objects.Room;
 import booking.shared.objects.User;
 import booking.database.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.objects.UserGroup;
 import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
@@ -116,5 +117,22 @@ public class ServerModelImpl implements ServerModel
         {
             return List.of();
         }
+    }
+
+    @Override public List<UserGroup> getUserGroups()
+    {
+        List<UserGroup> userGroups = persistence.getUserGroups();
+        return userGroups;
+    }
+
+    @Override public List<User> getUserGroupUsers(UserGroup userGroup)
+    {
+        List<User> users = persistence.getUserGroupUsers(userGroup);
+        return users;
+    }
+
+    @Override public void updateUserRoomData(User user, Room room, String comment, int color)
+    {
+        persistence.updateUserRoomData(user, room, comment, color);
     }
 }

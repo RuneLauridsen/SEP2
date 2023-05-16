@@ -8,6 +8,7 @@ import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.objects.UserGroup;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -80,7 +81,7 @@ public class ClientModelImpl implements ClientModel
     {
         try
         {
-            return networkLayer.getActiveBookings(start, end);
+            return networkLayer.getBookingsForUser(user.getName(), start, end);
         }
         catch (ClientResponseException e)
         {
@@ -96,7 +97,7 @@ public class ClientModelImpl implements ClientModel
     {
         try
         {
-            networkLayer.createBooking(room, interval);
+            networkLayer.createBooking(room, interval, false, null);
         }
         catch (ClientResponseException e)
         {
@@ -108,11 +109,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public Room getRoom(String room, User activeUser)
+    @Override public Room getRoom(String room)
     {
         try
         {
-            return networkLayer.getRoom(room, activeUser);
+            return networkLayer.getRoom(room);
         }
         catch (ClientResponseException e)
         {
@@ -123,8 +124,6 @@ public class ClientModelImpl implements ClientModel
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
     }
-
-
 
     @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
     {
@@ -142,19 +141,83 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
+    @Override public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end)
+    {
+        try
+        {
+            return networkLayer.getBookingsForUser(userName, start, end);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public List<UserGroup> getUserGroups()
+    {
+        try
+        {
+            return networkLayer.getUserGroups();
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public List<User> getUserGroupUsers(UserGroup userGroup)
+    {
+        try
+        {
+            return networkLayer.getUserGroupUsers(userGroup);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public void updateUserRoomData(Room room, String comment, Integer color)
+    {
+        try
+        {
+            networkLayer.updateUserRoomData(room, comment, color);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
     @Override public boolean isAvailable(Room room)
     {
         try
         {
             // TODO(rune): Kan vi gøre det smartere end at hente alle bookinger ned hver gang?
-            // Er det nødvendigt at lave smartere, hvis vi laver en kalder er den en god idé
+            // Er det nødvendigt at lave smartere? Hvis vi laver en kalender er den en god idé
             // at hente alle dagens bookinger ned fra serveren.
 
             LocalTime now = LocalTime.now();
             List<Booking> bookingsToday = networkLayer.getBookingsForRoom(room.getName(), LocalDate.now(), LocalDate.now());
-            for(Booking bookingToday : bookingsToday)
+            for (Booking bookingToday : bookingsToday)
             {
-                if(bookingToday.getInterval().isOverlapWith(now))
+                if (bookingToday.getInterval().isOverlapWith(now))
                 {
                     return false;
                 }

@@ -77,6 +77,16 @@ public class Room implements Serializable
         return type;
     }
 
+    public String getUserComment()
+    {
+        return userComment;
+    }
+
+    public int getUserColor()
+    {
+        return userColor;
+    }
+
     @Override public boolean equals(Object obj)
     {
         if (obj instanceof Room other)

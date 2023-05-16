@@ -1,6 +1,5 @@
 package booking.view.CoordinatorGUI;
 
-import booking.core.BookingInterval;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;

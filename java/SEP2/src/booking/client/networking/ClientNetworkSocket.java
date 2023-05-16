@@ -2,6 +2,7 @@ package booking.client.networking;
 
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.objects.UserGroup;
 import booking.shared.socketMessages.*;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
@@ -53,26 +54,18 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getRooms();
     }
 
-    @Override public List<Booking> getActiveBookings(LocalDate start, LocalDate end)
+    @Override public void createBooking(Room room, BookingInterval interval, boolean isOverlapAllowed, UserGroup group)
         throws ClientNetworkException, ClientResponseException
     {
-        sendRequest(new ActiveBookingsRequest(start, end));
-        ActiveBookingsResponse response = (ActiveBookingsResponse) readResponse();
-        return response.getBookings();
-    }
-
-    @Override public void createBooking(Room room, BookingInterval interval)
-        throws ClientNetworkException, ClientResponseException
-    {
-        sendRequest(new CreateBookingRequest(room, interval));
+        sendRequest(new CreateBookingRequest(room, interval, isOverlapAllowed, group));
         CreateBookingResponse response = (CreateBookingResponse) readResponse();
     }
 
-    @Override public Room getRoom(String room, User activeUser)
+    @Override public Room getRoom(String roomName)
         throws ClientNetworkException, ClientResponseException
     {
-        sendRequest(new RoomRequest(room));
-        RoomResponse response = (RoomResponse)readResponse();
+        sendRequest(new RoomRequest(roomName));
+        RoomResponse response = (RoomResponse) readResponse();
         return response.getRoom();
     }
 
@@ -84,12 +77,34 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getBookings();
     }
 
-    public Room getRoom(String roomName)
+    public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException
     {
-        sendRequest(new RoomRequest(roomName));
-        RoomResponse response = (RoomResponse) readResponse();
-        return response.getRoom();
+        sendRequest(new BookingsForUserRequest(userName, start, end));
+        BookingsForUserResponse response = (BookingsForUserResponse) readResponse();
+        return response.getBookings();
+    }
+
+    public List<UserGroup> getUserGroups()
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new UserGroupsRequest());
+        UserGroupsResponse response = (UserGroupsResponse) readResponse();
+        return response.getUserGroups();
+    }
+
+    public List<User> getUserGroupUsers(UserGroup userGroup)
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new UserGroupUsersRequest(userGroup));
+        UserGroupUsersResponse response = (UserGroupUsersResponse) readResponse();
+        return response.getUsers();
+    }
+
+    @Override public void updateUserRoomData(Room room, String comment, Integer color) throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new UpdateUserRoomDataRequest(room, comment, color));
+        UpdateUserRoomDataResponse response = (UpdateUserRoomDataResponse) readResponse();
     }
 
     private void sendRequest(Request request)

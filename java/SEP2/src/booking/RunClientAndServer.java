@@ -2,7 +2,6 @@ package booking;
 
 import booking.client.model.ClientModelImpl;
 import booking.client.networking.ClientNetworkSocket;
-import booking.shared.objects.BookingInterval;
 import booking.database.DatabaseHandler;
 import booking.server.model.ServerModelImpl;
 import booking.server.networking.ServerNetworkSocket;
@@ -24,65 +23,6 @@ public class RunClientAndServer
                 var serverModel = new ServerModelImpl(database);
                 var server = new ServerNetworkSocket(serverModel);
 
-                var gitte = database.getUser("Gitte");
-                var rune = database.getUser("Rune");
-
-                var interval = new BookingInterval(
-                    LocalDate.of(2024, 01, 01),
-                    LocalTime.of(10, 0),
-                    LocalTime.of(16, 0)
-                );
-
-                //var gitteRooms = database.getAvailableRooms(gitte, interval, null, null, null, null);
-                //var runeRooms = database.getAvailableRooms(rune, interval, null, null, null, null);
-
-                var C0201 = database.getRoom("C02.01", gitte);
-                var C0202 = database.getRoom("C02.02", rune);
-
-                serverModel.createBooking(gitte, C0201, new BookingInterval(
-                    LocalDate.of(2023, 5, 8),
-                    LocalTime.of(10, 0),
-                    LocalTime.of(16, 0)
-                ));
-
-                serverModel.createBooking(gitte, C0201, new BookingInterval(
-                    LocalDate.of(2023, 5, 9),
-                    LocalTime.of(10, 0),
-                    LocalTime.of(16, 0)
-                ));
-
-                serverModel.createBooking(gitte, C0202, new BookingInterval(
-                    LocalDate.of(2023, 5, 10),
-                    LocalTime.of(10, 0),
-                    LocalTime.of(16, 0)
-                ));
-
-                serverModel.createBooking(gitte, C0202, new BookingInterval(
-                    LocalDate.of(2023, 5, 11),
-                    LocalTime.of(10, 0),
-                    LocalTime.of(16, 0)
-                ));
-
-                serverModel.createBooking(gitte, C0202, new BookingInterval(
-                    LocalDate.of(2023, 5, 12),
-                    LocalTime.of(10, 0),
-                    LocalTime.of(16, 0)
-                ));
-
-                var bookings1 = serverModel.getBookingsForUser(
-                    "Gitte",
-                    LocalDate.MIN,
-                    LocalDate.MAX,
-                    gitte
-                );
-
-                var bookings2 = serverModel.getBookingsForUser(
-                    "Gitte",
-                    LocalDate.of(2023, 5, 9),
-                    LocalDate.of(2023, 5, 11),
-                    rune
-                );
-
                 server.run();
             }
             catch (Exception e)
@@ -97,15 +37,32 @@ public class RunClientAndServer
                 var clientNetwork = new ClientNetworkSocket();
                 var clientModel = new ClientModelImpl(clientNetwork);
 
-                clientModel.login("Rune123", "asdasd");
+                clientModel.login("Gitte", "");
 
-                var p = new GetAvailableRoomsParameters(
-                    LocalDate.of(2023, 5, 8),
+                var gitte = clientModel.getUser();
+                var ug = clientModel.getUserGroups();
+                var ugu = clientModel.getUserGroupUsers(ug.get(1));
+
+                var C0201 = clientModel.getRoom("C02.01");
+                var C0202 = clientModel.getRoom("C02.02");
+                var C0203 = clientModel.getRoom("C02.03");
+                var C0204 = clientModel.getRoom("C02.04");
+
+                var params = new GetAvailableRoomsParameters(
+                    LocalDate.of(2023, 01, 01),
                     LocalTime.of(10, 0),
                     LocalTime.of(16, 0)
                 );
 
-                var rooms = clientModel.getAvailableRooms(p);
+                var rooms0 = clientModel.getAvailableRooms(params);
+
+                clientModel.updateUserRoomData(C0202, "ny komt", 69420);
+
+                var rooms1 = clientModel.getAvailableRooms(params);
+
+                clientModel.updateUserRoomData(C0204, "ny komt 4", 444);
+
+                var rooms2 = clientModel.getAvailableRooms(params);
 
                 System.out.println(clientModel.getUser());
             }

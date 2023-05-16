@@ -4,13 +4,13 @@ import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
 import booking.server.model.ServerModel;
+import booking.shared.objects.UserGroup;
 import booking.shared.socketMessages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.time.LocalDate;
 import java.util.List;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
@@ -74,7 +74,7 @@ public class ServerNetworkSocketHandler implements Runnable
                 Object request = readRequest();
 
                 //
-                // Get available rooms
+                // Available rooms
                 //
                 if (request instanceof AvailableRoomsRequest availableRoomsRequest)
                 {
@@ -153,33 +153,46 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
 
                 //
-                // Available rooms
-                //
-                else if(request instanceof AvailableRoomsRequest availableRoomsRequest)
-                {
-                    List<Room> availableRooms = model.getAvailableRooms(user, availableRoomsRequest.getParameters());
-                    sendResponse(new AvailableRoomsResponse(availableRooms));
-                }
-
-                //
-                // Active rooms
-                //
-                else if(request instanceof ActiveBookingsRequest activeBookingsRequest)
-                {
-                    List<Booking> availableRooms = model.getBookingsForUser(
-                        user.getName(), LocalDate.now(), LocalDate.MAX, user);
-
-                    sendResponse(new ActiveBookingsResponse(availableRooms));
-                }
-
-                //
                 // Room
                 //
-                else if(request instanceof RoomRequest roomRequest)
+                else if (request instanceof RoomRequest roomRequest)
                 {
                     Room room = model.getRoom(roomRequest.getRoomName(), user);
 
                     sendResponse(new RoomResponse(room));
+                }
+
+                //
+                // User groups
+                //
+                else if (request instanceof UserGroupsRequest userGroupsRequest)
+                {
+                    List<UserGroup> userGroups = model.getUserGroups();
+
+                    sendResponse(new UserGroupsResponse(userGroups));
+                }
+
+                //
+                // User group users
+                //
+                else if (request instanceof UserGroupUsersRequest userGroupUsersRequest)
+                {
+                    List<User> users = model.getUserGroupUsers(userGroupUsersRequest.getUserGroup());
+
+                    sendResponse(new UserGroupUsersResponse(users));
+                }
+
+                //
+                // Update user room data
+                //
+                else if (request instanceof UpdateUserRoomDataRequest updateUserRoomDataRequest)
+                {
+                    model.updateUserRoomData(user,
+                                             updateUserRoomDataRequest.getRoom(),
+                                             updateUserRoomDataRequest.getComment(),
+                                             updateUserRoomDataRequest.getColor());
+
+                    sendResponse(new UpdateUserRoomDataResponse());
                 }
 
                 //

@@ -161,7 +161,7 @@ public class UserBookRoomViewModel
 
     public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(model.getRoom(roomName, null));
+        viewHandler.showRoomInfo(model.getRoom(roomName));
     }
 
 }
