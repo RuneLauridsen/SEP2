@@ -92,6 +92,13 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getRoom();
     }
 
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new CreateRoomRequest(room));
+        CreateRoomResponse response = (CreateRoomResponse) readResponse();
+    }
+
     private void sendRequest(Request request)
         throws ClientNetworkException, ClientResponseException
     {

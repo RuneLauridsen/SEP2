@@ -55,4 +55,5 @@ public interface Persistence
     // Tilføjer en ny bruger. Returnere false hvis brugernavnet er optaget.
     public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type);
 
+  public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
 }

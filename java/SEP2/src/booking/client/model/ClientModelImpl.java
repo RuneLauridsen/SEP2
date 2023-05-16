@@ -3,10 +3,7 @@ package booking.client.model;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkException;
 import booking.client.networking.ClientResponseException;
-import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Room;
-import booking.shared.objects.User;
+import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 
 import java.time.LocalDate;
@@ -97,6 +94,22 @@ public class ClientModelImpl implements ClientModel
         try
         {
             networkLayer.createBooking(room, interval);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        try
+        {
+            networkLayer.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
         }
         catch (ClientResponseException e)
         {

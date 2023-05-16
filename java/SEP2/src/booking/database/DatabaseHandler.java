@@ -715,6 +715,12 @@ public class DatabaseHandler implements Persistence
         }
     }
 
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        Objects.requireNonNull(name);
+        
+    }
+
     private static Connection openConnection() throws SQLException
     {
         switch (System.getProperty("user.name"))
