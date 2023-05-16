@@ -39,32 +39,10 @@ public class RunClientAndServer
 
                 clientModel.login("Gitte", "");
 
-                var gitte = clientModel.getUser();
-                var ug = clientModel.getUserGroups();
-                var ugu = clientModel.getUserGroupUsers(ug.get(1));
+                var timeSlots = clientModel.getTimeSlots();
 
-                var C0201 = clientModel.getRoom("C02.01");
-                var C0202 = clientModel.getRoom("C02.02");
-                var C0203 = clientModel.getRoom("C02.03");
-                var C0204 = clientModel.getRoom("C02.04");
+                System.out.println(timeSlots);
 
-                var params = new GetAvailableRoomsParameters(
-                    LocalDate.of(2023, 01, 01),
-                    LocalTime.of(10, 0),
-                    LocalTime.of(16, 0)
-                );
-
-                var rooms0 = clientModel.getAvailableRooms(params);
-
-                clientModel.updateUserRoomData(C0202, "ny komt", 69420);
-
-                var rooms1 = clientModel.getAvailableRooms(params);
-
-                clientModel.updateUserRoomData(C0204, "ny komt 4", 444);
-
-                var rooms2 = clientModel.getAvailableRooms(params);
-
-                System.out.println(clientModel.getUser());
             }
             catch (Exception e)
             {
@@ -73,7 +51,7 @@ public class RunClientAndServer
         });
 
         serverThread.start();
-        Thread.sleep(1000); // Wait for server to start
+        Thread.sleep(2000); // Wait for server to start
         clientThread.start();
 
         serverThread.join();

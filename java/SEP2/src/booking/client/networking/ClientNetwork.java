@@ -1,5 +1,6 @@
 package booking.client.networking;
 
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.Booking;
@@ -40,5 +41,8 @@ public interface ClientNetwork
         throws ClientNetworkException, ClientResponseException;
 
     public void updateUserRoomData(Room room, String comment, Integer color)
+        throws ClientNetworkException, ClientResponseException;
+
+    public List<TimeSlot> getTimeSlots()
         throws ClientNetworkException, ClientResponseException;
 }

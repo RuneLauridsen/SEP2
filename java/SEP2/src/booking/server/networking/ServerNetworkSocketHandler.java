@@ -2,6 +2,7 @@ package booking.server.networking;
 
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.server.model.ServerModel;
 import booking.shared.objects.UserGroup;
@@ -193,6 +194,15 @@ public class ServerNetworkSocketHandler implements Runnable
                                              updateUserRoomDataRequest.getColor());
 
                     sendResponse(new UpdateUserRoomDataResponse());
+                }
+
+                //
+                // Time slots
+                //
+                else if (request instanceof TimeSlotsRequest timeSlotsRequest)
+                {
+                    List<TimeSlot> timeSlots = model.getTimeSlots();
+                    sendResponse(new TimeSlotsResponse(timeSlots));
                 }
 
                 //

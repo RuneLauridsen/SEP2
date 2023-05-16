@@ -1,5 +1,6 @@
 package booking.client.networking;
 
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.UserGroup;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -105,6 +107,13 @@ public class ClientNetworkSocket implements ClientNetwork
     {
         sendRequest(new UpdateUserRoomDataRequest(room, comment, color));
         UpdateUserRoomDataResponse response = (UpdateUserRoomDataResponse) readResponse();
+    }
+
+    @Override public List<TimeSlot> getTimeSlots() throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new TimeSlotsRequest());
+        TimeSlotsResponse response = (TimeSlotsResponse) readResponse();
+        return response.getTimeSlots();
     }
 
     private void sendRequest(Request request)

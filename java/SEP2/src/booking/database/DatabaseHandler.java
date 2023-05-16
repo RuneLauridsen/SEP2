@@ -5,6 +5,7 @@ import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Course;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.shared.objects.UserGroup;
 import booking.shared.objects.UserType;
@@ -849,6 +850,41 @@ public class DatabaseHandler implements Persistence
         }
         finally
         {
+            closeStatement(statement);
+        }
+    }
+
+    @Override public List<TimeSlot> getTimeSlots()
+    {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try
+        {
+            String query = "SELECT time_slot_id, time_slot_start, time_slot_end FROM sep2.time_slot ORDER BY time_slot_start; ";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+
+            List<TimeSlot> timeSlots = new ArrayList<>();
+            while (resultSet.next())
+            {
+                timeSlots.add(new TimeSlot(
+                    resultSet.getInt("time_slot_id"),
+                    resultSet.getTime("time_slot_start").toLocalTime(),
+                    resultSet.getTime("time_slot_end").toLocalTime()
+                ));
+            }
+
+            return timeSlots;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeResultSet(resultSet);
             closeStatement(statement);
         }
     }

@@ -6,6 +6,7 @@ import booking.client.networking.ClientResponseException;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.UserGroup;
@@ -194,6 +195,22 @@ public class ClientModelImpl implements ClientModel
         try
         {
             networkLayer.updateUserRoomData(room, comment, color);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public List<TimeSlot> getTimeSlots()
+    {
+        try
+        {
+            return networkLayer.getTimeSlots();
         }
         catch (ClientResponseException e)
         {

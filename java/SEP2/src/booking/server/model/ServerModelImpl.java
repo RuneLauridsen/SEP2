@@ -3,6 +3,7 @@ package booking.server.model;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.database.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
@@ -134,5 +135,10 @@ public class ServerModelImpl implements ServerModel
     @Override public void updateUserRoomData(User user, Room room, String comment, int color)
     {
         persistence.updateUserRoomData(user, room, comment, color);
+    }
+
+    @Override public List<TimeSlot> getTimeSlots()
+    {
+        return persistence.getTimeSlots();
     }
 }

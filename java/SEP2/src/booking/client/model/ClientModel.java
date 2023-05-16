@@ -3,6 +3,7 @@ package booking.client.model;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
+import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.UserGroup;
@@ -28,6 +29,8 @@ public interface ClientModel
     public List<User> getUserGroupUsers(UserGroup userGroup);
 
     public void updateUserRoomData(Room room, String comment, Integer color);
+
+    public List<TimeSlot> getTimeSlots();
 
     public boolean isAvailable(Room room);
 }
