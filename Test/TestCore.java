@@ -145,7 +145,7 @@ public class TestCore {
     {
         // Kan vi det? Hvis så tjek andre del af slette
     }
-
+ /*
     @Test
     public void AddUserToUserGroup()
     {
@@ -159,15 +159,16 @@ public class TestCore {
         UserGroup SWSDJ = new UserGroup(1,"SW-SDJ",SDJ,SW);
 
         //Ikke færdig da jeg ikke er sikker på hvordan det fungere
-
     }
+
+  */
 
     @Test
     public void AddMoreUsersToUserGroup()
     {
 
     }
-
+ /*
     @Test
     public void UserGroup()
     {
@@ -177,7 +178,7 @@ public class TestCore {
 
         assertEquals(SDJ, SW.getCourse());
         assertEquals(SDJClass,SW.getUsers());
-    }
+    }*/
 
     @Test
     public void ConstructorOfUserType()

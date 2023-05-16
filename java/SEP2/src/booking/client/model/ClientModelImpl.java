@@ -127,7 +127,7 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public Room getRoom(String room, User activeUser)
+    @Override public Room getRoom(String room)
     {
         try
         {

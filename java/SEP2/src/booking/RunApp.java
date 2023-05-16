@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class RunApp
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws InterruptedException
     {
         Thread serverThread = new Thread(() -> {
             try
@@ -30,6 +30,7 @@ public class RunApp
         });
 
         serverThread.start();
+        Thread.sleep(2000); // NOTE(rune): Wait for server to start
 
         Application.launch(App.class, args);
     }

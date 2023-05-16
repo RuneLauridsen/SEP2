@@ -666,10 +666,6 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    /*public boolean createRoom(String name, ){
-
-    }*/
-
     public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type)
     {
         Objects.requireNonNull(name);
@@ -890,6 +886,37 @@ public class DatabaseHandler implements Persistence
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
     {
         Objects.requireNonNull(name);
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(comment);
+        Objects.requireNonNull(doubleName);
+
+        String query = "INSERT INTO sep2.room "
+            + " (room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id) "
+            + "VALUES "
+            + " (?, ?, ?, ?, ?);";
+
+        PreparedStatement statement = null;
+
+        try
+        {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setInt(2, size);
+            statement.setInt(3, maxComf);
+            statement.setInt(4, maxSafety);
+            statement.setString(5, comment);
+            statement.setInt(6, type.getId());
+            statement.execute();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);  // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeStatement(statement);
+        }
+
     }
 
     private static Connection openConnection() throws SQLException
