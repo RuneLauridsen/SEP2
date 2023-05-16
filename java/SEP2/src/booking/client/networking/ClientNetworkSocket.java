@@ -1,13 +1,8 @@
 package booking.client.networking;
 
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
+import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.objects.UserGroup;
 import booking.shared.socketMessages.*;
-import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Room;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -114,6 +109,13 @@ public class ClientNetworkSocket implements ClientNetwork
         sendRequest(new TimeSlotsRequest());
         TimeSlotsResponse response = (TimeSlotsResponse) readResponse();
         return response.getTimeSlots();
+    }
+
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new CreateRoomRequest(name,type,maxComf,maxSafety,size,comment,isDouble,doubleName));
+        CreateRoomResponse response = (CreateRoomResponse) readResponse();
     }
 
     private void sendRequest(Request request)

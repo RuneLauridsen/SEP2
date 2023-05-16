@@ -8,6 +8,7 @@ import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
+import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.UserGroup;
 
@@ -110,7 +111,23 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public Room getRoom(String room)
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        try
+        {
+            networkLayer.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public Room getRoom(String room, User activeUser)
     {
         try
         {

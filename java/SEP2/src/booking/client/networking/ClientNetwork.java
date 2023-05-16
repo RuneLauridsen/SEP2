@@ -7,6 +7,8 @@ import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.UserGroup;
+import booking.shared.objects.*;
+import booking.shared.GetAvailableRoomsParameters;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,7 +35,7 @@ public interface ClientNetwork
 
     public Room getRoom(String roomName)
         throws ClientNetworkException, ClientResponseException;
-
+        
     public List<UserGroup> getUserGroups()
         throws ClientNetworkException, ClientResponseException;
 
@@ -44,5 +46,8 @@ public interface ClientNetwork
         throws ClientNetworkException, ClientResponseException;
 
     public List<TimeSlot> getTimeSlots()
+        throws ClientNetworkException, ClientResponseException;
+    
+    void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
         throws ClientNetworkException, ClientResponseException;
 }

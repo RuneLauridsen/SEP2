@@ -18,10 +18,13 @@ public class AddRoom
   public TextField txtDoubleRoomName;
   public ComboBox<RoomType> cbbRoomType;
 
-  public void init(AddRoomViewModel viewModel){
+  AddRoomViewModel viewModel;
 
+  public void init(AddRoomViewModel viewModel){
+    this.viewModel = viewModel;
   }
   public void saveButtonClick(MouseEvent mouseEvent)
   {
+    viewModel.createRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()),txaComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText());
   }
 }

@@ -134,6 +134,32 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
 
                 //
+                // Create Room
+                //
+                else if (request instanceof CreateRoomRequest createRoomRequest)
+                {
+                    ErrorResponseReason createRoomResult = model.createRoom(
+                        createRoomRequest.getName(),
+                        createRoomRequest.getType(),
+                        createRoomRequest.getMaxComf(),
+                        createRoomRequest.getMaxSafety(),
+                        createRoomRequest.getSize(),
+                        createRoomRequest.getComment(),
+                        createRoomRequest.isDouble(),
+                        createRoomRequest.getDoubleName()
+                    );
+
+                    if (createRoomResult == ERROR_RESPONSE_REASON_NONE)
+                    {
+                        sendResponse(new CreateRoomResponse());
+                    }
+                    else
+                    {
+                        sendResponse(new ErrorResponse(createRoomResult));
+                    }
+                }
+
+                //
                 // Delete booking
                 //
                 else if (request instanceof DeleteBookingRequest deleteBookingRequest)

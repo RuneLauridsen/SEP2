@@ -3,6 +3,7 @@ package booking.server.model;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.database.Persistence;
@@ -78,6 +79,15 @@ public class ServerModelImpl implements ServerModel
             return ERROR_RESPONSE_REASON_TOO_MANY_ACTIVE_BOOKINGS;
         }
     }
+
+    @Override public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        //TODO(julie) errorhandle stuff
+
+        persistence.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
+        return ERROR_RESPONSE_REASON_NONE;
+    }
+
 
     @Override public ErrorResponseReason deleteBooking(User activeUser, Booking booking)
     {
