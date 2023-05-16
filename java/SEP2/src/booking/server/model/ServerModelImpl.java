@@ -3,6 +3,7 @@ package booking.server.model;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.database.Persistence;

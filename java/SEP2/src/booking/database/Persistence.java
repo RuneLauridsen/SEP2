@@ -1,5 +1,4 @@
 package booking.database;
-package booking.database;
 
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;

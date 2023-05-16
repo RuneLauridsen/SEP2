@@ -869,11 +869,9 @@ public class DatabaseHandler implements Persistence
             List<TimeSlot> timeSlots = new ArrayList<>();
             while (resultSet.next())
             {
-                timeSlots.add(new TimeSlot(
-                    resultSet.getInt("time_slot_id"),
+                timeSlots.add(new TimeSlot(resultSet.getInt("time_slot_id"),
                     resultSet.getTime("time_slot_start").toLocalTime(),
-                    resultSet.getTime("time_slot_end").toLocalTime()
-                ));
+                    resultSet.getTime("time_slot_end").toLocalTime()));
             }
 
             return timeSlots;
@@ -887,6 +885,8 @@ public class DatabaseHandler implements Persistence
             closeResultSet(resultSet);
             closeStatement(statement);
         }
+    }
+
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
     {
         Objects.requireNonNull(name);

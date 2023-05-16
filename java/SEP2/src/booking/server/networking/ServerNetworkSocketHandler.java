@@ -139,7 +139,14 @@ public class ServerNetworkSocketHandler implements Runnable
                 else if (request instanceof CreateRoomRequest createRoomRequest)
                 {
                     ErrorResponseReason createRoomResult = model.createRoom(
-                        createRoomRequest.getRoom()
+                        createRoomRequest.getName(),
+                        createRoomRequest.getType(),
+                        createRoomRequest.getMaxComf(),
+                        createRoomRequest.getMaxSafety(),
+                        createRoomRequest.getSize(),
+                        createRoomRequest.getComment(),
+                        createRoomRequest.isDouble(),
+                        createRoomRequest.getDoubleName()
                     );
 
                     if (createRoomResult == ERROR_RESPONSE_REASON_NONE)
