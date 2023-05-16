@@ -5,6 +5,7 @@ import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
+import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.UserGroup;
 
@@ -20,7 +21,8 @@ public interface ClientModel
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters);
     public List<Booking> getActiveBookings(LocalDate start, LocalDate end);
     public void createBooking(Room room, BookingInterval interval);
-    public Room getRoom(String room);
+    public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
+    public Room getRoom(String room, User activeUser);
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end);
     public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end);

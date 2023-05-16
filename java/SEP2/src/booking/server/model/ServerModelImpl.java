@@ -79,6 +79,15 @@ public class ServerModelImpl implements ServerModel
         }
     }
 
+    @Override public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        //TODO(julie) errorhandle stuff
+
+        persistence.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
+        return ERROR_RESPONSE_REASON_NONE;
+    }
+
+
     @Override public ErrorResponseReason deleteBooking(User activeUser, Booking booking)
     {
         if (activeUser.getType().canEditBookings() || activeUser.equals(booking.getUser()))

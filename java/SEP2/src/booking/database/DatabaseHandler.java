@@ -887,6 +887,9 @@ public class DatabaseHandler implements Persistence
             closeResultSet(resultSet);
             closeStatement(statement);
         }
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        Objects.requireNonNull(name);
     }
 
     private static Connection openConnection() throws SQLException
