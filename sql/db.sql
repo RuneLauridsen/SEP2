@@ -182,9 +182,43 @@ VALUES
 INSERT INTO "user"
     (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
 VALUES
-    ('Rune', 'RLAU', 331689, 0, 3);
+    ('Rune',  'RLAU', 331689, 0, 3),
+    ('Maja',  'MAJA', 111111, 0, 3),
+    ('Julie', 'JULI', 222222, 0, 3),
+    ('Simon', 'SIMO', 333333, 0, 3),
+    ('Gitte', 'GITT', 123456, 0, 1);
 
-INSERT INTO "user"
-    (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
+INSERT INTO user_room_data
+    (user_id, room_id, color, comment)
 VALUES
-    ('Rune2', 'RLAU2', 331689, 0, 3);
+    (5, 1, 69, 'jeg hedder gitte'),
+    (5, 2, 70, 'jeg hedder gitte 2');
+
+INSERT INTO course
+    (course_name, course_time_slot_count)
+VALUES
+    ('SDJ2', 10),
+    ('DBMS', 20),
+    ('SWE', 30);
+
+INSERT INTO user_group
+    (user_group_name, course_id)
+VALUES
+    ('SDJ2-2023', 1),
+    ('DBMS-2023', 2);
+
+INSERT INTO user_group_user
+    (user_group_id, user_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (2, 2),
+    (2, 3),
+    (2, 4);
+
+INSERT INTO time_slot
+    (time_slot_start, time_slot_end)
+VALUES
+    ('8:20', '11:50'),
+    ('12:45', '16:05');
