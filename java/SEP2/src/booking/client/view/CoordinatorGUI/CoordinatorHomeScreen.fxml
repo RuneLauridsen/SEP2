@@ -38,8 +38,8 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </TableView>
-            <Button mnemonicParsing="false" text="Add Room" />
-            <HBox alignment="TOP_RIGHT" onMouseClicked="#AddRoomClicked" prefHeight="43.0" prefWidth="580.0">
+            <Button mnemonicParsing="false" onMouseClicked="#AddRoomClicked" text="Add Room" />
+            <HBox alignment="TOP_RIGHT"  prefHeight="43.0" prefWidth="580.0">
                <children>
                   <Button mnemonicParsing="false" onMouseClicked="#CoursesClicked" text="Courses">
                      <HBox.margin>
