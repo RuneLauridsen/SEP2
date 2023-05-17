@@ -2,26 +2,27 @@ package booking.client.view.CoordinatorGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.util.Callback;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class CoordinatorHomeScreenViewModel
 {
+  ObservableList<Room> rooms = FXCollections.observableArrayList();
   ViewHandler viewHandler;
-  ClientModel persistence;
-  public CoordinatorHomeScreenViewModel(ViewHandler viewHandler, ClientModel persistence)
+  ClientModel model;
+  public CoordinatorHomeScreenViewModel(ViewHandler viewHandler, ClientModel model)
   {
     this.viewHandler = viewHandler;
-    this.persistence =persistence;
+    this.model =model;
   }
 
   public ObservableList<Room> getAllRooms(){
-    ObservableList<Room> rooms = FXCollections.observableArrayList();
-    rooms.addAll(persistence.getRooms());
+    rooms.addAll(model.getRooms());
    return rooms;
   }
 
@@ -32,7 +33,7 @@ public class CoordinatorHomeScreenViewModel
 
   public String isAvailable(Room room)
   {
-    if (persistence.isAvailable(room))
+    if (model.isAvailable(room))
       return "Available";
     else
       return "occupied";
@@ -41,7 +42,13 @@ public class CoordinatorHomeScreenViewModel
 
   public void ChangeToSearch(String name)
   {
-    viewHandler.showRoomInfo(persistence.getRoom(name));
+    viewHandler.showRoomInfo(model.getRoom(name));
+  }
+
+  public void refreshActiveBookings()
+  {
+    rooms.clear();
+    rooms.addAll(model.getRooms());
   }
 
   public void changeToEditRoom(Room room)

@@ -19,11 +19,11 @@ public class App extends Application
         database.open();
 
         // TODO(rune): Fjern
-        User user = database.getUser("Rune");
+        User user = database.getUser("Gitte");
 
         ClientNetwork network = new ClientNetworkSocket();
         ClientModel model = new ClientModelImpl(network);
-        model.login("Rune", "");
+        model.login("Gitte", "");
 
         ViewModelFactory viewModelFactory = new ViewModelFactory();
         ViewHandler viewHandler = new ViewHandler(primaryStage, viewModelFactory, model);

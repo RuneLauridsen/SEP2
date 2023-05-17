@@ -70,7 +70,7 @@
                 </GridPane>
             <HBox alignment="CENTER" prefHeight="51.0" prefWidth="270.0">
                <children>
-                      <Button mnemonicParsing="false" onMouseClicked="#saveButtonClick" text="Save" />
+                      <Button mnemonicParsing="false" fx:id="saveButton" onMouseClicked="#saveButtonClick" text="Save" />
                   <Button mnemonicParsing="false" fx:id="cancelButton" onMouseClicked="#cancelButtonClick" text="Cancel">
                      <HBox.margin>
                         <Insets left="20.0" />
