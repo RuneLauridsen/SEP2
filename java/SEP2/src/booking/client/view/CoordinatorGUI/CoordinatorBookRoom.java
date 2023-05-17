@@ -64,6 +64,7 @@ public class CoordinatorBookRoom
         cbbFromTime.valueProperty().bindBidirectional(viewModel.selectedFromTimeProperty());
         cbbToTime.valueProperty().bindBidirectional(viewModel.selectedToTimeProperty());
         cbbPrefixTime.valueProperty().bindBidirectional(viewModel.selectedPreFixTimeProperty());
+        cbbDayTime.valueProperty().bindBidirectional(viewModel.selectedDayProperty());
         cbbBuilding.valueProperty().bindBidirectional(viewModel.selectedBuildingProperty());
         cbbFloor.valueProperty().bindBidirectional(viewModel.selectedFloorProperty());
         cbbCourse.valueProperty().bindBidirectional(viewModel.selectedCourseProperty());
