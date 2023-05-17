@@ -19,6 +19,53 @@ import java.util.List;
 
 public class ClientModelImpl implements ClientModel
 {
+    private final ClientNetwork networkLayer;
+    private User user;
+
+    public ClientModelImpl(ClientNetwork networkLayer)
+    {
+        this.networkLayer = networkLayer;
+    }
+
+    @Override public void deleteBooking(Booking booking)
+    {
+        try
+        {
+            networkLayer.deleteBooking(booking);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+    public User getUser()
+    {
+        return user;
+    }
+
+    @Override public void login(String username, String password)
+    {
+        try
+        {
+            user = networkLayer.connect(username, password);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public void logout(){
+
+    }
     @Override public List<RoomType> getRoomTypes()
     {
         try
@@ -34,6 +81,103 @@ public class ClientModelImpl implements ClientModel
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
     }
+
+    @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
+    {
+        try
+        {
+            return networkLayer.getAvailableRooms(parameters);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public List<Booking> getActiveBookings(LocalDate start, LocalDate end)
+    {
+        try
+        {
+            return networkLayer.getBookingsForUser(user.getName(), start, end);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public void createBooking(Room room, BookingInterval interval)
+    {
+        try
+        {
+            networkLayer.createBooking(room, interval, false, null);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        try
+        {
+            networkLayer.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public Room getRoom(String room)
+    {
+        try
+        {
+            return networkLayer.getRoom(room);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public List<Room> getRooms()
+    {
+        try
+        {
+            return networkLayer.getRooms();
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
 
     @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
     {
