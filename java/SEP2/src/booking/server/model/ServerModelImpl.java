@@ -1,5 +1,6 @@
 package booking.server.model;
 
+import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -84,10 +85,9 @@ public class ServerModelImpl implements ServerModel
     {
         //TODO(julie) errorhandle stuff
 
-        persistence.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
+        persistence.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
         return ERROR_RESPONSE_REASON_NONE;
     }
-
 
     @Override public ErrorResponseReason deleteBooking(User activeUser, Booking booking)
     {
@@ -140,6 +140,19 @@ public class ServerModelImpl implements ServerModel
     {
         List<User> users = persistence.getUserGroupUsers(userGroup);
         return users;
+    }
+
+    @Override public ErrorResponseReason updateRoom(Room room, UpdateRoomParameters parameters, User activeUser)
+    {
+        if (activeUser.getType().canEditRooms())
+        {
+            persistence.updateRoom(room, parameters);
+            return ERROR_RESPONSE_REASON_NONE;
+        }
+        else
+        {
+            return ERROR_RESPONSE_REASON_ACCESS_DENIED;
+        }
     }
 
     @Override public void updateUserRoomData(User user, Room room, String comment, int color)

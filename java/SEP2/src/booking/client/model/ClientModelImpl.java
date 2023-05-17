@@ -3,6 +3,7 @@ package booking.client.model;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkException;
 import booking.client.networking.ClientResponseException;
+import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -115,7 +116,7 @@ public class ClientModelImpl implements ClientModel
     {
         try
         {
-            networkLayer.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
+            networkLayer.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
         }
         catch (ClientResponseException e)
         {
@@ -204,6 +205,22 @@ public class ClientModelImpl implements ClientModel
         catch (ClientNetworkException e)
         {
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public void updateRoom(Room room, UpdateRoomParameters parameters)
+    {
+        try
+        {
+            networkLayer.updateRoom(room, parameters);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 

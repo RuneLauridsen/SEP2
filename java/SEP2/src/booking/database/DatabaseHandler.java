@@ -1,5 +1,6 @@
 package booking.database;
 
+import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Course;
@@ -805,6 +806,48 @@ public class DatabaseHandler implements Persistence
         }
     }
 
+    @Override public void updateRoom(Room room, UpdateRoomParameters parameters)
+    {
+        Objects.requireNonNull(room);
+        Objects.requireNonNull(parameters);
+
+        PreparedStatement statement = null;
+
+        try
+        {
+            String sql = """
+                UPDATE
+                    room
+                SET
+                    room_name = ?,
+                    room_size = ?,
+                    room_comfort_capacity = ?,
+                    room_fire_capacity = ?,
+                    room_comment = ?,
+                    room_type_id = ?
+                WHERE
+                    room_id = ?
+                """;
+
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, parameters.getNewName());
+            statement.setInt(2, parameters.getNewSize());
+            statement.setInt(3, parameters.getNewComfortCapacity());
+            statement.setInt(4, parameters.getNewFireCapacity());
+            statement.setString(5, parameters.getNewComment());
+            statement.setInt(6, parameters.getNewType().getId());
+            statement.setInt(7, room.getId());
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            closeStatement(statement);
+        }
+    }
+
     @Override public void updateUserRoomData(User user, Room room, String comment, int color)
     {
         Objects.requireNonNull(user);
@@ -866,8 +909,8 @@ public class DatabaseHandler implements Persistence
             while (resultSet.next())
             {
                 timeSlots.add(new TimeSlot(resultSet.getInt("time_slot_id"),
-                    resultSet.getTime("time_slot_start").toLocalTime(),
-                    resultSet.getTime("time_slot_end").toLocalTime()));
+                                           resultSet.getTime("time_slot_start").toLocalTime(),
+                                           resultSet.getTime("time_slot_end").toLocalTime()));
             }
 
             return timeSlots;

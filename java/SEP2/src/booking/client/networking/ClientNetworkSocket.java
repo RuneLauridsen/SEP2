@@ -1,5 +1,6 @@
 package booking.client.networking;
 
+import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.socketMessages.*;
@@ -98,6 +99,12 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getUsers();
     }
 
+    @Override public void updateRoom(Room room, UpdateRoomParameters parameters) throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new UpdateRoomRequest(room, parameters));
+        UpdateRoomResponse response = (UpdateRoomResponse) readResponse();
+    }
+
     @Override public void updateUserRoomData(Room room, String comment, Integer color) throws ClientNetworkException, ClientResponseException
     {
         sendRequest(new UpdateUserRoomDataRequest(room, comment, color));
@@ -114,7 +121,7 @@ public class ClientNetworkSocket implements ClientNetwork
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
         throws ClientNetworkException, ClientResponseException
     {
-        sendRequest(new CreateRoomRequest(name,type,maxComf,maxSafety,size,comment,isDouble,doubleName));
+        sendRequest(new CreateRoomRequest(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName));
         CreateRoomResponse response = (CreateRoomResponse) readResponse();
     }
 

@@ -209,6 +209,25 @@ public class ServerNetworkSocketHandler implements Runnable
                     sendResponse(new UserGroupUsersResponse(users));
                 }
 
+                // Update room
+                else if (request instanceof UpdateRoomRequest updateRoomRequest)
+                {
+                    ErrorResponseReason error = model.updateRoom(
+                        updateRoomRequest.getRoom(),
+                        updateRoomRequest.getParameters(),
+                        user
+                    );
+
+                    if (error == ERROR_RESPONSE_REASON_NONE)
+                    {
+                        sendResponse(new UpdateRoomResponse());
+                    }
+                    else
+                    {
+                        sendResponse(new ErrorResponse(error));
+                    }
+                }
+
                 //
                 // Update user room data
                 //
