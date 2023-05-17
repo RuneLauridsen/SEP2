@@ -919,7 +919,7 @@ public class DatabaseHandler implements Persistence
 
     }
 
-    private static Connection openConnection() throws SQLException
+    public static Connection openConnection() throws SQLException
     {
         switch (System.getProperty("user.name"))
         {
