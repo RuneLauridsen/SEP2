@@ -1,4 +1,5 @@
 import booking.database.DatabaseHandler;
+import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
 
@@ -115,6 +116,37 @@ public class TestDatabase
         assertEquals(roomBefore.getUserColor(), -1);
         assertEquals(roomAfter.getUserComment(), "test comment");
         assertEquals(roomAfter.getUserColor(), 0xff00ff00);
+    }
+
+    @Test void testUpdateRoom()
+    {
+        User user = database.getUser("Gitte");
+        Room roomBefore = database.getRoom("A02.03", user);
+
+        UpdateRoomParameters parameters = new UpdateRoomParameters(roomBefore);
+        parameters.setNewName("A02.99");
+        parameters.setNewSize(90);
+        parameters.setNewComfortCapacity(91);
+        parameters.setNewComment("new global comment");
+
+        database.updateRoom(roomBefore, parameters);
+
+        Room roomAfter = database.getRoom("A02.99", user);
+
+        assertEquals(roomBefore.getName(), "A02.03");
+        assertEquals(roomBefore.getSize(), 3);
+        assertEquals(roomBefore.getComfortCapacity(), 33);
+        assertEquals(roomBefore.getFireCapacity(), 333);
+        assertEquals(roomBefore.getComment(), "");
+        assertEquals(roomBefore.getType().getId(), 1);
+
+        assertEquals(roomAfter.getName(), "A02.99");
+        assertEquals(roomAfter.getSize(), 90);
+        assertEquals(roomAfter.getComfortCapacity(), 91);
+        assertEquals(roomAfter.getFireCapacity(), 333);
+        assertEquals(roomAfter.getComment(), "new global comment");
+        assertEquals(roomAfter.getType().getId(), 1);
+
     }
 }
 

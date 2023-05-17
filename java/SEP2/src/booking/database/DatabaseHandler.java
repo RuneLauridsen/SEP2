@@ -817,7 +817,7 @@ public class DatabaseHandler implements Persistence
         {
             String sql = """
                 UPDATE
-                    room
+                    sep2.room
                 SET
                     room_name = ?,
                     room_size = ?,
@@ -837,6 +837,7 @@ public class DatabaseHandler implements Persistence
             statement.setString(5, parameters.getNewComment());
             statement.setInt(6, parameters.getNewType().getId());
             statement.setInt(7, room.getId());
+            statement.execute();
         }
         catch (SQLException e)
         {
