@@ -98,6 +98,14 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getBookings();
     }
 
+    @Override public List<Room> getRooms()
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new RoomsRequest());
+        RoomsResponse response = (RoomsResponse) readResponse();
+        return response.getRooms();
+    }
+
     public List<UserGroup> getUserGroups()
         throws ClientNetworkException, ClientResponseException
     {

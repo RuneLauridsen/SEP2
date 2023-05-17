@@ -85,6 +85,15 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
 
                 //
+                // All rooms
+                //
+                if (request instanceof RoomsRequest roomsRequest)
+                {
+                    List<Room> rooms = model.getRooms(user);
+                    sendResponse(new RoomsResponse(rooms));
+                }
+
+                //
                 // Get bookings for room
                 //
                 else if (request instanceof BookingsForRoomRequest bookingsForRoomRequest)

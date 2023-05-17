@@ -37,6 +37,9 @@ public interface ClientNetwork
     public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException;
 
+    public List<Room> getRooms()
+        throws ClientNetworkException, ClientResponseException;
+
     public Room getRoom(String roomName)
         throws ClientNetworkException, ClientResponseException;
 

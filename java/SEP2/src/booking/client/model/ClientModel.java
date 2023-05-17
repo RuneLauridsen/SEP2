@@ -27,6 +27,7 @@ public interface ClientModel
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
     public Room getRoom(String room);
 
+    public List<Room>getRooms();
     public List<RoomType> getRoomTypes();
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end);

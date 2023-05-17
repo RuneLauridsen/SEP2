@@ -43,7 +43,11 @@ public class ServerModelImpl implements ServerModel
     {
         return persistence.getRoom(roomName, activeUser);
     }
-
+    @Override public List<Room> getRooms(User activeUser)
+    {
+        return persistence.getRooms(activeUser);
+    }
+    
     @Override public List<RoomType> getRoomTypes()
     {
         return new ArrayList<>(persistence.getRoomTypes().values());
