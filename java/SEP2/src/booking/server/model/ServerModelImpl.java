@@ -83,6 +83,8 @@ public class ServerModelImpl implements ServerModel
 
             if (activeBookings.size() < user.getType().getMaxBookingCount())
             {
+                overlaps.addAll(getOverlaps(parameters));
+
                 // NOTE(rune): Selvom klient sender isOverlapAllowed kan det godt være
                 // at klientens brugertype ikke har tilladelse til at overlappe bookinger.
                 boolean isOverlapAllowed = false;
