@@ -1,7 +1,6 @@
 package booking.client.networking;
 
 import booking.shared.CreateBookingParameters;
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;

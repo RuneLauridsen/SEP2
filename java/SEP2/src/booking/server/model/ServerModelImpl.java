@@ -1,7 +1,6 @@
 package booking.server.model;
 
 import booking.shared.CreateBookingParameters;
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Overlap;
 import booking.shared.objects.Room;
@@ -112,7 +111,6 @@ public class ServerModelImpl implements ServerModel
         {
             return ERROR_RESPONSE_REASON_ROOM_TYPE_NOT_ALLOWED;
         }
-        return ERROR_RESPONSE_REASON_NONE;
     }
 
     @Override public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)

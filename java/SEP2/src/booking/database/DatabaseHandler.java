@@ -1,7 +1,6 @@
 package booking.database;
 
 import booking.shared.CreateBookingParameters;
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Course;

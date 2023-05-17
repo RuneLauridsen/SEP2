@@ -1,6 +1,5 @@
 import booking.database.DatabaseHandler;
 import booking.shared.CreateBookingParameters;
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -124,14 +123,12 @@ public class TestDatabase
         assertEquals(roomToUpdate.getComment(), "");
         assertEquals(roomToUpdate.getType().getId(), 1);
 
-
         roomToUpdate.setName("A02.99");
         roomToUpdate.setSize(90);
         roomToUpdate.setComfortCapacity(91);
         roomToUpdate.setComment("new global comment");
 
         database.updateRoom(roomToUpdate);
-
 
         assertEquals(roomToUpdate.getName(), "A02.99");
         assertEquals(roomToUpdate.getSize(), 90);
