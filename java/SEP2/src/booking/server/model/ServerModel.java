@@ -1,8 +1,10 @@
 package booking.server.model;
 
+import booking.shared.CreateBookingParameters;
 import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
+import booking.shared.objects.Overlap;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import booking.shared.objects.TimeSlot;
@@ -22,14 +24,14 @@ public interface ServerModel
     public Room getRoom(String roomName, User activeUser);
 
     public List<Room> getRooms(User activeUser);
-    
+
     public List<RoomType> getRoomTypes();
 
     public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters);
 
     // NOTE(rune): Returnerer en fejlkode, hvis bruger ikke har adgang til at booke lokaler,
     // eller har for mange igangværende bookinger. Checker ikke efter overlap.
-    public ErrorResponseReason createBooking(User activeUser, Room room, BookingInterval interval);
+    public ErrorResponseReason createBooking(User activeUser, CreateBookingParameters parameters, List<Overlap> overlaps);
 
     // NOTE(rune): Returnerer en fejlkode, hvis bruger ikke har adgang til at slette bookinger.
     public ErrorResponseReason deleteBooking(User activeUser, Booking booking);

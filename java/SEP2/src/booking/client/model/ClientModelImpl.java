@@ -3,6 +3,7 @@ package booking.client.model;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkException;
 import booking.client.networking.ClientResponseException;
+import booking.shared.CreateBookingParameters;
 import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
@@ -42,6 +43,7 @@ public class ClientModelImpl implements ClientModel
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
     }
+
     public User getUser()
     {
         return user;
@@ -63,9 +65,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public void logout(){
+    @Override public void logout()
+    {
 
     }
+
     @Override public List<RoomType> getRoomTypes()
     {
         try
@@ -114,11 +118,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public void createBooking(Room room, BookingInterval interval)
+    @Override public void createBooking(CreateBookingParameters parameters)
     {
         try
         {
-            networkLayer.createBooking(room, interval, false, null);
+            networkLayer.createBooking(parameters);
         }
         catch (ClientResponseException e)
         {
@@ -134,7 +138,7 @@ public class ClientModelImpl implements ClientModel
     {
         try
         {
-            networkLayer.createRoom( name,  type,  maxComf,  maxSafety,  size,  comment,  isDouble,  doubleName);
+            networkLayer.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
         }
         catch (ClientResponseException e)
         {
@@ -177,7 +181,6 @@ public class ClientModelImpl implements ClientModel
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
     }
-
 
     @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
     {

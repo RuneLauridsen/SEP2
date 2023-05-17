@@ -1,5 +1,6 @@
 package booking.database;
 
+import booking.shared.CreateBookingParameters;
 import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
@@ -45,7 +46,7 @@ public interface Persistence
     public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate, User activeUser);
 
     // Tilføjer en ny booking. Checker ikke efter overlap, lokalets ledighed osv.
-    public void createBooking(User activeUser, Room room, BookingInterval interval);
+    public void createBooking(User activeUser, CreateBookingParameters parameters);
 
     public void deleteBooking(Booking booking);
 

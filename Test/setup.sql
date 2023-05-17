@@ -110,17 +110,18 @@ CREATE TABLE booking
     booking_start_time      time        NOT NULL,
     booking_end_time        time        NOT NULL,
     room_id                 int         NOT NULL REFERENCES "room"(room_id) ,
-    user_id                 int         NOT NULL REFERENCES "user"(user_id)
+    user_id                 int         NOT NULL REFERENCES "user"(user_id) ,
+    user_group_id           int         NULL     REFERENCES "user_group"(user_group_id) 
 );
 
 
 INSERT INTO user_type
-    (user_type_name, can_edit_users, can_edit_rooms, can_edit_bookings, max_booking_count)
+    (user_type_name, can_edit_users, can_edit_rooms, can_edit_bookings, can_overlap_bookings, max_booking_count)
 VALUES
-    /* id = 1 */ ('Skemalægger',            true,  true,  true,  99999),
-    /* id = 2 */ ('Medarbejder',            false, false, false, 99999),
-    /* id = 3 */ ('Studerende',             false, false, false, 2),
-    /* id = 4 */ ('Studerende (Bachelor)',  false, false, false, 2);
+    /* id = 1 */ ('Skemalægger',            true,  true,  true,  true,  99999),
+    /* id = 2 */ ('Medarbejder',            false, false, false, false, 99999),
+    /* id = 3 */ ('Studerende',             false, false, false, false, 2),
+    /* id = 4 */ ('Studerende (Bachelor)',  false, false, false, false, 2);
 
 INSERT INTO room_type
     (room_type_name)
@@ -217,25 +218,26 @@ VALUES
 INSERT INTO course
     (course_name, course_time_slot_count)
 VALUES
-    ('SDJ2', 10),
-    ('DBMS', 20),
+    ('SDJ', 10),
+    ('DBS', 20),
     ('SWE', 30);
 
 INSERT INTO user_group
     (user_group_name, course_id)
 VALUES
-    ('SDJ2-2023', 1),
-    ('DBMS-2023', 2);
+    ('SDJ-2023', 1),
+    ('DBS-2023', 2);
 
 INSERT INTO user_group_user
     (user_group_id, user_id)
 VALUES
-    (1, 1),
-    (1, 2),
-    (1, 3),
-    (2, 2),
-    (2, 3),
-    (2, 4);
+    /* SDJ Maja  */ (1, 1),
+    /* SDJ Julie */ (1, 2),
+    /* SDJ Simon */ (1, 3),
+    
+    /* DBS Julie */ (2, 2),
+    /* DBS Simon */ (2, 3),
+    /* DBS Rune  */ (2, 4);
 
 INSERT INTO time_slot
     (time_slot_start, time_slot_end)
@@ -244,10 +246,19 @@ VALUES
     ('12:45', '16:05');
 
 INSERT INTO booking
-    (user_id, room_id, booking_date, booking_start_time, booking_end_time)
+    (user_id, room_id, booking_date, booking_start_time, booking_end_time, user_group_id)
 VALUES
-    /* Rune,  A02.01 */ (4, 1, '2023-05-08', '10:00', '16:00'),
-    /* Rune,  A02.02 */ (4, 2, '2023-05-09', '10:00', '16:00'),
-    /* Rune,  A02.03 */ (4, 3, '2023-05-10', '10:00', '16:00'),
-    /* Gitte, B02.04 */ (5, 4, '2023-05-11', '10:00', '16:00'),
-    /* Gitte, B02.05 */ (5, 5, '2023-05-12', '10:00', '16:00');
+    /* Rune,  A02.01 */ (4, 1,  '2023-05-08', '10:00', '16:00', NULL),
+    /* Rune,  A02.02 */ (4, 2,  '2023-05-09', '10:00', '16:00', NULL),
+    /* Rune,  A02.03 */ (4, 3,  '2023-05-10', '10:00', '16:00', NULL),
+    /* Gitte, B02.04 */ (5, 4,  '2023-05-11', '10:00', '16:00', NULL),
+    /* Gitte, B02.05 */ (5, 5,  '2023-05-12', '10:00', '16:00', NULL),
+    
+    -- til testOverlap
+    /* Maja,  A03.01 */ (5, 11, '2023-05-12', '11:00', '13:00', NULL),
+    /* Maja,  A03.01 */ (5, 11, '2023-05-12', '16:00', '16:45', NULL),
+    
+        
+    -- til testOverlap_withUserGroups
+    /* Gitte,  A03.02 SDJ */ (5, 12, '2023-05-12', '11:00', '13:00', 1),
+    /* Gitte,  A03.02 DBS */ (5, 12, '2023-05-12', '16:00', '16:45', 2);

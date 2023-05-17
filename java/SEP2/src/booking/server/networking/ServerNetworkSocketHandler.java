@@ -1,6 +1,7 @@
 package booking.server.networking;
 
 import booking.shared.objects.Booking;
+import booking.shared.objects.Overlap;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import booking.shared.objects.TimeSlot;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
@@ -127,15 +129,17 @@ public class ServerNetworkSocketHandler implements Runnable
                 //
                 else if (request instanceof CreateBookingRequest createBookingRequest)
                 {
+                    List<Overlap> overlaps = new ArrayList<>();
+
                     ErrorResponseReason createBookingResult = model.createBooking(
                         user,
-                        createBookingRequest.getRoom(),
-                        createBookingRequest.getInterval()
+                        createBookingRequest.getParameters(),
+                        overlaps
                     );
 
                     if (createBookingResult == ERROR_RESPONSE_REASON_NONE)
                     {
-                        sendResponse(new CreateBookingResponse());
+                        sendResponse(new CreateBookingResponse(overlaps));
                     }
                     else
                     {

@@ -1,8 +1,9 @@
 package booking.server.model;
 
+import booking.shared.CreateBookingParameters;
 import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
+import booking.shared.objects.Overlap;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import booking.shared.objects.TimeSlot;
@@ -17,8 +18,6 @@ import static booking.shared.socketMessages.ErrorResponseReason.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerModelImpl implements ServerModel
 {
@@ -43,11 +42,12 @@ public class ServerModelImpl implements ServerModel
     {
         return persistence.getRoom(roomName, activeUser);
     }
+
     @Override public List<Room> getRooms(User activeUser)
     {
         return persistence.getRooms(activeUser);
     }
-    
+
     @Override public List<RoomType> getRoomTypes()
     {
         return new ArrayList<>(persistence.getRoomTypes().values());
@@ -65,14 +65,14 @@ public class ServerModelImpl implements ServerModel
         );
     }
 
-    @Override public ErrorResponseReason createBooking(User user, Room room, BookingInterval interval, boolean isOverlapAllowed)
+    @Override public ErrorResponseReason createBooking(User user, CreateBookingParameters parameters, List<Overlap> overlaps)
     {
         // NOTE(rune): Vi stoler på at klienten sender Room med korrekt RoomType værdi. Dette er ikke en sikker måde
         // a styre adgang til lokaler på, da klienten nemt kunne sende en Room instans med modificeret RoomType,
         // for at få adgang til at booke lokaler, som klienten normalt ikke ville have adgang til.
         // SocketHandler'en holder selv styr på User objektet, så der kan klienten ikke snyde.
 
-        boolean isAllowedToBookRoom = user.getType().getAllowedRoomTypes().contains(room.getType());
+        boolean isAllowedToBookRoom = user.getType().getAllowedRoomTypes().contains(parameters.getRoom().getType());
         if (isAllowedToBookRoom)
         {
             List<Booking> activeBookings = persistence.getBookingsForUser(
@@ -84,19 +84,26 @@ public class ServerModelImpl implements ServerModel
 
             if (activeBookings.size() < user.getType().getMaxBookingCount())
             {
-                if (!isOverlapAllowed && user.getType().canEditRooms())
+                overlaps.addAll(getOverlaps(parameters));
+
+                // NOTE(rune): Selvom klient sender isOverlapAllowed kan det godt være
+                // at klientens brugertype ikke har tilladelse til at overlappe bookinger.
+                boolean isOverlapAllowed = false;
+                if (parameters.isOverlapAllowed() && user.getType().canOverlapBookings())
                 {
-                    synchronized (checkBookingOverlapLock)
-                    {
-                        List<Booking> checkBookings = persistence.getBookingsForRoom(
-                            room,
-                            interval.getDate(),
-                            interval.getDate(),
-                            user)
-                    }
+                    isOverlapAllowed = true;
                 }
 
-                persistence.createBooking(user, room, interval);
+                // NOTE(rune): Overlap kan enten betyde at lokalet er optaget i booking interval,
+                // eller at en af medlemmerne i en bookings user group er optaget.
+                // Planlæggere skal have mulighed for at overlappe bookinger, så vi tjekker ikke
+                // hvis klient eksplicit siger at den nye booking godt må overlappe.
+                if (overlaps.size() == 0 || isOverlapAllowed)
+                {
+                    persistence.createBooking(user, parameters);
+                }
+
+                return ERROR_RESPONSE_REASON_NONE;
             }
             else
             {
@@ -191,5 +198,54 @@ public class ServerModelImpl implements ServerModel
     @Override public List<TimeSlot> getTimeSlots()
     {
         return persistence.getTimeSlots();
+    }
+
+    private List<Overlap> getOverlaps(CreateBookingParameters parameters)
+    {
+        List<Overlap> overlaps = new ArrayList<>();
+
+        List<User> newBookingUsers = List.of();
+        if (parameters.getUserGroup() != null)
+        {
+            newBookingUsers = persistence.getUserGroupUsers(parameters.getUserGroup());
+        }
+
+        List<Booking> oldBookings = persistence.getBookingsForRoom(
+            parameters.getRoom(),
+            parameters.getInterval().getDate(),
+            parameters.getInterval().getDate(),
+            null
+        );
+
+        for (Booking oldBooking : oldBookings)
+        {
+            if (parameters.getInterval().isOverlapWith(oldBooking.getInterval()))
+            {
+                List<User> overlapUsers = new ArrayList<>();
+
+                // NOTE(rune): Hvis booking er til bestemt klasse/hold, så skal
+                // vi tjekke om den nye booking ill overlappe med en eller flere
+                // users fra andre klasers/holds eksisterende bookinger.
+                if (oldBooking.getUserGroup() != null)
+                {
+                    List<User> oldBookingUsers = persistence.getUserGroupUsers(oldBooking.getUserGroup());
+
+                    for (User newBookingUser : newBookingUsers)
+                    {
+                        if (oldBookingUsers.contains(newBookingUser))
+                        {
+                            overlapUsers.add(newBookingUser);
+                        }
+                    }
+                }
+
+                overlaps.add(new Overlap(
+                    oldBooking,
+                    overlapUsers
+                ));
+            }
+        }
+
+        return overlaps;
     }
 }

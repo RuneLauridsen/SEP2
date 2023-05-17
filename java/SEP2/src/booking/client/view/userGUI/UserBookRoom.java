@@ -46,7 +46,7 @@ public class UserBookRoom
     public void btnSearchClicked(MouseEvent e)
     {
         lvRooms.getItems().clear();
-        viewModel.showAvailablerooms();
+        viewModel.showAvailableRooms();
 
         if (viewModel.getRoomList().size() > 0)
         {
@@ -61,7 +61,8 @@ public class UserBookRoom
         vbAvailableRooms.setVisible(true);
     }
 
-    private void refresh(){
+    private void refresh()
+    {
         dpDate.setValue(null);
         txtMaxCap.clear();
         txtMinCap.clear();

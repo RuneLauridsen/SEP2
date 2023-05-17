@@ -1,5 +1,6 @@
 package booking.client.networking;
 
+import booking.shared.CreateBookingParameters;
 import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
@@ -25,7 +26,7 @@ public interface ClientNetwork
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
         throws ClientNetworkException, ClientResponseException;
 
-    public void createBooking(Room room, BookingInterval interval, boolean isOverlapAllowed, UserGroup userGroup)
+    public void createBooking(CreateBookingParameters parameters)
         throws ClientNetworkException, ClientResponseException;
 
     public void deleteBooking(Booking booking)
