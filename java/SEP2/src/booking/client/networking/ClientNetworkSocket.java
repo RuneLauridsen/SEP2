@@ -1,5 +1,6 @@
 package booking.client.networking;
 
+import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.socketMessages.*;
@@ -50,10 +51,10 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getRooms();
     }
 
-    @Override public void createBooking(Room room, BookingInterval interval, boolean isOverlapAllowed, UserGroup group)
+    @Override public void createBooking(CreateBookingParameters parameters)
         throws ClientNetworkException, ClientResponseException
     {
-        sendRequest(new CreateBookingRequest(room, interval, isOverlapAllowed, group));
+        sendRequest(new CreateBookingRequest(parameters));
         CreateBookingResponse response = (CreateBookingResponse) readResponse();
     }
 

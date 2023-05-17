@@ -2,11 +2,10 @@ package booking.client.view.userGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
-import booking.shared.objects.User;
-import booking.database.Persistence;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -104,7 +103,7 @@ public class UserBookRoomViewModel
         return roomList;
     }
 
-    public ObservableList<Room> showAvailablerooms()
+    public ObservableList<Room> showAvailableRooms()
     {
         // TODO(rune): Min/max cap
 
@@ -143,7 +142,14 @@ public class UserBookRoomViewModel
         LocalTime endTime = parseLocalDateTime(selectedToTime.get());
         BookingInterval requestedInterval = new BookingInterval(selectedDate.get(), startTime, endTime);
 
-        model.createBooking(room, requestedInterval);
+        CreateBookingParameters parameters = new CreateBookingParameters(
+            room,
+            requestedInterval,
+            false,  // ingen overlap tilladt,
+            null    // ikke til hold/klassen
+        );
+
+        model.createBooking(parameters);
 
         viewHandler.showInfo("Lokale " + room + " er booking til " + requestedInterval);
     }

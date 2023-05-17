@@ -61,21 +61,31 @@ public class BookingInterval implements Serializable
             return false;
         }
 
-        if (isOverlapWith(other.start))
-        {
-            return false;
-        }
+        boolean a = this.getStart().isBefore(other.getEnd()) ||
+            this.getStart().equals(other.getEnd());
 
-        if (isOverlapWith(other.end))
-        {
-            return false;
-        }
+        boolean b = other.getStart().isBefore(this.getEnd()) ||
+            other.getStart().equals(this.getEnd());
 
-        return false;
+        return a && b;
     }
 
     @Override public String toString()
     {
         return date + " " + start + "-" + end;
+    }
+
+    @Override public boolean equals(Object obj)
+    {
+        if (obj instanceof BookingInterval other)
+        {
+            return Objects.equals(this.date, other.date)
+                && Objects.equals(this.start, other.start)
+                && Objects.equals(this.end, other.end);
+        }
+        else
+        {
+            return false;
+        }
     }
 }
