@@ -15,6 +15,7 @@ import booking.shared.socketMessages.ErrorResponseReason;
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerModelImpl implements ServerModel
@@ -34,6 +35,11 @@ public class ServerModelImpl implements ServerModel
     @Override public Room getRoom(String roomName, User activeUser)
     {
         return persistence.getRoom(roomName, activeUser);
+    }
+
+    @Override public List<RoomType> getRoomTypes()
+    {
+        return new ArrayList<>(persistence.getRoomTypes().values());
     }
 
     @Override public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters)

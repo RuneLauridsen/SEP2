@@ -1,6 +1,7 @@
 import booking.database.DatabaseHandler;
 import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
 import booking.shared.objects.User;
 
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
 
 public class TestDatabase
 {
@@ -146,7 +149,15 @@ public class TestDatabase
         assertEquals(roomAfter.getFireCapacity(), 333);
         assertEquals(roomAfter.getComment(), "new global comment");
         assertEquals(roomAfter.getType().getId(), 1);
+    }
 
+    @Test void testGetRoomTypes()
+    {
+        Map<Integer, RoomType> roomTypes = database.getRoomTypes();
+        assertEquals(roomTypes.size(), 7);
+
+        assertEquals(roomTypes.get(4).getId(), 4);
+        assertEquals(roomTypes.get(4).getName(), "Klasselokale");
     }
 }
 

@@ -67,6 +67,14 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getRoom();
     }
 
+    @Override public List<RoomType> getRoomTypes()
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new RoomTypesRequest());
+        RoomTypesResponse response = (RoomTypesResponse) readResponse();
+        return response.getRoomTypes();
+    }
+
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException
     {

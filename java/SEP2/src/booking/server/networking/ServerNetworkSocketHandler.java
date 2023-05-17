@@ -2,6 +2,7 @@ package booking.server.networking;
 
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.server.model.ServerModel;
@@ -187,6 +188,16 @@ public class ServerNetworkSocketHandler implements Runnable
                     Room room = model.getRoom(roomRequest.getRoomName(), user);
 
                     sendResponse(new RoomResponse(room));
+                }
+
+                //
+                // Room types
+                //
+                else if (request instanceof RoomTypesRequest roomTypesRequest)
+                {
+                    List<RoomType> roomTypes = model.getRoomTypes();
+
+                    sendResponse(new RoomTypesResponse(roomTypes));
                 }
 
                 //

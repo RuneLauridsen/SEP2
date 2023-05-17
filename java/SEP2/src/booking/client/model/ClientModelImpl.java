@@ -144,6 +144,22 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
+    @Override public List<RoomType> getRoomTypes()
+    {
+        try
+        {
+            return networkLayer.getRoomTypes();
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
     @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
     {
         try

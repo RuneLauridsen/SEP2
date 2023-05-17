@@ -37,6 +37,9 @@ public interface ClientNetwork
     public Room getRoom(String roomName)
         throws ClientNetworkException, ClientResponseException;
 
+    public List<RoomType> getRoomTypes()
+        throws ClientNetworkException, ClientResponseException;
+
     public List<UserGroup> getUserGroups()
         throws ClientNetworkException, ClientResponseException;
 
