@@ -1,38 +1,43 @@
 package booking.client.view.CoordinatorGUI;
 
+import booking.client.view.login.LoginViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
 public class Booking
 {
     @FXML
-    public Button btnBookRoom;
+    private Button btnBookRoom;
 
     @FXML
-    public Button btnInsertFile;
+    private Button btnInsertFile;
 
     @FXML
-    public Button btnCancel;
+    private Button btnCancel;
 
     @FXML
-    public Button btnConfirm;
+    private Button btnConfirm;
 
     @FXML
-    public Label lblFileName;
+    private Label lblFileName;
 
     @FXML
-    public ListView<Booking> lvBookings;
+    private ListView<Booking> lvBookings;
 
     @FXML
-    public VBox VBoxFile;
+    private VBox VBoxFile;
 
-    public void btnBookRoomClicked(MouseEvent event)
+    private BookingViewModel viewModel;
+
+    @FXML
+    private void btnBookRoomClicked(ActionEvent event)
     {
-
+        viewModel.bookRoomAction();
     }
 
     public void btnInsertFileClicked(MouseEvent event)
