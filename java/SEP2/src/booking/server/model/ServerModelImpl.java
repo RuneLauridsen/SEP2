@@ -20,6 +20,22 @@ import java.util.List;
 
 public class ServerModelImpl implements ServerModel
 {
+    private final Persistence persistence;
+
+    public ServerModelImpl(Persistence persistence)
+    {
+        this.persistence = persistence;
+    }
+
+    @Override public User getUser(String username)
+    {
+        return persistence.getUser(username);
+    }
+
+    @Override public Room getRoom(String roomName, User activeUser)
+    {
+        return persistence.getRoom(roomName, activeUser);
+    }
     @Override public List<Room> getRooms(User activeUser)
     {
         return persistence.getRooms(activeUser);
