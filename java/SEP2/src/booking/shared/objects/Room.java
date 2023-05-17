@@ -5,16 +5,17 @@ import java.io.Serializable;
 public class Room implements Serializable
 {
     private final int id;
-    private final String name;
-    private final int size;
-    private final int comfortCapacity;
-    private final int fireCapacity;
-    private final String comment;
-    private final RoomType type;
+    private  String name;
+    private  int size;
+    private  int comfortCapacity;
+    private  int fireCapacity;
+    private  String comment;
+    private  RoomType type;
 
     // NOTE(rune): Bruger-specifik
-    private final String userComment;
-    private final int userColor;
+    private  String userComment;
+    private  int userColor;
+
 
     public Room(int id, String name, int size, int comfortCapacity, int fireCapacity, String comment, RoomType type, String userComment, int userColor)
     {
@@ -26,6 +27,46 @@ public class Room implements Serializable
         this.comment = comment;
         this.type = type;
         this.userComment = userComment;
+        this.userColor = userColor;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setSize(int size)
+    {
+        this.size = size;
+    }
+
+    public void setComfortCapacity(int comfortCapacity)
+    {
+        this.comfortCapacity = comfortCapacity;
+    }
+
+    public void setFireCapacity(int fireCapacity)
+    {
+        this.fireCapacity = fireCapacity;
+    }
+
+    public void setComment(String comment)
+    {
+        this.comment = comment;
+    }
+
+    public void setType(RoomType type)
+    {
+        this.type = type;
+    }
+
+    public void setUserComment(String userComment)
+    {
+        this.userComment = userComment;
+    }
+
+    public void setUserColor(int userColor)
+    {
         this.userColor = userColor;
     }
 

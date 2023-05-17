@@ -28,4 +28,14 @@ public class EditRoomViewModel
     ObservableList<RoomType> types = FXCollections.observableArrayList(model.getRoomTypes());
     return types;
   }
+
+  public void UpdateRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName){
+    room.setName(name);
+    room.setType(type);
+    room.setSize(size);
+    room.setComfortCapacity(maxComf);
+    room.setFireCapacity(maxSafety);
+    room.setComment(comment);
+    model.updateRoom(room);
+  }
 }

@@ -33,7 +33,7 @@ public class EditRoom
 
   public void saveButtonClick(MouseEvent mouseEvent)
   {
-    //TODO
+    viewModel.UpdateRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()),txaComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText());
   }
 
   public void cancelButtonClick(MouseEvent mouseEvent)

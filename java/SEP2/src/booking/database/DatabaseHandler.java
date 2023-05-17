@@ -1,6 +1,5 @@
 package booking.database;
 
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Course;
@@ -827,10 +826,9 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public void updateRoom(Room room, UpdateRoomParameters parameters)
+    @Override public void updateRoom(Room room)
     {
         Objects.requireNonNull(room);
-        Objects.requireNonNull(parameters);
 
         PreparedStatement statement = null;
 
@@ -851,12 +849,12 @@ public class DatabaseHandler implements Persistence
                 """;
 
             statement = connection.prepareStatement(sql);
-            statement.setString(1, parameters.getNewName());
-            statement.setInt(2, parameters.getNewSize());
-            statement.setInt(3, parameters.getNewComfortCapacity());
-            statement.setInt(4, parameters.getNewFireCapacity());
-            statement.setString(5, parameters.getNewComment());
-            statement.setInt(6, parameters.getNewType().getId());
+            statement.setString(1, room.getName());
+            statement.setInt(2, room.getSize());
+            statement.setInt(3, room.getComfortCapacity());
+            statement.setInt(4, room.getFireCapacity());
+            statement.setString(5, room.getComment());
+            statement.setInt(6, room.getType().getId());
             statement.setInt(7, room.getId());
             statement.execute();
         }

@@ -1,6 +1,5 @@
 package booking.server.model;
 
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -17,8 +16,6 @@ import static booking.shared.socketMessages.ErrorResponseReason.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerModelImpl implements ServerModel
 {
@@ -171,11 +168,11 @@ public class ServerModelImpl implements ServerModel
         return users;
     }
 
-    @Override public ErrorResponseReason updateRoom(Room room, UpdateRoomParameters parameters, User activeUser)
+    @Override public ErrorResponseReason updateRoom(Room room, User activeUser)
     {
         if (activeUser.getType().canEditRooms())
         {
-            persistence.updateRoom(room, parameters);
+            persistence.updateRoom(room);
             return ERROR_RESPONSE_REASON_NONE;
         }
         else

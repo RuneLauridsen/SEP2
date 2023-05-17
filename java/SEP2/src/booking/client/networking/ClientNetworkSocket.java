@@ -1,6 +1,5 @@
 package booking.client.networking;
 
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.socketMessages.*;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -122,9 +120,9 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getUsers();
     }
 
-    @Override public void updateRoom(Room room, UpdateRoomParameters parameters) throws ClientNetworkException, ClientResponseException
+    @Override public void updateRoom(Room room) throws ClientNetworkException, ClientResponseException
     {
-        sendRequest(new UpdateRoomRequest(room, parameters));
+        sendRequest(new UpdateRoomRequest(room));
         UpdateRoomResponse response = (UpdateRoomResponse) readResponse();
     }
 

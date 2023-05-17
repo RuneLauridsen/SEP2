@@ -1,6 +1,5 @@
 package booking.database;
 
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -60,7 +59,7 @@ public interface Persistence
 
     public List<UserGroup> getUserGroups();
     public List<User> getUserGroupUsers(UserGroup userGroup);
-    public void updateRoom(Room room, UpdateRoomParameters parameters);
+    public void updateRoom(Room room);
     public void updateUserRoomData(User user, Room room, String comment, int color);
     public List<TimeSlot> getTimeSlots();
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);

@@ -3,7 +3,6 @@ package booking.client.model;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkException;
 import booking.client.networking.ClientResponseException;
-import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -243,11 +242,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public void updateRoom(Room room, UpdateRoomParameters parameters)
+    @Override public void updateRoom(Room room)
     {
         try
         {
-            networkLayer.updateRoom(room, parameters);
+            networkLayer.updateRoom(room);
         }
         catch (ClientResponseException e)
         {
