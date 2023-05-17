@@ -103,11 +103,18 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT  "
-                + " b.booking_date, b.booking_start_time, b.booking_end_time "
-                + "FROM sep2.booking b "
-                + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
-                + "WHERE r.room_name = ?;";
+            String query = """
+                SELECT
+                    b.booking_date,
+                    b.booking_start_time, 
+                    b.booking_end_time "
+                FROM 
+                    sep2.booking b "
+                INNER JOIN 
+                    sep2.room r ON b.room_id = r.room_id "
+                WHERE 
+                    r.room_name = ?;
+                """;
 
             statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -146,13 +153,24 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT "
-                + "r.room_id, r.room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id, "
-                + "COALESCE(urd.comment, '') AS user_data_comment, "
-                + "COALESCE(urd.color, CAST(x'ffffffff' AS int)) as user_data_color "
-                + "FROM sep2.room r "
-                + "LEFT OUTER JOIN sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? "
-                + "WHERE r.room_name = ? ";
+            String query = """
+                SELECT
+                    r.room_id,
+                    r.room_name, 
+                    room_size, 
+                    room_comfort_capacity, 
+                    room_fire_capacity, 
+                    room_comment, 
+                    room_type_id,
+                    COALESCE(urd.comment, '') AS user_data_comment,
+                    COALESCE(urd.color, CAST(x'ffffffff' AS int)) as user_data_color
+                FROM 
+                    sep2.room r
+                LEFT OUTER JOIN 
+                    sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ?
+                WHERE 
+                    r.room_name = ?
+                """;
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, userId);
@@ -238,12 +256,22 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT "
-                + "r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id, "
-                + "COALESCE(urd.comment, '') AS user_data_comment, "
-                + "COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color "
-                + "FROM sep2.room r "
-                + "LEFT OUTER JOIN sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? ;";
+            String query = """
+                SELECT
+                    r.room_id, 
+                    r.room_name, 
+                    r.room_size, 
+                    r.room_comfort_capacity, 
+                    r.room_fire_capacity, 
+                    r.room_comment, 
+                    r.room_type_id,
+                    COALESCE(urd.comment, '') AS user_data_comment,
+                    COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color
+                FROM 
+                    sep2.room r
+                LEFT OUTER JOIN 
+                    sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? ;
+                """;
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, userId);
@@ -288,21 +316,24 @@ public class DatabaseHandler implements Persistence
         {
             Map<Integer, RoomType> roomTypes = getRoomTypes();
 
-            String query = "SELECT "
-                + "    ut.user_type_id, "
-                + "    ut.user_type_name, "
-                + "    ut.can_edit_rooms, "
-                + "    ut.can_edit_users, "
-                + "    ut.can_edit_bookings, "
-                + "    ut.can_overlap_bookings, "
-                + "    ut.max_booking_count, "
-                + "    rt.room_type_id, "
-                + "    rt.room_type_name "
-                + "FROM sep2.user_type ut "
-                + "INNER JOIN sep2.user_type_allowed_room_type utart "
-                + "    ON ut.user_type_id = utart.user_type_id "
-                + "INNER JOIN sep2.room_type rt "
-                + "    ON utart.room_type_id = rt.room_type_id;";
+            String query = """
+                SELECT
+                    ut.user_type_id,
+                    ut.user_type_name, 
+                    ut.can_edit_rooms, 
+                    ut.can_edit_users, 
+                    ut.can_edit_bookings, 
+                    ut.can_overlap_bookings, 
+                    ut.max_booking_count, 
+                    rt.room_type_id, 
+                    rt.room_type_name 
+                FROM 
+                    sep2.user_type ut 
+                INNER JOIN 
+                    sep2.user_type_allowed_room_type utart ON ut.user_type_id = utart.user_type_id 
+                INNER JOIN 
+                    sep2.room_type rt ON utart.room_type_id = rt.room_type_id;
+                 """;
 
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
@@ -355,12 +386,22 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT  "
-                + " b.booking_id, b.booking_date, b.booking_start_time, b.booking_end_time "
-                + "FROM sep2.booking b "
-                + "INNER JOIN sep2.room r ON b.room_id = r.room_id "
-                + "WHERE r.room_name = ? "
-                + "ORDER BY  b.booking_date, b.booking_start_time;";
+            String query = """
+                SELECT 
+                    b.booking_id, 
+                    b.booking_date, 
+                    b.booking_start_time, 
+                    b.booking_end_time 
+                FROM 
+                    sep2.booking b 
+                INNER JOIN 
+                    sep2.room r ON b.room_id = r.room_id 
+                WHERE 
+                    r.room_name = ? 
+                ORDER BY 
+                    b.booking_date, 
+                    b.booking_start_time;
+                """;
 
             statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -408,7 +449,7 @@ public class DatabaseHandler implements Persistence
         try
         {
             String query = """ 
-                SELECT  
+                SELECT
                     b.booking_id, 
                     b.booking_date, 
                     b.booking_start_time, 
@@ -623,10 +664,12 @@ public class DatabaseHandler implements Persistence
         Objects.requireNonNull(activeUser);
         Objects.requireNonNull(parameters);
 
-        String query = "INSERT INTO sep2.booking "
-            + " (booking_date, booking_start_time, booking_end_time, room_id, user_id) "
-            + "VALUES "
-            + " (?, ?, ?, ?, ?);";
+        String query = """
+            INSERT INTO sep2.booking
+                (booking_date, booking_start_time, booking_end_time, room_id, user_id) 
+            VALUES 
+                (?, ?, ?, ?, ?);
+            """;
 
         PreparedStatement statement = null;
 
@@ -790,7 +833,13 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "INSERT INTO sep2.\"user\" (user_name, user_initials, user_viaid, user_password_hash, user_type_id) VALUES (?, ?, ?, ?, ?);";
+            String query = """
+                INSERT INTO sep2.\"user\" 
+                    (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
+                VALUES 
+                    (?, ?, ?, ?, ?);
+                """;
+
             statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, initials);
@@ -828,9 +877,18 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT ug.user_group_id, ug.user_group_name, c.course_id, c.course_name, c.course_time_slot_count "
-                + "FROM sep2.course c "
-                + "INNER JOIN sep2.user_group ug ON c.course_id = ug.course_id; ";
+            String query = """
+                SELECT
+                    ug.user_group_id, 
+                    ug.user_group_name, 
+                    c.course_id, 
+                    c.course_name, 
+                    c.course_time_slot_count 
+                FROM 
+                    sep2.course c
+                INNER JOIN 
+                    sep2.user_group ug ON c.course_id = ug.course_id; 
+                """;
 
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
@@ -875,10 +933,20 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid "
-                + "FROM sep2.user_group_user ugu "
-                + "INNER JOIN sep2.\"user\" u ON u.user_id = ugu.user_id "
-                + "WHERE ugu.user_group_id = ? ";
+            String query = """
+                SELECT 
+                    u.user_id, 
+                    u.user_type_id, 
+                    u.user_name, 
+                    u.user_initials, 
+                    u.user_viaid "
+                FROM 
+                    sep2.user_group_user ugu
+                INNER JOIN 
+                    sep2.\"user\" u ON u.user_id = ugu.user_id
+                WHERE 
+                    ugu.user_group_id = ? 
+                """;
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, userGroup.getId());
