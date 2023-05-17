@@ -567,7 +567,28 @@ public class DatabaseHandler implements Persistence
 
     @Override public void deleteBooking(Booking booking)
     {
+        Objects.requireNonNull(booking);
 
+        PreparedStatement statement = null;
+
+        try
+        {
+            String sql = """
+                DELETE FROM sep2.booking WHERE booking_id = ?
+                """;
+
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, booking.getId());
+            statement.execute();
+        }
+        catch (SQLException e)
+        {
+
+        }
+        finally
+        {
+            closeStatement(statement);
+        }
     }
 
     // TODO(rune): Måske fjern denne funktion, men udvid getRooms til at tage minCap osv.

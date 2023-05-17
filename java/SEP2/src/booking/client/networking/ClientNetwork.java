@@ -28,6 +28,9 @@ public interface ClientNetwork
     public void createBooking(Room room, BookingInterval interval, boolean isOverlapAllowed, UserGroup userGroup)
         throws ClientNetworkException, ClientResponseException;
 
+    public void deleteBooking(Booking booking)
+        throws ClientNetworkException, ClientResponseException;
+
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException;
 

@@ -23,6 +23,7 @@ public interface ClientModel
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters);
     public List<Booking> getActiveBookings(LocalDate start, LocalDate end);
     public void createBooking(Room room, BookingInterval interval);
+    public void deleteBooking(Booking booking);
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
     public Room getRoom(String room);
 

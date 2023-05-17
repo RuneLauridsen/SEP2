@@ -112,6 +112,22 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
+    @Override public void deleteBooking(Booking booking)
+    {
+        try
+        {
+            networkLayer.deleteBooking(booking);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
     {
         try

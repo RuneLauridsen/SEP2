@@ -42,6 +42,7 @@ public class UserHomeScreenViewModel
         username.set(model.getUser().getName());
 
         List<Booking> bookings = model.getActiveBookings(LocalDate.now(), LocalDate.MAX);
+        activeBookings.clear();
         activeBookings.addAll(bookings);
     }
 
@@ -68,5 +69,11 @@ public class UserHomeScreenViewModel
     public void ChangeToSearch(String roomName)
     {
         viewHandler.showRoomInfo(model.getRoom(roomName));
+    }
+
+    public void cancelBooking(Booking booking)
+    {
+        model.deleteBooking(booking);
+        refreshActiveBookings();
     }
 }

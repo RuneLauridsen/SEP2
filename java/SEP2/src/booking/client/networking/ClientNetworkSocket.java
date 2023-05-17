@@ -59,6 +59,13 @@ public class ClientNetworkSocket implements ClientNetwork
         CreateBookingResponse response = (CreateBookingResponse) readResponse();
     }
 
+    @Override public void deleteBooking(Booking booking)
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new DeleteBookingRequest(booking));
+        DeleteBookingResponse response = (DeleteBookingResponse) readResponse();
+    }
+
     @Override public Room getRoom(String roomName)
         throws ClientNetworkException, ClientResponseException
     {
