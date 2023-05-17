@@ -17,14 +17,21 @@ import static booking.shared.socketMessages.ErrorResponseReason.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerModelImpl implements ServerModel
 {
     private final Persistence persistence;
 
+    // NOTE(rune): Når man checker efter overlap mellem bookinger, er koden
+    // synchronized med dette objekt.
+    private final Object checkBookingOverlapLock;
+
     public ServerModelImpl(Persistence persistence)
     {
         this.persistence = persistence;
+        this.checkBookingOverlapLock = new Object();
     }
 
     @Override public User getUser(String username)
@@ -58,7 +65,7 @@ public class ServerModelImpl implements ServerModel
         );
     }
 
-    @Override public ErrorResponseReason createBooking(User user, Room room, BookingInterval interval)
+    @Override public ErrorResponseReason createBooking(User user, Room room, BookingInterval interval, boolean isOverlapAllowed)
     {
         // NOTE(rune): Vi stoler på at klienten sender Room med korrekt RoomType værdi. Dette er ikke en sikker måde
         // a styre adgang til lokaler på, da klienten nemt kunne sende en Room instans med modificeret RoomType,
@@ -77,8 +84,19 @@ public class ServerModelImpl implements ServerModel
 
             if (activeBookings.size() < user.getType().getMaxBookingCount())
             {
+                if (!isOverlapAllowed && user.getType().canEditRooms())
+                {
+                    synchronized (checkBookingOverlapLock)
+                    {
+                        List<Booking> checkBookings = persistence.getBookingsForRoom(
+                            room,
+                            interval.getDate(),
+                            interval.getDate(),
+                            user)
+                    }
+                }
+
                 persistence.createBooking(user, room, interval);
-                return ERROR_RESPONSE_REASON_NONE;
             }
             else
             {
@@ -87,7 +105,7 @@ public class ServerModelImpl implements ServerModel
         }
         else
         {
-            return ERROR_RESPONSE_REASON_TOO_MANY_ACTIVE_BOOKINGS;
+            return ERROR_RESPONSE_REASON_ROOM_TYPE_NOT_ALLOWED;
         }
     }
 

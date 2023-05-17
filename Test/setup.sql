@@ -18,6 +18,7 @@ CREATE TABLE user_type
     can_edit_users          bool        NOT NULL ,
     can_edit_rooms          bool        NOT NULL ,
     can_edit_bookings       bool        NOT NULL , -- kan redigere/slette andre folks bookinger
+    can_overlap_bookings    bool        NOT NULL , -- kan lave bookinger som overlapper med andre bookinger
     max_booking_count       int         NOT NULL
 );
 
