@@ -1,5 +1,6 @@
 package booking.client.view.CoordinatorGUI;
 
+import booking.shared.objects.Room;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -8,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 public class CoordinatorHomeScreen
 {
   public Label lblName;
-  public TableView tvtRooms;
+  public TableView<Room> tvtRooms;
   public TableColumn tcolName;
   public TableColumn tcolType;
   public TableColumn tcolStatus;
@@ -21,6 +22,7 @@ public class CoordinatorHomeScreen
   }
   public void AddRoomClicked(MouseEvent mouseEvent)
   {
+    viewModel.changeToAddRoom();
   }
 
   public void CoursesClicked(MouseEvent mouseEvent)
