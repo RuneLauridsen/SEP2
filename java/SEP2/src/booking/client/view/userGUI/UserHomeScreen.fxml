@@ -18,43 +18,45 @@
             <children>
                 <Label fx:id="lblName">
                     <font>
-                        <Font size="21.0" />
+                        <Font size="21.0"/>
                     </font>
                 </Label>
-                <Line endX="200.49290466308594" startX="-100.0" />
+                <Line endX="200.49290466308594" startX="-100.0"/>
                 <Label text="Active bookings:">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="16.0"/>
                     </font>
                 </Label>
                 <Label fx:id="lblNoBookings" text="You have no active bookings">
                     <VBox.margin>
-                        <Insets bottom="30.0" />
+                        <Insets bottom="30.0"/>
                     </VBox.margin>
                 </Label>
                 <TableView fx:id="tblActiveBookings" onMouseClicked="#tableViewClicked" prefHeight="200.0" prefWidth="386.0">
                     <columns>
-                        <TableColumn fx:id="colRoom" prefWidth="120.0000057220459" text="Room" />
-                        <TableColumn fx:id="colDate" prefWidth="117.5999755859375" text="Date" />
-                        <TableColumn fx:id="colFrom" prefWidth="94.4000244140625" text="From" />
-                        <TableColumn fx:id="colTo" prefWidth="85.5999755859375" text="To" />
+                        <TableColumn fx:id="colRoom" prefWidth="120.0000057220459" text="Room"/>
+                        <TableColumn fx:id="colDate" prefWidth="117.5999755859375" text="Date"/>
+                        <TableColumn fx:id="colFrom" prefWidth="74.4000244140625" text="From"/>
+                        <TableColumn fx:id="colTo" prefWidth="65.5999755859375" text="To"/>
+                        <TableColumn fx:id="colCancel" prefWidth="40"/>
                     </columns>
                 </TableView>
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="302.0">
                     <children>
                         <Button mnemonicParsing="false" onAction="#findAvailableRoomClick" text="Find available room">
-                     <HBox.margin>
-                        <Insets right="60.0" />
-                     </HBox.margin></Button>
-                  <Line endX="-100.0" endY="30.0" startX="-100.0" stroke="#0000007d">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Line>
-                  <TextField fx:id="txtSearch" prefHeight="26.0" prefWidth="82.0" promptText="eg. C04.17" />
+                            <HBox.margin>
+                                <Insets right="60.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <Line endX="-100.0" endY="30.0" startX="-100.0" stroke="#0000007d">
+                            <HBox.margin>
+                                <Insets right="10.0"/>
+                            </HBox.margin>
+                        </Line>
+                        <TextField fx:id="txtSearch" prefHeight="26.0" prefWidth="82.0" promptText="eg. C04.17"/>
                         <Button mnemonicParsing="false" onAction="#searchRoomClick" text="Search Room">
                             <HBox.margin>
-                                <Insets left="10.0" />
+                                <Insets left="10.0"/>
                             </HBox.margin>
                         </Button>
                     </children>

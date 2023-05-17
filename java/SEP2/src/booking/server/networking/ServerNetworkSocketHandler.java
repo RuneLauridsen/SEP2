@@ -2,6 +2,7 @@ package booking.server.networking;
 
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.server.model.ServerModel;
@@ -199,6 +200,16 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
 
                 //
+                // Room types
+                //
+                else if (request instanceof RoomTypesRequest roomTypesRequest)
+                {
+                    List<RoomType> roomTypes = model.getRoomTypes();
+
+                    sendResponse(new RoomTypesResponse(roomTypes));
+                }
+
+                //
                 // User groups
                 //
                 else if (request instanceof UserGroupsRequest userGroupsRequest)
@@ -216,6 +227,25 @@ public class ServerNetworkSocketHandler implements Runnable
                     List<User> users = model.getUserGroupUsers(userGroupUsersRequest.getUserGroup());
 
                     sendResponse(new UserGroupUsersResponse(users));
+                }
+
+                // Update room
+                else if (request instanceof UpdateRoomRequest updateRoomRequest)
+                {
+                    ErrorResponseReason error = model.updateRoom(
+                        updateRoomRequest.getRoom(),
+                        updateRoomRequest.getParameters(),
+                        user
+                    );
+
+                    if (error == ERROR_RESPONSE_REASON_NONE)
+                    {
+                        sendResponse(new UpdateRoomResponse());
+                    }
+                    else
+                    {
+                        sendResponse(new ErrorResponse(error));
+                    }
                 }
 
                 //

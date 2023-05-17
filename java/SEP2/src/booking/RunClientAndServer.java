@@ -6,9 +6,13 @@ import booking.database.DatabaseHandler;
 import booking.server.model.ServerModelImpl;
 import booking.server.networking.ServerNetworkSocket;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.UpdateRoomParameters;
+import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class RunClientAndServer
 {

@@ -8,23 +8,23 @@ import javafx.collections.ObservableList;
 
 public class AddRoomViewModel
 {
-  ViewHandler viewHandler;
-  ClientModel persistence;
-  public AddRoomViewModel(ViewHandler viewHandler, ClientModel persistence)
-  {
-    this.viewHandler = viewHandler;
-    this.persistence = persistence;
-  }
+    private final ViewHandler viewHandler;
+    private final ClientModel model;
 
-  public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName){
-    persistence.createRoom(name,type,maxComf,maxSafety,size,comment,isDouble,doubleName);
-  }
+    public AddRoomViewModel(ViewHandler viewHandler, ClientModel model)
+    {
+        this.viewHandler = viewHandler;
+        this.model = model;
+    }
 
-  public ObservableList<RoomType> getRoomTypes()
-  {
-    ObservableList<RoomType> types = FXCollections.observableArrayList();
-    //TODO get list of room types
-    types.add(new RoomType(1,"Grupperum"));
-    return types;
-  }
+    public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    {
+        model.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
+    }
+
+    public ObservableList<RoomType> getRoomTypes()
+    {
+        ObservableList<RoomType> types = FXCollections.observableArrayList(model.getRoomTypes());
+        return types;
+    }
 }

@@ -1,5 +1,6 @@
 package booking.client.model;
 
+import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -8,6 +9,7 @@ import booking.shared.objects.User;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.UserGroup;
+import booking.shared.socketMessages.UpdateRoomRequest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,10 +23,12 @@ public interface ClientModel
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters);
     public List<Booking> getActiveBookings(LocalDate start, LocalDate end);
     public void createBooking(Room room, BookingInterval interval);
+    public void deleteBooking(Booking booking);
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
     public Room getRoom(String room);
 
     public List<Room>getRooms();
+    public List<RoomType> getRoomTypes();
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end);
     public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end);
@@ -32,6 +36,7 @@ public interface ClientModel
     public List<UserGroup> getUserGroups();
     public List<User> getUserGroupUsers(UserGroup userGroup);
 
+    public void updateRoom(Room room, UpdateRoomParameters parameters);
     public void updateUserRoomData(Room room, String comment, Integer color);
 
     public List<TimeSlot> getTimeSlots();

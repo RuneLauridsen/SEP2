@@ -1,5 +1,6 @@
 package booking.client.networking;
 
+import booking.shared.UpdateRoomParameters;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
@@ -27,6 +28,9 @@ public interface ClientNetwork
     public void createBooking(Room room, BookingInterval interval, boolean isOverlapAllowed, UserGroup userGroup)
         throws ClientNetworkException, ClientResponseException;
 
+    public void deleteBooking(Booking booking)
+        throws ClientNetworkException, ClientResponseException;
+
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException;
 
@@ -38,11 +42,17 @@ public interface ClientNetwork
 
     public Room getRoom(String roomName)
         throws ClientNetworkException, ClientResponseException;
-        
+
+    public List<RoomType> getRoomTypes()
+        throws ClientNetworkException, ClientResponseException;
+
     public List<UserGroup> getUserGroups()
         throws ClientNetworkException, ClientResponseException;
 
     public List<User> getUserGroupUsers(UserGroup userGroup)
+        throws ClientNetworkException, ClientResponseException;
+
+    public void updateRoom(Room room, UpdateRoomParameters parameters)
         throws ClientNetworkException, ClientResponseException;
 
     public void updateUserRoomData(Room room, String comment, Integer color)
@@ -50,7 +60,7 @@ public interface ClientNetwork
 
     public List<TimeSlot> getTimeSlots()
         throws ClientNetworkException, ClientResponseException;
-    
+
     void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
         throws ClientNetworkException, ClientResponseException;
 }
