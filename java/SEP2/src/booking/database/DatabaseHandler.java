@@ -893,7 +893,7 @@ public class DatabaseHandler implements Persistence
         String query = "INSERT INTO sep2.room "
             + " (room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id) "
             + "VALUES "
-            + " (?, ?, ?, ?, ?);";
+            + " (?, ?, ?, ?, ?,?);";
 
         PreparedStatement statement = null;
 

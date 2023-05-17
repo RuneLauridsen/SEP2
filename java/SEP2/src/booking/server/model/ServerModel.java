@@ -19,6 +19,7 @@ public interface ServerModel
     public User getUser(String username);
 
     public Room getRoom(String roomName, User activeUser);
+    public List<Room> getRooms(User activeUser);
 
     public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters);
 
