@@ -48,7 +48,7 @@ public interface ServerModel
 
     public List<User> getUserGroupUsers(UserGroup userGroup);
 
-    public ErrorResponseReason updateRoom(Room room, UpdateRoomParameters parameters, User activeUser);
+    public ErrorResponseReason updateRoom(Room room, User activeUser);
     public void updateUserRoomData(User user, Room room, String comment, int color);
 
     public List<TimeSlot> getTimeSlots();

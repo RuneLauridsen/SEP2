@@ -246,11 +246,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public void updateRoom(Room room, UpdateRoomParameters parameters)
+    @Override public void updateRoom(Room room)
     {
         try
         {
-            networkLayer.updateRoom(room, parameters);
+            networkLayer.updateRoom(room);
         }
         catch (ClientResponseException e)
         {

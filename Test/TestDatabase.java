@@ -16,6 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Map;
 
 public class TestDatabase
@@ -110,31 +115,30 @@ public class TestDatabase
     @Test void testUpdateRoom()
     {
         User user = database.getUser("Gitte");
-        Room roomBefore = database.getRoom("A02.03", user);
+        Room roomToUpdate = database.getRoom("A02.03", user);
 
-        UpdateRoomParameters parameters = new UpdateRoomParameters(roomBefore);
-        parameters.setNewName("A02.99");
-        parameters.setNewSize(90);
-        parameters.setNewComfortCapacity(91);
-        parameters.setNewComment("new global comment");
+        assertEquals(roomToUpdate.getName(), "A02.03");
+        assertEquals(roomToUpdate.getSize(), 3);
+        assertEquals(roomToUpdate.getComfortCapacity(), 33);
+        assertEquals(roomToUpdate.getFireCapacity(), 333);
+        assertEquals(roomToUpdate.getComment(), "");
+        assertEquals(roomToUpdate.getType().getId(), 1);
 
-        database.updateRoom(roomBefore, parameters);
 
-        Room roomAfter = database.getRoom("A02.99", user);
+        roomToUpdate.setName("A02.99");
+        roomToUpdate.setSize(90);
+        roomToUpdate.setComfortCapacity(91);
+        roomToUpdate.setComment("new global comment");
 
-        assertEquals(roomBefore.getName(), "A02.03");
-        assertEquals(roomBefore.getSize(), 3);
-        assertEquals(roomBefore.getComfortCapacity(), 33);
-        assertEquals(roomBefore.getFireCapacity(), 333);
-        assertEquals(roomBefore.getComment(), "");
-        assertEquals(roomBefore.getType().getId(), 1);
+        database.updateRoom(roomToUpdate);
 
-        assertEquals(roomAfter.getName(), "A02.99");
-        assertEquals(roomAfter.getSize(), 90);
-        assertEquals(roomAfter.getComfortCapacity(), 91);
-        assertEquals(roomAfter.getFireCapacity(), 333);
-        assertEquals(roomAfter.getComment(), "new global comment");
-        assertEquals(roomAfter.getType().getId(), 1);
+
+        assertEquals(roomToUpdate.getName(), "A02.99");
+        assertEquals(roomToUpdate.getSize(), 90);
+        assertEquals(roomToUpdate.getComfortCapacity(), 91);
+        assertEquals(roomToUpdate.getFireCapacity(), 333);
+        assertEquals(roomToUpdate.getComment(), "new global comment");
+        assertEquals(roomToUpdate.getType().getId(), 1);
     }
 
     @Test void testGetRoomTypes()

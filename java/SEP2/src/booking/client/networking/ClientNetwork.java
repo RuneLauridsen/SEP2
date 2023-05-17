@@ -10,7 +10,6 @@ import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.UserGroup;
 import booking.shared.objects.*;
-import booking.shared.GetAvailableRoomsParameters;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -53,7 +52,7 @@ public interface ClientNetwork
     public List<User> getUserGroupUsers(UserGroup userGroup)
         throws ClientNetworkException, ClientResponseException;
 
-    public void updateRoom(Room room, UpdateRoomParameters parameters)
+    public void updateRoom(Room room)
         throws ClientNetworkException, ClientResponseException;
 
     public void updateUserRoomData(Room room, String comment, Integer color)

@@ -238,7 +238,6 @@ public class ServerNetworkSocketHandler implements Runnable
                 {
                     ErrorResponseReason error = model.updateRoom(
                         updateRoomRequest.getRoom(),
-                        updateRoomRequest.getParameters(),
                         user
                     );
 

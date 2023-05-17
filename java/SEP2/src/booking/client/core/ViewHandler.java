@@ -1,15 +1,13 @@
 package booking.client.core;
 
 import booking.client.model.ClientModel;
-import booking.client.view.CoordinatorGUI.CoordinatorHomeScreen;
-import booking.client.view.CoordinatorGUI.CoordinatorHomeScreenViewModel;
+import booking.client.view.CoordinatorGUI.*;
 import booking.client.view.userGUI.UserHomeScreen;
 import booking.client.view.userGUI.UserBookRoomViewModel;
 import booking.client.view.userGUI.UserHomeScreenViewModel;
+import booking.client.view.userGUI.*;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
-import booking.client.view.CoordinatorGUI.AddRoom;
-import booking.client.view.CoordinatorGUI.AddRoomViewModel;
 import booking.client.view.roomInfo.RoomInfo;
 import booking.client.view.roomInfo.RoomInfoViewModel;
 import booking.client.view.userGUI.UserBookRoom;
@@ -103,6 +101,33 @@ public class ViewHandler
             CoordinatorHomeScreenViewModel viewModel = viewModelFactory.getCoordinatorHomescreenViewModel(this,  model);
 
             CoordinatorHomeScreen view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            Stage bookingStage = new Stage();
+            bookingStage.setScene(scene);
+            bookingStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showCoordinatorBookRoom()
+    {
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
+
+            loader.setLocation(getClass().getResource("../view/coordinatorGUI/coordinatorBookRoom.fxml"));
+            root = loader.load();
+
+            CoordinatorBookRoomViewModel viewModel = viewModelFactory.getCoordinatorBookRoomViewModel(this,  model);
+
+            CoordinatorBookRoom view = loader.getController();
             view.init(viewModel);
 
             scene = new Scene(root);
@@ -240,4 +265,33 @@ public class ViewHandler
         alert.setContentText(content);
         return alert.showAndWait();
     }
+
+    public void showEditRoom(Room room){
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
+
+            loader.setLocation(getClass().getResource("../view/CoordinatorGUI/EditRoom.fxml"));
+            root = loader.load();
+
+
+            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
+            EditRoomViewModel viewModel = new EditRoomViewModel(this, model,room);
+
+            EditRoom view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            Stage infoStage = new Stage();
+            infoStage.setScene(scene);
+            infoStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
 }

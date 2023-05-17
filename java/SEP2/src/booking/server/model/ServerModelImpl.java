@@ -84,8 +84,6 @@ public class ServerModelImpl implements ServerModel
 
             if (activeBookings.size() < user.getType().getMaxBookingCount())
             {
-                overlaps.addAll(getOverlaps(parameters));
-
                 // NOTE(rune): Selvom klient sender isOverlapAllowed kan det godt være
                 // at klientens brugertype ikke har tilladelse til at overlappe bookinger.
                 boolean isOverlapAllowed = false;
@@ -114,6 +112,7 @@ public class ServerModelImpl implements ServerModel
         {
             return ERROR_RESPONSE_REASON_ROOM_TYPE_NOT_ALLOWED;
         }
+        return ERROR_RESPONSE_REASON_NONE;
     }
 
     @Override public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
@@ -177,11 +176,11 @@ public class ServerModelImpl implements ServerModel
         return users;
     }
 
-    @Override public ErrorResponseReason updateRoom(Room room, UpdateRoomParameters parameters, User activeUser)
+    @Override public ErrorResponseReason updateRoom(Room room, User activeUser)
     {
         if (activeUser.getType().canEditRooms())
         {
-            persistence.updateRoom(room, parameters);
+            persistence.updateRoom(room);
             return ERROR_RESPONSE_REASON_NONE;
         }
         else
