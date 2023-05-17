@@ -1,6 +1,8 @@
 package booking.client.core;
 
 import booking.client.model.ClientModel;
+import booking.client.view.CoordinatorGUI.CoordinatorHomeScreen;
+import booking.client.view.CoordinatorGUI.CoordinatorHomeScreenViewModel;
 import booking.client.view.userGUI.UserHomeScreen;
 import booking.client.view.userGUI.UserBookRoomViewModel;
 import booking.client.view.userGUI.UserHomeScreenViewModel;
@@ -81,6 +83,32 @@ public class ViewHandler
             scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showCoordinatorHomeScreen(User user){
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
+
+            loader.setLocation(getClass().getResource("../view/coordinatorGUI/CoordinatorHomeScreen.fxml"));
+            root = loader.load();
+
+            CoordinatorHomeScreenViewModel viewModel = viewModelFactory.getCoordinatorHomescreenViewModel(this,  model);
+
+            CoordinatorHomeScreen view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            Stage bookingStage = new Stage();
+            bookingStage.setScene(scene);
+            bookingStage.show();
         }
         catch (IOException ex)
         {

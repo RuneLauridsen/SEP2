@@ -21,7 +21,9 @@ public class AddRoom
   AddRoomViewModel viewModel;
 
   public void init(AddRoomViewModel viewModel){
+
     this.viewModel = viewModel;
+    cbbRoomType.setItems(viewModel.getRoomTypes());
   }
   public void saveButtonClick(MouseEvent mouseEvent)
   {
