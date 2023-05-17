@@ -43,4 +43,9 @@ public class CoordinatorHomeScreenViewModel
   {
     viewHandler.showRoomInfo(persistence.getRoom(name));
   }
+
+  public void changeToEditRoom(Room room)
+  {
+    viewHandler.showEditRoom(room);
+  }
 }

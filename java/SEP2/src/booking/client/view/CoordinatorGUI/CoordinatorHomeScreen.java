@@ -1,5 +1,6 @@
 package booking.client.view.CoordinatorGUI;
 
+import booking.client.view.userGUI.ButtonTableCell;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,7 +18,7 @@ public class CoordinatorHomeScreen
   public TableColumn<Room, RoomType> tcolType;
   public TableColumn<Room, String> tcolStatus;
   public TableColumn tcolBook;
-  public TableColumn tcolAlter;
+  public TableColumn<Room, Room> tcolAlter;
 
   CoordinatorHomeScreenViewModel viewModel;
   public void init(CoordinatorHomeScreenViewModel viewModel){
@@ -26,6 +27,9 @@ public class CoordinatorHomeScreen
     tcolName.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getName()));
     tcolType.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getType()));
     tcolStatus.setCellValueFactory(p -> new SimpleStringProperty(viewModel.isAvailable(p.getValue())));
+
+    tcolAlter.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue()));
+    tcolAlter.setCellFactory(p -> new ButtonTableCell<>("❌", viewModel::changeToEditRoom));
   }
   public void AddRoomClicked(MouseEvent mouseEvent)
   {

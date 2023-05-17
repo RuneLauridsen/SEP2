@@ -65,7 +65,7 @@ public class ServerModelImpl implements ServerModel
         );
     }
 
-    @Override public ErrorResponseReason createBooking(User user, Room room, BookingInterval interval, boolean isOverlapAllowed)
+    @Override public ErrorResponseReason createBooking(User user, Room room, BookingInterval interval)
     {
         // NOTE(rune): Vi stoler på at klienten sender Room med korrekt RoomType værdi. Dette er ikke en sikker måde
         // a styre adgang til lokaler på, da klienten nemt kunne sende en Room instans med modificeret RoomType,
@@ -84,7 +84,7 @@ public class ServerModelImpl implements ServerModel
 
             if (activeBookings.size() < user.getType().getMaxBookingCount())
             {
-                if (!isOverlapAllowed && user.getType().canEditRooms())
+                if (user.getType().canEditRooms())
                 {
                     synchronized (checkBookingOverlapLock)
                     {
@@ -92,7 +92,7 @@ public class ServerModelImpl implements ServerModel
                             room,
                             interval.getDate(),
                             interval.getDate(),
-                            user)
+                            user);
                     }
                 }
 
@@ -107,6 +107,7 @@ public class ServerModelImpl implements ServerModel
         {
             return ERROR_RESPONSE_REASON_ROOM_TYPE_NOT_ALLOWED;
         }
+        return ERROR_RESPONSE_REASON_NONE;
     }
 
     @Override public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
