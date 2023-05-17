@@ -3,7 +3,9 @@ package booking.shared;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 
-public class UpdateRoomParameters
+import java.io.Serializable;
+
+public class UpdateRoomParameters implements Serializable
 {
     private String newName;
     private int newSize;

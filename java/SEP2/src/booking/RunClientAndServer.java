@@ -6,6 +6,8 @@ import booking.database.DatabaseHandler;
 import booking.server.model.ServerModelImpl;
 import booking.server.networking.ServerNetworkSocket;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.UpdateRoomParameters;
+import booking.shared.objects.Room;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -40,6 +42,14 @@ public class RunClientAndServer
                 clientModel.login("Gitte", "");
 
                 var timeSlots = clientModel.getTimeSlots();
+
+                Room room = clientModel.getRoom("C02.07");
+                UpdateRoomParameters parameters = new UpdateRoomParameters(room);
+                parameters.setNewName("C02.99");
+
+                clientModel.updateRoom(room, parameters);
+
+                Room room2 = clientModel.getRoom("C02.99");
 
                 System.out.println(timeSlots);
 
