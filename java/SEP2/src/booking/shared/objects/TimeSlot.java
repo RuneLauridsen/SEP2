@@ -42,4 +42,9 @@ public class TimeSlot implements Serializable
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return start + "-" + end;
+    }
 }
