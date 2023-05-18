@@ -68,6 +68,12 @@ CREATE TABLE user_group_user
     PRIMARY KEY (user_group_id, user_id)
 );
 
+-- Til dobbeltlokaler, triplelokaler, quadruppellokaler osv.
+CREATE TABLE multi_room
+(
+    multi_room_id           serial      NOT NULL PRIMARY KEY
+);
+
 -- Lokaler, alle typer
 CREATE TABLE room
 (
@@ -78,9 +84,8 @@ CREATE TABLE room
     room_fire_capacity      int         NOT NULL,
     room_comment            varchar(99) NOT NULL,
 
-    room_type_id            int         NOT NULL REFERENCES room_type(room_type_id)
-
-    -- TODO: Rum med skillevægge
+    room_type_id            int         NOT NULL REFERENCES room_type(room_type_id),
+    multi_room_id           int         NULL     REFERENCES multi_room(multi_room_id)
 );
 
 -- Farveopdeling af lokaler pr. bruger + personlig bemærkning
@@ -111,7 +116,7 @@ CREATE TABLE booking
     booking_end_time        time        NOT NULL,
     room_id                 int         NOT NULL REFERENCES "room"(room_id) ,
     user_id                 int         NOT NULL REFERENCES "user"(user_id) ,
-    user_group_id           int         NULL     REFERENCES "user_group"(user_group_id) 
+    user_group_id           int         NULL     REFERENCES "user_group"(user_group_id)
 );
 
 
@@ -172,34 +177,34 @@ VALUES
 
 
 INSERT INTO room
-    (room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id)
+    (room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id, multi_room_id)
 VALUES
-    /* id = 1 */ ('A02.01', 1, 11, 111, '', 1),
-    /* id = 2 */ ('A02.02', 2, 22, 222, '', 1),
-    /* id = 3 */ ('A02.03', 3, 33, 333, '', 1),
-    /* id = 4 */ ('B02.04', 4, 44, 444, '', 1),
-    /* id = 5 */ ('B02.05', 5, 55, 555, '', 1),
-    /* id = 6 */ ('B02.06', 6, 66, 666, '', 1),
-    /* id = 7 */ ('C02.07', 7, 77, 777, '', 1),
-    /* id = 8 */ ('C02.08', 8, 88, 888, '', 1),
-    /* id = 9 */ ('C02.09', 9, 99, 999, '', 1),
+    /* id = 1 */ ('A02.01', 1, 11, 111, '', 1, NULL),
+    /* id = 2 */ ('A02.02', 2, 22, 222, '', 1, NULL),
+    /* id = 3 */ ('A02.03', 3, 33, 333, '', 1, NULL),
+    /* id = 4 */ ('B02.04', 4, 44, 444, '', 1, NULL),
+    /* id = 5 */ ('B02.05', 5, 55, 555, '', 1, NULL),
+    /* id = 6 */ ('B02.06', 6, 66, 666, '', 1, NULL),
+    /* id = 7 */ ('C02.07', 7, 77, 777, '', 1, NULL),
+    /* id = 8 */ ('C02.08', 8, 88, 888, '', 1, NULL),
+    /* id = 9 */ ('C02.09', 9, 99, 999, '', 1, NULL),
 
-    /* id = 11 */ ('A03.00', 0, 00, 000, '', 1),
-    /* id = 11 */ ('A03.01', 1, 11, 111, '', 1),
-    /* id = 12 */ ('A03.02', 2, 22, 222, '', 1),
-    /* id = 13 */ ('A03.03', 3, 33, 333, '', 1),
-    /* id = 14 */ ('B03.04', 4, 44, 444, '', 1),
-    /* id = 15 */ ('B03.05', 5, 55, 555, '', 1),
-    /* id = 16 */ ('B03.06', 6, 66, 666, '', 1),
-    /* id = 17 */ ('C03.07', 7, 77, 777, '', 1),
-    /* id = 18 */ ('C03.08', 8, 88, 888, '', 1),
-    /* id = 19 */ ('C03.09', 9, 99, 999, '', 1),
+    /* id = 11 */ ('A03.00', 0, 00, 000, '', 1, NULL),
+    /* id = 11 */ ('A03.01', 1, 11, 111, '', 1, NULL),
+    /* id = 12 */ ('A03.02', 2, 22, 222, '', 1, NULL),
+    /* id = 13 */ ('A03.03', 3, 33, 333, '', 1, NULL),
+    /* id = 14 */ ('B03.04', 4, 44, 444, '', 1, NULL),
+    /* id = 15 */ ('B03.05', 5, 55, 555, '', 1, NULL),
+    /* id = 16 */ ('B03.06', 6, 66, 666, '', 1, NULL),
+    /* id = 17 */ ('C03.07', 7, 77, 777, '', 1, NULL),
+    /* id = 18 */ ('C03.08', 8, 88, 888, '', 1, NULL),
+    /* id = 19 */ ('C03.09', 9, 99, 999, '', 1, NULL),
 
     -- bachelor lokale
-    /* id = 20 */ ('C06.01', 1, 11, 111, '', 3),
+    /* id = 20 */ ('C06.01', 1, 11, 111, '', 3, NULL),
 
     -- klasslokale
-    /* id = 20 */ ('C05.15', 2, 22, 222, '', 4);
+    /* id = 20 */ ('C05.15', 2, 22, 222, '', 4, NULL);
 
 INSERT INTO "user"
     (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
@@ -234,7 +239,7 @@ VALUES
     /* SDJ Maja  */ (1, 1),
     /* SDJ Julie */ (1, 2),
     /* SDJ Simon */ (1, 3),
-    
+
     /* DBS Julie */ (2, 2),
     /* DBS Simon */ (2, 3),
     /* DBS Rune  */ (2, 4);
@@ -253,12 +258,12 @@ VALUES
     /* Rune,  A02.03 */ (4, 3,  '2023-05-10', '10:00', '16:00', NULL),
     /* Gitte, B02.04 */ (5, 4,  '2023-05-11', '10:00', '16:00', NULL),
     /* Gitte, B02.05 */ (5, 5,  '2023-05-12', '10:00', '16:00', NULL),
-    
+
     -- til testOverlap
     /* Maja,  A03.01 */ (5, 11, '2023-05-12', '11:00', '13:00', NULL),
     /* Maja,  A03.01 */ (5, 11, '2023-05-12', '16:00', '16:45', NULL),
-    
-        
+
+
     -- til testOverlap_withUserGroups
     /* Gitte,  A03.02 SDJ */ (5, 12, '2023-05-12', '11:00', '13:00', 1),
     /* Gitte,  A03.02 DBS */ (5, 12, '2023-05-12', '16:00', '16:45', 2);
