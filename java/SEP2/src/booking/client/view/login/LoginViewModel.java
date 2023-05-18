@@ -2,12 +2,15 @@ package booking.client.view.login;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.HashingEncrypter;
 import booking.shared.objects.User;
 import booking.database.Persistence;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.security.NoSuchAlgorithmException;
 
 public class LoginViewModel
 {
@@ -48,7 +51,12 @@ public class LoginViewModel
         // TODO(rune): Bedre login. Server skal tjekke password.
         // Lige nu tjekker den kun brugernavnet.
 
-        model.login(username.get(), "");
+        //TODO(julie) Jeg tror ikke at viewmodel skal være ansvarlig for at encrypt
+        try {
+            model.login(username.get(), HashingEncrypter.encrypt(password.get()));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         // TODO(rune): Håndter login fejl
 
         //if (user != null)

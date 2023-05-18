@@ -50,9 +50,10 @@ public class DatabaseHandler implements Persistence
         closeConnection(connection);
     }
 
-    public User getUser(String username)
+    public User getUser(String username, String password)
     {
         Objects.requireNonNull(username);
+        Objects.requireNonNull(password);
 
         Map<Integer, UserType> userTypes = getUserTypes();
 
@@ -61,10 +62,11 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid FROM sep2.\"user\" u WHERE u.user_name = ?";
+            String query = "SELECT u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid FROM sep2.\"user\" u WHERE u.user_name = ? AND u.user_password_hash = ?";
 
             statement = connection.prepareStatement(query);
             statement.setString(1, username);
+            statement.setString(2, password);
             resultSet = statement.executeQuery();
 
             if (resultSet.next())
@@ -822,7 +824,7 @@ public class DatabaseHandler implements Persistence
         Objects.requireNonNull(passwordHash);
         Objects.requireNonNull(type);
 
-        User userWithSameName = getUser(name);
+        User userWithSameName = getUser(name, passwordHash);
         if (userWithSameName != null)
         {
             // Brugernavn er optaget.

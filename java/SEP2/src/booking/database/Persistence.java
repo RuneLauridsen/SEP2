@@ -27,7 +27,7 @@ public interface Persistence
 
     // Henter bruger ud fra brugernavn. Flere brugere kan ikke have samme brugernavn.
     // Returnerer null hvis der ikke findes nogen bruger med brugernavnet.
-    public User getUser(String username);
+    public User getUser(String username, String password);
 
     // Henter et lokale, dets lokaltype og dets bruger-specifikke data.
     public Room getRoom(String room, User activeUser);
