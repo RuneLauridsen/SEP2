@@ -25,6 +25,7 @@ public class EditRoom
   public void init(EditRoomViewModel viewModel){
     this.viewModel = viewModel;
     cbbRoomType.setItems(viewModel.getRoomTypes());
+    cbbColor.setItems(viewModel.getColors());
 
     txtName.setText(viewModel.getRoom().getName());
     txtMaxComfortCap.setText(String.valueOf(viewModel.getRoom().getComfortCapacity()));
