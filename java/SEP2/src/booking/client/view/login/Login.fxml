@@ -34,7 +34,7 @@
                 <HBox alignment="CENTER" prefHeight="58.0" prefWidth="275.0">
                     <children>
                         <Button fx:id="btnLogIn" mnemonicParsing="false" text="Log in" onAction="#btnLoginClicked"/>
-                        <Button fx:id="btnRegister" mnemonicParsing="false" text="Register">
+                        <Button fx:id="btnRegister" mnemonicParsing="false" text="Register" onAction="#btnRegisterClicked">
                             <HBox.margin>
                                 <Insets left="30.0"/>
                             </HBox.margin>

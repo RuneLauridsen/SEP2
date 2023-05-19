@@ -212,8 +212,8 @@ VALUES
     /* id = 1 */ ('Maja',   null,  111111, 0, 3),
     /* id = 2 */ ('Julie',  null,  222222, 0, 3),
     /* id = 3 */ ('Simon',  null,  333333, 0, 3),
-    /* id = 4 */ ('Rune',   null,  444444, 0, 3),
-    /* id = 5 */ ('Gitte', 'GITT', 555555, 0, 1);
+    /* id = 4 */ ('Rune',   null,  444444, '287571E774CFC9E46649185E68A7918C', 3),
+    /* id = 5 */ ('Gitte', 'GITT', 555555, '015C1B5BD250CD4280B65B58B1BE50D5', 1); -- password = 1234
 
 INSERT INTO user_room_data
     (user_id, room_id, color, comment)

@@ -17,6 +17,8 @@ public class EditRoom
   public ComboBox<RoomType> cbbRoomType;
   public Button cancelButton;
   public Button saveButton;
+  public ComboBox<String> cbbColor;
+  public TextArea txaPersonalComment;
 
   EditRoomViewModel viewModel;
 
@@ -34,7 +36,9 @@ public class EditRoom
 
   public void saveButtonClick(MouseEvent mouseEvent)
   {
-    viewModel.UpdateRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()),txaComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText());
+    viewModel.UpdateRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()),txaComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText(), txaPersonalComment.getText(), cbbColor.getSelectionModel().getSelectedItem());
+
+
     Stage stage = (Stage) saveButton.getScene().getWindow();
     stage.close();
   }

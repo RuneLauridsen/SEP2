@@ -25,19 +25,19 @@
                         </children>
                     </HBox>
                     <Label text="VIA ID" />
-                    <TextField fx:id="txtUsername" />
+                    <TextField fx:id="txtVIAID" />
             <Label text="Name">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="txtUsername1" />
+            <TextField fx:id="txtUsername" />
             <Label text="Occupation">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
-            <ComboBox prefHeight="26.0" prefWidth="238.0" />
+            <ComboBox fx:id="cbbUserType" prefHeight="26.0" prefWidth="238.0" />
                     <Label text="Password">
                         <VBox.margin>
                             <Insets top="10.0" />
@@ -46,8 +46,8 @@
                     <PasswordField fx:id="txtPassword" />
                     <HBox alignment="CENTER" prefHeight="58.0" prefWidth="275.0">
                         <children>
-                            <Button fx:id="btnBack" mnemonicParsing="false" text="Back" />
-                            <Button fx:id="btnRegister" mnemonicParsing="false" text="Register">
+                            <Button fx:id="btnBack" mnemonicParsing="false" onAction="#onBackClicked" text="Back" />
+                            <Button fx:id="btnRegister" mnemonicParsing="false" onAction="#onRegisterClick" text="Register">
                                 <HBox.margin>
                                     <Insets left="30.0" />
                                 </HBox.margin>

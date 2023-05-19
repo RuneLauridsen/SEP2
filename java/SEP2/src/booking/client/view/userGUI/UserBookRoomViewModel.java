@@ -128,7 +128,7 @@ public class UserBookRoomViewModel
         parameters.setFloor(floor);
 
         List<Room> roomsFromDatabase = model.getAvailableRooms(parameters);
-        roomList.removeAll();
+        roomList.clear();
         roomList.addAll(roomsFromDatabase);
 
         return roomList;
@@ -151,7 +151,7 @@ public class UserBookRoomViewModel
 
         model.createBooking(parameters);
 
-        viewHandler.showInfo("Lokale " + room + " er booking til " + requestedInterval);
+        viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
     }
 
     private static LocalTime parseLocalDateTime(String s)

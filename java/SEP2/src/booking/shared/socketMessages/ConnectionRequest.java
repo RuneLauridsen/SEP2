@@ -1,5 +1,8 @@
 package booking.shared.socketMessages;
 
+import booking.client.model.HashingEncrypter;
+
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class ConnectionRequest extends Request

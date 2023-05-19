@@ -43,6 +43,22 @@ public class ClientNetworkSocket implements ClientNetwork
         // TODO(rune): Disconnect
     }
 
+    public void createUser(String username, String password, String initials, int viaid, UserType userType)
+        throws ClientNetworkException, ClientResponseException
+    {
+        CreateUserRequest createUserRequest = new CreateUserRequest(
+            username,
+            password,
+            initials,
+            viaid,
+            userType
+        );
+
+        sendRequest(createUserRequest);
+
+        CreateUserResponse response = (CreateUserResponse) readResponse();
+    }
+
     @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
         throws ClientNetworkException, ClientResponseException
     {
@@ -79,6 +95,14 @@ public class ClientNetworkSocket implements ClientNetwork
         sendRequest(new RoomTypesRequest());
         RoomTypesResponse response = (RoomTypesResponse) readResponse();
         return response.getRoomTypes();
+    }
+
+    @Override public List<UserType> getUserTypes()
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new UserTypesRequest());
+        UserTypesResponse response = (UserTypesResponse) readResponse();
+        return response.getUserTypes();
     }
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)

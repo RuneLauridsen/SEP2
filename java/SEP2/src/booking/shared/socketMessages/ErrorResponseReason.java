@@ -7,6 +7,8 @@ public enum ErrorResponseReason
     // Ingen fejl, alt er OK
     ERROR_RESPONSE_REASON_NONE(""),
 
+    ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR("Internal server error"),
+
     // Client sendte en request klasse som serveren ikke kender/kan håndtere.
     ERROR_RESPONSE_REASON_INVALID_REQUEST_TYPE("Invalid request type"),
 
@@ -24,7 +26,9 @@ public enum ErrorResponseReason
 
     ERROR_RESPONSE_REASON_ROOM_NOT_FOUND("Room not found"),
 
-    ERROR_RESPONSE_REASON_USER_NOT_FOUND("User not found");
+    ERROR_RESPONSE_REASON_USER_NOT_FOUND("User not found"),
+
+    ERROR_RESPONSE_REASON_USERNAME_TAKEN("Username is already taken");
 
     private final String message;
 

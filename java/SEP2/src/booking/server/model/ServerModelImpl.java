@@ -1,19 +1,15 @@
 package booking.server.model;
 
+import booking.client.model.HashingEncrypter;
 import booking.shared.CreateBookingParameters;
-import booking.shared.objects.Booking;
-import booking.shared.objects.Overlap;
-import booking.shared.objects.Room;
-import booking.shared.objects.RoomType;
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
+import booking.shared.objects.*;
 import booking.database.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.objects.UserGroup;
 import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +33,19 @@ public class ServerModelImpl implements ServerModel
         return persistence.getUser(username);
     }
 
+    @Override public User login(String username, String password)
+    {
+        try
+        {
+            User user = persistence.getUser(username, HashingEncrypter.encrypt(password));
+            return user;
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            return null; // TODO(rune): Måske en måde er rapportere fejl
+        }
+    }
+
     @Override public Room getRoom(String roomName, User activeUser)
     {
         return persistence.getRoom(roomName, activeUser);
@@ -51,6 +60,12 @@ public class ServerModelImpl implements ServerModel
     {
         return new ArrayList<>(persistence.getRoomTypes().values());
     }
+
+    @Override public List<UserType> getUserTypes()
+    {
+        return new ArrayList<>(persistence.getUserTypes().values());
+    }
+
 
     @Override public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters)
     {
@@ -140,7 +155,7 @@ public class ServerModelImpl implements ServerModel
     {
         // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
 
-        User user = persistence.getUser(userName);
+        User user = persistence.getUser(userName, null);
         if (user != null)
         {
             return persistence.getBookingsForUser(user, from, to, activeUser);
@@ -197,6 +212,34 @@ public class ServerModelImpl implements ServerModel
     @Override public List<TimeSlot> getTimeSlots()
     {
         return persistence.getTimeSlots();
+    }
+
+    public ErrorResponseReason createUser(String username, String password, String initials, int viaid, UserType userType)
+    {
+        try
+        {
+            String passwordHash = HashingEncrypter.encrypt(password);
+            boolean createUserResult = persistence.createUser(
+                username,
+                initials,
+                viaid,
+                passwordHash,
+                userType
+            );
+
+            if(createUserResult)
+            {
+                return ERROR_RESPONSE_REASON_NONE;
+            }
+            else
+            {
+                return ERROR_RESPONSE_REASON_USERNAME_TAKEN;
+            }
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            return ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR;
+        }
     }
 
     private List<Overlap> getOverlaps(CreateBookingParameters parameters)

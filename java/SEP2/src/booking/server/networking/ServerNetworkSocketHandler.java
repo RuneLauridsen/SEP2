@@ -1,19 +1,14 @@
 package booking.server.networking;
 
-import booking.shared.objects.Booking;
-import booking.shared.objects.Overlap;
-import booking.shared.objects.Room;
-import booking.shared.objects.RoomType;
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
+import booking.shared.objects.*;
 import booking.server.model.ServerModel;
-import booking.shared.objects.UserGroup;
 import booking.shared.socketMessages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +42,13 @@ public class ServerNetworkSocketHandler implements Runnable
     {
         try
         {
+            // TODO(rune): Lav sådan at man kan registerer ny bruger uden at være logget ind.
+
             //
             // Login
             //
             ConnectionRequest connectionRequest = (ConnectionRequest) readRequest();
-            User user = model.getUser(connectionRequest.getUsername());
+            User user = model.login(connectionRequest.getUsername(), connectionRequest.getPassword());
             if (user != null)
             {
                 sendResponse(new ConnectionResponse(user));
@@ -89,7 +86,7 @@ public class ServerNetworkSocketHandler implements Runnable
                 //
                 // All rooms
                 //
-                if (request instanceof RoomsRequest roomsRequest)
+                else if (request instanceof RoomsRequest roomsRequest)
                 {
                     List<Room> rooms = model.getRooms(user);
                     sendResponse(new RoomsResponse(rooms));
@@ -135,6 +132,13 @@ public class ServerNetworkSocketHandler implements Runnable
                         user,
                         createBookingRequest.getParameters(),
                         overlaps
+                    );
+
+                    var reomve = model.getBookingsForRoom(
+                        createBookingRequest.getParameters().getRoom().getName(),
+                        LocalDate.MIN,
+                        LocalDate.MAX,
+                        null
                     );
 
                     if (createBookingResult == ERROR_RESPONSE_REASON_NONE)
@@ -214,6 +218,15 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
 
                 //
+                // User types
+                //
+                else if(request instanceof UserTypesRequest userTypesRequest)
+                {
+                    List<UserType> userTypes = model.getUserTypes();
+                    sendResponse(new UserTypesResponse(userTypes));
+                }
+
+                //
                 // User groups
                 //
                 else if (request instanceof UserGroupsRequest userGroupsRequest)
@@ -271,6 +284,29 @@ public class ServerNetworkSocketHandler implements Runnable
                 {
                     List<TimeSlot> timeSlots = model.getTimeSlots();
                     sendResponse(new TimeSlotsResponse(timeSlots));
+                }
+
+                //
+                // Create user
+                //
+                else if(request instanceof CreateUserRequest createUserRequest)
+                {
+                    ErrorResponseReason createUserResult = model.createUser(
+                        createUserRequest.getUsername(),
+                        createUserRequest.getPassword(),
+                        createUserRequest.getInitials(),
+                        createUserRequest.getViaid(),
+                        createUserRequest.getUserType()
+                    );
+
+                    if(createUserResult == ERROR_RESPONSE_REASON_NONE)
+                    {
+                        sendResponse(new CreateUserResponse());
+                    }
+                    else
+                    {
+                        sendResponse(new ErrorResponse(createUserResult));
+                    }
                 }
 
                 //

@@ -1,9 +1,11 @@
 import booking.client.core.ViewHandler;
+import booking.client.core.ViewHandlerImpl;
 import booking.client.core.ViewModelFactory;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelImpl;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkSocket;
+import booking.client.view.login.LoginViewModel;
 import booking.client.view.userGUI.UserBookRoomViewModel;
 import booking.database.DatabaseHandler;
 import booking.server.model.ServerModel;
@@ -12,6 +14,8 @@ import booking.server.networking.ServerNetwork;
 import booking.server.networking.ServerNetworkSocket;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Overlap;
+import booking.shared.CreateBookingParameters;
+import booking.shared.GetAvailableRoomsParameters;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,6 +61,8 @@ public class TestIntegration
         }
 
         model = clientModel;
+        viewHandler = new FakeViewHandler();
+        viewModelFactory = new ViewModelFactory();
     }
 
     @AfterEach void cleanup()
@@ -65,27 +71,46 @@ public class TestIntegration
         serverThread.interrupt();
     }
 
+    @Test void testLogin()
+    {
+        LoginViewModel loginViewModel = viewModelFactory.getLoginViewModel(viewHandler, model);
+        loginViewModel.usernameProperty().set("Rune");
+        loginViewModel.passwordProperty().set("asdasd");
+        loginViewModel.loginAction();
+
+        // TODO(rune): Test forkert brugernavn og password
+        assertEquals(model.getUser().getName(), "Rune");
+        assertEquals(model.getUser().getViaId(), 444444);
+        assertEquals(model.getUser().getInitials(), null);
+        assertEquals(model.getUser().getType().getName(), "Studerende");
+    }
+
+    @Test void testRegister()
+    {
+
+    }
+
     @Test void testCreateBooking()
     {
-        model.login("Rune", "");
+        model.login("Rune", "asdasd");
 
-        UserBookRoomViewModel viewModel = new UserBookRoomViewModel(null, model);
+        UserBookRoomViewModel viewModel = viewModelFactory.getUserBookRoomViewModel(viewHandler, model);
         viewModel.selectedDateProperty().set(LocalDate.of(2023, 5, 9));
         viewModel.selectedFromTimeProperty().set("11:00");
         viewModel.selectedToTimeProperty().set("13:00");
+        viewModel.selectedBuildingProperty().set('A');
+        viewModel.selectedFloorProperty().set(2);
 
         viewModel.showAvailableRooms();
 
-        BookingInterval interval0 = new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(14, 0), LocalTime.of(15, 0));
-        BookingInterval interval1 = new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(8, 0), LocalTime.of(18, 0));
-        BookingInterval interval2 = new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(12, 0));
+        assertEquals(viewModel.getRoomList().size(), 2);
+        assertEquals(viewModel.getRoomList().get(0).getName(), "A02.01");
+        assertEquals(viewModel.getRoomList().get(1).getName(), "A02.03");
 
-        //CreateBookingParameters parameters1 = new CreateBookingParameters(room, interval1, false, null);
-        //CreateBookingParameters parameters0 = new CreateBookingParameters(room, interval0, false, null);
-        //CreateBookingParameters parameters2 = new CreateBookingParameters(room, interval2, false, null);
+        viewModel.bookRoom(viewModel.getRoomList().get(0));
+        viewModel.showAvailableRooms();
 
-        List<Overlap> overlaps0 = new ArrayList<>();
-        List<Overlap> overlaps1 = new ArrayList<>();
-        List<Overlap> overlaps2 = new ArrayList<>();
+        assertEquals(viewModel.getRoomList().size(), 1);
+        assertEquals(viewModel.getRoomList().get(0).getName(), "A02.03");
     }
 }

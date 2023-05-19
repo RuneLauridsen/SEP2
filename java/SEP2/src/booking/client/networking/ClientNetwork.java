@@ -45,6 +45,9 @@ public interface ClientNetwork
     public List<RoomType> getRoomTypes()
         throws ClientNetworkException, ClientResponseException;
 
+    public List<UserType> getUserTypes()
+        throws ClientNetworkException, ClientResponseException;
+
     public List<UserGroup> getUserGroups()
         throws ClientNetworkException, ClientResponseException;
 
@@ -60,6 +63,9 @@ public interface ClientNetwork
     public List<TimeSlot> getTimeSlots()
         throws ClientNetworkException, ClientResponseException;
 
-    void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+        throws ClientNetworkException, ClientResponseException;
+
+    public void createUser(String username, String password, String initials, int viaid, UserType userType)
         throws ClientNetworkException, ClientResponseException;
 }

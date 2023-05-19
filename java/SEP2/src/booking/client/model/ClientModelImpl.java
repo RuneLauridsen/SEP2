@@ -12,6 +12,7 @@ import booking.shared.objects.User;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.UserGroup;
+import booking.shared.socketMessages.CreateUserRequest;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -69,11 +70,44 @@ public class ClientModelImpl implements ClientModel
 
     }
 
+    @Override public void register(String username, String password, String initials, int viaid, UserType userType)
+    {
+        try
+        {
+            networkLayer.createUser(username, password, initials, viaid, userType);
+            login(username, password);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
     @Override public List<RoomType> getRoomTypes()
     {
         try
         {
             return networkLayer.getRoomTypes();
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
+
+    @Override public List<UserType> getUserTypes()
+    {
+        try
+        {
+            return networkLayer.getUserTypes();
         }
         catch (ClientResponseException e)
         {
@@ -249,7 +283,9 @@ public class ClientModelImpl implements ClientModel
     {
         try
         {
+            // TODO(rune): Slå sammen til en request?
             networkLayer.updateRoom(room);
+            networkLayer.updateUserRoomData(room, room.getName(), room.getUserColor());
         }
         catch (ClientResponseException e)
         {

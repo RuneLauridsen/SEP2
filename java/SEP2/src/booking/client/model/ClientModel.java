@@ -17,6 +17,8 @@ public interface ClientModel
 {
     public void login(String username, String password);
     public void logout();
+    public void register(String username, String password, String initials, int viaid, UserType userType);
+
     public User getUser(); // NOTE(rune): Returns null if user is not logged in.
 
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters);
@@ -28,6 +30,7 @@ public interface ClientModel
 
     public List<Room> getRooms();
     public List<RoomType> getRoomTypes();
+    public List<UserType> getUserTypes();
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end);
     public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end);

@@ -28,4 +28,9 @@ public class Login
     {
         viewModel.loginAction();
     }
+
+    public void btnRegisterClicked(ActionEvent actionEvent)
+    {
+        viewModel.showRegister();
+    }
 }

@@ -29,13 +29,16 @@ public class EditRoomViewModel
     return types;
   }
 
-  public void UpdateRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName){
+  public void UpdateRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName, String personalComment, String color){
     room.setName(name);
     room.setType(type);
     room.setSize(size);
     room.setComfortCapacity(maxComf);
     room.setFireCapacity(maxSafety);
     room.setComment(comment);
+    room.setUserComment(personalComment);
+    //if ()
+    //room.setUserColor();
     model.updateRoom(room);
   }
 }

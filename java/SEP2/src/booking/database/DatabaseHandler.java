@@ -50,10 +50,14 @@ public class DatabaseHandler implements Persistence
         closeConnection(connection);
     }
 
-    public User getUser(String username, String password)
+    public User getUser(String username)
+    {
+        return getUser(username, null);
+    }
+
+    public User getUser(String username, String passwordHash)
     {
         Objects.requireNonNull(username);
-        Objects.requireNonNull(password);
 
         Map<Integer, UserType> userTypes = getUserTypes();
 
@@ -62,11 +66,24 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String query = "SELECT u.user_id, u.user_type_id, u.user_name, u.user_initials, u.user_viaid FROM sep2.\"user\" u WHERE u.user_name = ? AND u.user_password_hash = ?";
+            String query = """
+                SELECT
+                    u.user_id, 
+                    u.user_type_id, 
+                    u.user_name, 
+                    u.user_initials, 
+                    u.user_viaid 
+                FROM 
+                    sep2."user" u 
+                WHERE 
+                    u.user_name = ?
+                AND
+                    u.user_password_hash = COALESCE(?, u.user_password_hash)
+                """;
 
             statement = connection.prepareStatement(query);
             statement.setString(1, username);
-            statement.setString(2, password);
+            statement.setString(2, passwordHash);
             resultSet = statement.executeQuery();
 
             if (resultSet.next())
@@ -752,21 +769,50 @@ public class DatabaseHandler implements Persistence
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
-        String query = "SELECT r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id, "
-            + "COALESCE(urd.comment, '') AS user_data_comment, "
-            + "COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color "
-            + "FROM sep2.room r "
-            + "INNER JOIN sep2.\"user\" u ON u.user_id = ? "
-            + "INNER JOIN sep2.user_type_allowed_room_type utart ON r.room_type_id = utart.room_type_id AND u.user_type_id = utart.user_type_id "
-            + "LEFT OUTER JOIN sep2.booking b ON r.room_id = b.room_id "
-            + "LEFT OUTER JOIN sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? "
-            + "WHERE ((b.booking_id IS NULL) OR (b.booking_date <> ?) OR NOT (b.booking_end_time > ? AND b.booking_start_time < ?)) "
-            + "AND ((r.room_comfort_capacity >= ?))  "
-            + "AND ((r.room_comfort_capacity <= ?))  "
-            + "AND ((substr(r.room_name, 1, 1) = ?) OR (? IS NULL)) "
-            + "AND ((substr(r.room_name, 3, 1) = ?) OR (? IS NULL)) "
-            + "GROUP BY r.room_id, r.room_name, r.room_size, r.room_comfort_capacity, r.room_fire_capacity, r.room_comment, r.room_type_id, urd.comment, urd.color "
-            + "ORDER BY r.room_name;";
+        String query = """
+             SELECT 
+                r.room_id, 
+                r.room_name, 
+                r.room_size, 
+                r.room_comfort_capacity, 
+                r.room_fire_capacity, 
+                r.room_comment, 
+                r.room_type_id, 
+                COALESCE(urd.comment, '') AS user_data_comment,
+                COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color
+            FROM 
+                sep2.room r
+            INNER JOIN 
+                sep2."user" u ON u.user_id = ?
+            INNER JOIN 
+                sep2.user_type_allowed_room_type utart ON r.room_type_id = utart.room_type_id AND u.user_type_id = utart.user_type_id
+            LEFT OUTER JOIN 
+                sep2.booking b ON r.room_id = b.room_id
+            LEFT OUTER JOIN 
+                sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ?
+            WHERE 
+                ((b.booking_id IS NULL) OR (b.booking_date <> ?) OR NOT (b.booking_end_time > ? AND b.booking_start_time < ?))
+            AND 
+                ((r.room_comfort_capacity >= ?)) 
+            AND 
+                ((r.room_comfort_capacity <= ?)) 
+            AND 
+                ((substr(r.room_name, 1, 1) = ?) OR (? IS NULL))
+            AND 
+                ((substr(r.room_name, 3, 1) = ?) OR (? IS NULL))
+            GROUP BY 
+                r.room_id, 
+                r.room_name, 
+                r.room_size, 
+                r.room_comfort_capacity, 
+                r.room_fire_capacity, 
+                r.room_comment, 
+                r.room_type_id, 
+                urd.comment, 
+                urd.color
+            ORDER BY 
+                r.room_name;
+            """;
 
         PreparedStatement statement = null;
         ResultSet resultSet = null;

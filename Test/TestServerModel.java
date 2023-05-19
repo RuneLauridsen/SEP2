@@ -1,13 +1,8 @@
-import booking.client.view.userGUI.UserBookRoomViewModel;
 import booking.database.DatabaseHandler;
 import booking.server.model.ServerModel;
 import booking.server.model.ServerModelImpl;
 import booking.shared.CreateBookingParameters;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Overlap;
-import booking.shared.objects.Room;
-import booking.shared.objects.User;
-import booking.shared.objects.UserGroup;
+import booking.shared.objects.*;
 import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
@@ -39,6 +34,8 @@ public class TestServerModel
         TestDatabaseUtil.setdown(database);
     }
 
+    // Tester om server model retunere korrekte overlap,
+    // når man prøver at lave en ny booking.
     @Test void testOverlap()
     {
         User user = database.getUser("Rune");
@@ -75,6 +72,8 @@ public class TestServerModel
         assertEquals(overlaps1.get(0).getUsers().size(), 0);
     }
 
+    // Tester om server model returnerer korrekte overlap med korrekte brugere
+    // når man prøver at lave en ny booking.
     @Test void testOverlap_withUserGroups()
     {
         User user = database.getUser("Gitte");
@@ -111,5 +110,46 @@ public class TestServerModel
         assertEquals(overlaps0.get(0).getUsers().size(), 3);
         assertEquals(overlaps0.get(1).getUsers().size(), 2);
         assertEquals(overlaps1.get(0).getUsers().size(), 3);
+    }
+
+    @Test void testLogin()
+    {
+        User userCorrect = model.login("Gitte", "1234");
+        User userIncorrect = model.login("Gitte", "abcd");
+
+        assertEquals(userCorrect.getName(), "Gitte");
+        assertEquals(userCorrect.getViaId(), 555555);
+        assertEquals(userCorrect.getInitials(), "GITT");
+        assertEquals(userCorrect.getType().getName(), "Skemalægger");
+        assertEquals(userIncorrect, null);
+    }
+
+    @Test void testCreateUser()
+    {
+        List<UserType> userTypes = model.getUserTypes();
+
+        User userBefore = model.getUser("Test testesen");
+        assertEquals(userBefore, null);
+
+        model.createUser(
+            "Test testesen",
+            "abc123",
+            "R2D2",
+            123456,
+            userTypes.get(2)
+        );
+
+        User userWithPassword = model.getUser("Test testesen");
+        User userWithoutPassword = model.login("Test testesen", "abc123");
+
+        assertEquals(userWithPassword.getName(), "Test testesen");
+        assertEquals(userWithPassword.getInitials(), "R2D2");
+        assertEquals(userWithPassword.getViaId(), 123456);
+        assertEquals(userWithPassword.getType(), userTypes.get(2));
+
+        assertEquals(userWithoutPassword.getName(), "Test testesen");
+        assertEquals(userWithoutPassword.getInitials(), "R2D2");
+        assertEquals(userWithoutPassword.getViaId(), 123456);
+        assertEquals(userWithoutPassword.getType(), userTypes.get(2));
     }
 }

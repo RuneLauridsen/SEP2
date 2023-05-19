@@ -15,9 +15,9 @@ public class DatabaseHandlerTest
 
         var userTypes = persistence.getUserTypes();
 
-        User rune = persistence.getUser("Rune");
-        User gitte = persistence.getUser("Gitte");
-        User simon = persistence.getUser("Simon");
+        User rune = persistence.getUser("Rune", null);
+        User gitte = persistence.getUser("Gitte", null);
+        User simon = persistence.getUser("Simon", null);
 
         var bookings = persistence.getBookingsForUser(
             rune,

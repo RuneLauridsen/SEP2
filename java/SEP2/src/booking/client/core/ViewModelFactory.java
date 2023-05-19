@@ -4,6 +4,7 @@ import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
 import booking.client.view.CoordinatorGUI.CoordinatorBookRoom;
 import booking.client.view.CoordinatorGUI.CoordinatorBookRoomViewModel;
+import booking.client.view.login.RegisterViewModel;
 import booking.client.view.userGUI.UserBookRoomViewModel;
 import booking.client.view.userGUI.UserHomeScreenViewModel;
 import booking.shared.objects.Room;
@@ -20,8 +21,10 @@ public class ViewModelFactory
 
     private CoordinatorHomeScreenViewModel coordinatorHomeScreenViewModel;
     private CoordinatorBookRoomViewModel coordinatorBookRoomViewModel;
+    private RegisterViewModel registerViewModel;
 
     private RoomInfoViewModel roomInfoViewModel;
+
     public ViewModelFactory()
     {
     }
@@ -67,5 +70,12 @@ public class ViewModelFactory
         if (coordinatorBookRoomViewModel == null)
             coordinatorBookRoomViewModel = new CoordinatorBookRoomViewModel(viewHandler, model);
         return coordinatorBookRoomViewModel;
+    }
+
+    public RegisterViewModel getRegisterViewModel(ViewHandler viewHandler, ClientModel model)
+    {
+        if (registerViewModel == null)
+            registerViewModel = new RegisterViewModel(viewHandler, model);
+        return registerViewModel;
     }
 }

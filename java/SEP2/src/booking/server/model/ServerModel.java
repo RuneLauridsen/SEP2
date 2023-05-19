@@ -1,15 +1,8 @@
 package booking.server.model;
 
 import booking.shared.CreateBookingParameters;
-import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Overlap;
-import booking.shared.objects.Room;
-import booking.shared.objects.RoomType;
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
+import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.objects.UserGroup;
 import booking.shared.socketMessages.ErrorResponseReason;
 
 import java.time.LocalDate;
@@ -17,14 +10,16 @@ import java.util.List;
 
 public interface ServerModel
 {
-    // TODO(rune): Password checking
     public User getUser(String username);
-
     public Room getRoom(String roomName, User activeUser);
+
+    // Samme som getUser men checker password, og returnerer null hvis password ikke passer.
+    public User login(String username, String password);
 
     public List<Room> getRooms(User activeUser);
 
     public List<RoomType> getRoomTypes();
+    public List<UserType> getUserTypes();
 
     public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters);
 
@@ -37,7 +32,7 @@ public interface ServerModel
 
     // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
     // NOTE(rune): Tager både userName og activeUser som argument, da returnerede objekter
-    // indeholder bruger-specifik data (Room.userComment og user_room_data.userColor).
+    // indeholder bruger-specifik data (Room.userComment og Room.userColor).
     // userName fortæller hvilken bruger der skal hentes bookings for, og activeUser,
     // fortæller hvilken bruger der skal hentes bruger-specifik data for.
     public List<Booking> getBookingsForUser(String userName, LocalDate from, LocalDate to, User activeUser);
@@ -47,9 +42,12 @@ public interface ServerModel
 
     public List<User> getUserGroupUsers(UserGroup userGroup);
 
+    public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
     public ErrorResponseReason updateRoom(Room room, User activeUser);
     public void updateUserRoomData(User user, Room room, String comment, int color);
 
+    public ErrorResponseReason createUser(String username, String password, String initials, int viaid, UserType userType);
+
     public List<TimeSlot> getTimeSlots();
-    ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
+
 }

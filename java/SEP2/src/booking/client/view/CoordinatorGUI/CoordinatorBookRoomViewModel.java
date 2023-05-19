@@ -225,7 +225,7 @@ public class CoordinatorBookRoomViewModel
 
         model.createBooking(parameters);
 
-        viewHandler.showInfo("Lokale " + room + " er booking til " + requestedInterval);
+        viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
     }
 
     private static LocalTime parseLocalDateTime(String s)
