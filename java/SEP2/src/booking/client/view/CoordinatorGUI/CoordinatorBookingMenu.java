@@ -1,6 +1,6 @@
 package booking.client.view.CoordinatorGUI;
 
-import booking.client.view.login.LoginViewModel;
+import booking.client.core.ViewHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
-public class Booking
+public class CoordinatorBookingMenu
 {
     @FXML
     private Button btnBookRoom;
@@ -27,17 +27,22 @@ public class Booking
     private Label lblFileName;
 
     @FXML
-    private ListView<Booking> lvBookings;
+    private ListView<CoordinatorBookingMenu> lvBookings;
 
     @FXML
     private VBox VBoxFile;
 
-    private BookingViewModel viewModel;
+    private CoordinatorBookingMenuViewModel viewModel;
 
     @FXML
     private void btnBookRoomClicked(ActionEvent event)
     {
         viewModel.bookRoomAction();
+    }
+
+    public void init(CoordinatorBookingMenuViewModel viewModel, ViewHandler viewHandler)
+    {
+        
     }
 
     public void btnInsertFileClicked(MouseEvent event)

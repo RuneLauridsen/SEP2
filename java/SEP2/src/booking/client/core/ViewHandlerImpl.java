@@ -27,300 +27,322 @@ import java.util.Optional;
 //TODO(Julie): Muligvis ændre User persistance til singleton klasser.
 public class ViewHandlerImpl implements ViewHandler
 {
-  private static final String DEFAULT_WINDOW_TITLE = "Bookingsystem";
+    private static final String DEFAULT_WINDOW_TITLE = "Bookingsystem";
 
-  private final Stage primaryStage;
-  private final ViewModelFactory viewModelFactory;
-  private final ClientModel model;
+    private final Stage primaryStage;
+    private final ViewModelFactory viewModelFactory;
+    private final ClientModel model;
 
-  public ViewHandlerImpl(Stage primaryStage, ViewModelFactory viewModelFactory, ClientModel model)
-  {
-    this.primaryStage = primaryStage;
-    this.viewModelFactory = viewModelFactory;
-    this.model = model;
-  }
-
-  public void showLogin()
-  {
-    try
+    public ViewHandlerImpl(Stage primaryStage, ViewModelFactory viewModelFactory, ClientModel model)
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
-
-      loader.setLocation(getClass().getResource("../view/login/Login.fxml"));
-      root = loader.load();
-
-      Login view = loader.getController();
-      view.init(viewModelFactory.getLoginViewModel(this, model));
-
-      scene = new Scene(root, 600, 400);
-      primaryStage.setScene(scene);
-      primaryStage.show();
+        this.primaryStage = primaryStage;
+        this.viewModelFactory = viewModelFactory;
+        this.model = model;
     }
-    catch (IOException ex)
+
+    public void showLogin()
     {
-      ex.printStackTrace();
-    }
-  }
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-  public void showUserBookRoom()
-  {
-    try
+            loader.setLocation(getClass().getResource("../view/login/Login.fxml"));
+            root = loader.load();
+
+            Login view = loader.getController();
+            view.init(viewModelFactory.getLoginViewModel(this, model));
+
+            scene = new Scene(root, 600, 400);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showUserBookRoom()
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-      loader.setLocation(getClass().getResource("../view/userGUI/UserBookRoom.fxml"));
-      root = loader.load();
+            loader.setLocation(getClass().getResource("../view/userGUI/UserBookRoom.fxml"));
+            root = loader.load();
 
-      UserBookRoomViewModel viewModel = viewModelFactory.getUserBookRoomViewModel(this,  model);
+            UserBookRoomViewModel viewModel = viewModelFactory.getUserBookRoomViewModel(this, model);
 
-      UserBookRoom view = loader.getController();
-      view.init(viewModel);
+            UserBookRoom view = loader.getController();
+            view.init(viewModel);
 
-      scene = new Scene(root);
-      primaryStage.setScene(scene);
-      primaryStage.show();
+            scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
-    catch (IOException ex)
+
+    public void showCoordinatorHomeScreen(User user)
     {
-      ex.printStackTrace();
-    }
-  }
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-  public void showCoordinatorHomeScreen(User user)
-  {
-    try
+            loader.setLocation(getClass().getResource("../view/coordinatorGUI/CoordinatorHomeScreen.fxml"));
+            root = loader.load();
+
+            CoordinatorHomeScreenViewModel viewModel = viewModelFactory.getCoordinatorHomeScreenViewModel(this, model);
+
+            CoordinatorHomeScreen view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showCoordinatorBookRoom()
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-      loader.setLocation(getClass().getResource("../view/coordinatorGUI/CoordinatorHomeScreen.fxml"));
-      root = loader.load();
+            loader.setLocation(getClass().getResource("../view/coordinatorGUI/coordinatorBookRoom.fxml"));
+            root = loader.load();
 
-      CoordinatorHomeScreenViewModel viewModel = viewModelFactory.getCoordinatorHomescreenViewModel(this,  model);
+            CoordinatorBookRoomViewModel viewModel = viewModelFactory.getCoordinatorBookRoomViewModel(this, model);
 
-      CoordinatorHomeScreen view = loader.getController();
-      view.init(viewModel);
+            CoordinatorBookRoom view = loader.getController();
+            view.init(viewModel);
 
-      scene = new Scene(root);
-      primaryStage.setScene(scene);
-      primaryStage.show();
+            scene = new Scene(root);
+            Stage bookingStage = new Stage();
+            bookingStage.setScene(scene);
+            bookingStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
-    catch (IOException ex)
+
+    @Override public void showCoordinatorBookingMenu()
     {
-      ex.printStackTrace();
-    }
-  }
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-  public void showCoordinatorBookRoom()
-  {
-    try
+            loader.setLocation(getClass().getResource("../view/CoordinatorGUI/CoordinatorBookingMenu.fxml"));
+            root = loader.load();
+
+            CoordinatorBookingMenuViewModel viewModel = viewModelFactory.getCoordinatorBookingMenuViewModel(this, model);
+
+            CoordinatorBookingMenu view = loader.getController();
+            view.init(viewModel, this);
+
+            scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showUserHomeScreen(User user)
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-      loader.setLocation(getClass().getResource("../view/coordinatorGUI/coordinatorBookRoom.fxml"));
-      root = loader.load();
+            loader.setLocation(getClass().getResource("../view/userGUI/UserHomeScreen.fxml"));
+            root = loader.load();
 
-      CoordinatorBookRoomViewModel viewModel = viewModelFactory.getCoordinatorBookRoomViewModel(this,  model);
+            UserHomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this, model);
+            viewModel.refreshActiveBookings();
 
-      CoordinatorBookRoom view = loader.getController();
-      view.init(viewModel);
+            UserHomeScreen view = loader.getController();
+            view.init(viewModel);
 
-      scene = new Scene(root);
-      Stage bookingStage = new Stage();
-      bookingStage.setScene(scene);
-      bookingStage.show();
+            scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
-    catch (IOException ex)
+
+    public void showAddRoom()
     {
-      ex.printStackTrace();
-    }
-  }
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-  public void showUserHomeScreen(User user)
-  {
-    try
+            loader.setLocation(getClass().getResource("../view/CoordinatorGUI/AddRoom.fxml"));
+            root = loader.load();
+
+            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
+            AddRoomViewModel viewModel = new AddRoomViewModel(this, model);
+
+            AddRoom view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            Stage infoStage = new Stage();
+            infoStage.setScene(scene);
+            infoStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showRoomInfo(Room room)
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-      loader.setLocation(getClass().getResource("../view/userGUI/UserHomeScreen.fxml"));
-      root = loader.load();
+            loader.setLocation(getClass().getResource("../view/roomInfo/RoomInfo.fxml"));
+            root = loader.load();
 
-      UserHomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this,  model);
-      viewModel.refreshActiveBookings();
+            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
+            //RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence, room);
+            RoomInfoViewModel viewModel = new RoomInfoViewModel(this, model, room);
 
-      UserHomeScreen view = loader.getController();
-      view.init(viewModel);
+            RoomInfo view = loader.getController();
+            view.init(viewModel);
 
-      scene = new Scene(root);
-      primaryStage.setScene(scene);
-      primaryStage.show();
+            scene = new Scene(root);
+            Stage infoStage = new Stage();
+            infoStage.setScene(scene);
+            infoStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
-    catch (IOException ex)
+
+    public void showInfoDialog(String text)
     {
-      ex.printStackTrace();
+        showInfoDialog(text, "");
     }
-  }
 
-  public void showAddRoom()
-  {
-    try
+    public void showInfoDialog(String header, String content)
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
-
-      loader.setLocation(getClass().getResource("../view/CoordinatorGUI/AddRoom.fxml"));
-      root = loader.load();
-
-
-      //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
-      AddRoomViewModel viewModel = new AddRoomViewModel(this, model);
-
-      AddRoom view = loader.getController();
-      view.init(viewModel);
-
-      scene = new Scene(root);
-      Stage infoStage = new Stage();
-      infoStage.setScene(scene);
-      infoStage.show();
+        showAlert(Alert.AlertType.INFORMATION, DEFAULT_WINDOW_TITLE, header, content);
     }
-    catch (IOException ex)
+
+    public void showWarningDialog(String text)
     {
-      ex.printStackTrace();
+        showWarningDialog(text, "");
     }
-  }
 
-  public void showRoomInfo(Room room)
-  {
-    try
+    public void showWarningDialog(String header, String content)
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
-
-      loader.setLocation(getClass().getResource("../view/roomInfo/RoomInfo.fxml"));
-      root = loader.load();
-
-
-      //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
-      //RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence, room);
-      RoomInfoViewModel viewModel = new RoomInfoViewModel(this, model,room);
-
-      RoomInfo view = loader.getController();
-      view.init(viewModel);
-
-      scene = new Scene(root);
-      Stage infoStage = new Stage();
-      infoStage.setScene(scene);
-      infoStage.show();
+        showAlert(Alert.AlertType.WARNING, DEFAULT_WINDOW_TITLE, header, content);
     }
-    catch (IOException ex)
+
+    public void showErrorDialog(String text)
     {
-      ex.printStackTrace();
+        showErrorDialog(text, "");
     }
-  }
 
-  public void showInfoDialog(String text)
-  {
-    showInfoDialog(text, "");
-  }
-
-  public void showInfoDialog(String header, String content)
-  {
-    showAlert(Alert.AlertType.INFORMATION, DEFAULT_WINDOW_TITLE, header, content);
-  }
-
-  public void showWarningDialog(String text)
-  {
-    showWarningDialog(text, "");
-  }
-
-  public void showWarningDialog(String header, String content)
-  {
-    showAlert(Alert.AlertType.WARNING, DEFAULT_WINDOW_TITLE, header, content);
-  }
-
-  public void showErrorDialog(String text)
-  {
-    showErrorDialog(text, "");
-  }
-
-  public void showErrorDialog(String header, String content)
-  {
-    showAlert(Alert.AlertType.ERROR, DEFAULT_WINDOW_TITLE, header, content);
-  }
-
-  public static Optional<ButtonType> showAlert(Alert.AlertType type, String title, String header, String content)
-  {
-    Alert alert = new Alert(type);
-    alert.setTitle(title);
-    alert.setHeaderText(header);
-    alert.setContentText(content);
-    return alert.showAndWait();
-  }
-
-  public void showEditRoom(Room room)
-  {
-    try
+    public void showErrorDialog(String header, String content)
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
-
-      loader.setLocation(getClass().getResource("../view/CoordinatorGUI/EditRoom.fxml"));
-      root = loader.load();
-
-
-      //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
-      EditRoomViewModel viewModel = new EditRoomViewModel(this, model,room);
-
-      EditRoom view = loader.getController();
-      view.init(viewModel);
-
-      scene = new Scene(root);
-      Stage infoStage = new Stage();
-      infoStage.setScene(scene);
-      infoStage.show();
+        showAlert(Alert.AlertType.ERROR, DEFAULT_WINDOW_TITLE, header, content);
     }
-    catch (IOException ex)
+
+    public static Optional<ButtonType> showAlert(Alert.AlertType type, String title, String header, String content)
     {
-      ex.printStackTrace();
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        return alert.showAndWait();
     }
-  }
 
-  public void showRegister()
-  {
-    try
+    public void showEditRoom(Room room)
     {
-      Scene scene = null;
-      FXMLLoader loader = new FXMLLoader();
-      Parent root = null;
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
 
-      loader.setLocation(getClass().getResource("../view/login/Register.fxml"));
-      root = loader.load();
+            loader.setLocation(getClass().getResource("../view/CoordinatorGUI/EditRoom.fxml"));
+            root = loader.load();
 
-      RegisterViewModel viewModel = viewModelFactory.getRegisterViewModel(this,  model);
+            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
+            EditRoomViewModel viewModel = new EditRoomViewModel(this, model, room);
 
+            EditRoom view = loader.getController();
+            view.init(viewModel);
 
-      Register view = loader.getController();
-      view.init(viewModel);
-
-      scene = new Scene(root);
-      primaryStage.setScene(scene);
-      primaryStage.show();
+            scene = new Scene(root);
+            Stage infoStage = new Stage();
+            infoStage.setScene(scene);
+            infoStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
-    catch (IOException ex)
+
+    public void showRegister()
     {
-      ex.printStackTrace();
+        try
+        {
+            Scene scene = null;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = null;
+
+            loader.setLocation(getClass().getResource("../view/login/Register.fxml"));
+            root = loader.load();
+
+            RegisterViewModel viewModel = viewModelFactory.getRegisterViewModel(this, model);
+
+            Register view = loader.getController();
+            view.init(viewModel);
+
+            scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
-  }
 }
