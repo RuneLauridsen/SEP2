@@ -71,6 +71,7 @@ public class CoordinatorHomeScreen
 
   public void BookingsClicked(MouseEvent mouseEvent)
   {
+    viewModel.changeToBooking();
   }
 
   public void tableViewClicked(MouseEvent mouseEvent)
