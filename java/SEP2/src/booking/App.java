@@ -28,6 +28,8 @@ public class App extends Application
 
         ViewModelFactory viewModelFactory = new ViewModelFactory();
         ViewHandler viewHandler = new ViewHandlerImpl(primaryStage, viewModelFactory, model);
-        viewHandler.showLogin();
+
+        model.login(555555, "1234");
+        viewHandler.showCoordinatorBookingMenu();
     }
 }

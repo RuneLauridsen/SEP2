@@ -26,6 +26,11 @@ public class FakeViewHandler implements ViewHandler
 
     }
 
+    public void showCoordinatorBookingMenu()
+    {
+
+    }
+
     public void showUserHomeScreen(User user)
     {
 

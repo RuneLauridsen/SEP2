@@ -8,14 +8,18 @@ import booking.shared.objects.User;
 public interface ViewHandler
 {
     public void showLogin();
+    public void showRegister();
+
     public void showUserBookRoom();
+    public void showUserHomeScreen(User user);
+
     public void showCoordinatorHomeScreen(User user);
     public void showCoordinatorBookRoom();
-    public void showUserHomeScreen(User user);
+    public void showCoordinatorBookingMenu();
+
     public void showAddRoom();
-    public void showRoomInfo(Room room);
-    public void showRegister();
     public void showEditRoom(Room room);
+    public void showRoomInfo(Room room);
 
     public void showInfoDialog(String text);
     public void showInfoDialog(String header, String content);
