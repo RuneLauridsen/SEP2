@@ -15,4 +15,5 @@ public class DeleteBookingRequest extends Request
     {
         return booking;
     }
+
 }

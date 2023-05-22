@@ -49,4 +49,6 @@ public interface ServerModel
 
     public List<TimeSlot> getTimeSlots();
 
+    public ErrorResponseReason deleteRoom(Room room, User activeUser);
+
 }

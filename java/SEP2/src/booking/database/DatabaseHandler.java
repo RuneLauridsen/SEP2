@@ -1082,6 +1082,37 @@ public class DatabaseHandler implements Persistence
 
     }
 
+    @Override public void deleteRoom(Room room)
+    {
+        Objects.requireNonNull(room);
+
+        PreparedStatement statement = null;
+
+        try
+        {
+            String sql =  """
+                DELETE FROM sep2.booking WHERE room_id = ?;
+                DELETE FROM sep2.user_room_data WHERE room_id = ?;
+                DELETE FROM sep2.room WHERE room_id = ?;
+                """;
+
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, room.getId());
+            statement.setInt(2, room.getId());
+            statement.setInt(3, room.getId());
+            statement.execute();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        finally
+        {
+            closeStatement(statement);
+        }
+
+    }
+
     public static Connection openConnection() throws SQLException
     {
         switch (System.getProperty("user.name"))

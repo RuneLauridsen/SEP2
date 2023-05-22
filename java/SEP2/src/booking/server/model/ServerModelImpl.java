@@ -213,6 +213,17 @@ public class ServerModelImpl implements ServerModel
         return persistence.getTimeSlots();
     }
 
+    @Override public ErrorResponseReason deleteRoom(Room room, User activeUser)
+    {
+        if (activeUser.getType().canEditRooms()){
+            persistence.deleteRoom(room);
+            return ERROR_RESPONSE_REASON_NONE;
+        }
+        else
+            return ERROR_RESPONSE_REASON_ACCESS_DENIED;
+
+    }
+
     public ErrorResponseReason createUser(String username, String password, String initials, int viaid, UserType userType)
     {
         try

@@ -44,4 +44,5 @@ public interface ClientModel
     public List<TimeSlot> getTimeSlots();
 
     public boolean isAvailable(Room room);
+  public void deleteRoom(Room room);
 }

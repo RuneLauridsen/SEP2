@@ -17,19 +17,27 @@ public class CoordinatorHomeScreen
   public TableColumn<Room, String> tcolName;
   public TableColumn<Room, RoomType> tcolType;
   public TableColumn<Room, String> tcolStatus;
-  public TableColumn tcolBook;
   public TableColumn<Room, Room> tcolAlter;
+  public TableColumn <Room, Room> tcolDelete ;
 
   CoordinatorHomeScreenViewModel viewModel;
   public void init(CoordinatorHomeScreenViewModel viewModel){
     this.viewModel = viewModel;
+
+
+    
+
+
+
     tvtRooms.setItems(viewModel.getAllRooms());
     tcolName.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getName()));
     tcolType.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getType()));
     tcolStatus.setCellValueFactory(p -> new SimpleStringProperty(viewModel.isAvailable(p.getValue())));
 
     tcolAlter.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue()));
-    tcolAlter.setCellFactory(p -> new ButtonTableCell<>("❌", viewModel::changeToEditRoom));
+    tcolDelete.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue()));
+    tcolAlter.setCellFactory(p -> new ButtonTableCell<>("Edit", viewModel::changeToEditRoom));
+    tcolDelete.setCellFactory(p -> new ButtonTableCell<>("❌", viewModel::deleteRoom));
   }
   public void AddRoomClicked(MouseEvent mouseEvent)
   {

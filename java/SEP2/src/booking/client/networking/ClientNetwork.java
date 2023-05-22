@@ -68,4 +68,6 @@ public interface ClientNetwork
 
     public void createUser(String username, String password, String initials, int viaid, UserType userType)
         throws ClientNetworkException, ClientResponseException;
+  void deleteRoom(Room room)
+      throws ClientNetworkException, ClientResponseException;
 }

@@ -78,4 +78,5 @@ public interface Persistence
 
     // Indsætter nyt lokale uden bruger-specifik data.
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
+   public void deleteRoom(Room room);
 }

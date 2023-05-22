@@ -196,6 +196,24 @@ public class ServerNetworkSocketHandler implements Runnable
                         sendResponse(new ErrorResponse(deleteBookingResult));
                     }
                 }
+                //
+                //Delete room
+                //
+                else if (request instanceof DeleteRoomRequest deleteRoomRequest){
+                    ErrorResponseReason deleteRoomResult = model.deleteRoom(
+                        deleteRoomRequest.getRoom(),
+                        user
+                    );
+                    if (deleteRoomResult == ERROR_RESPONSE_REASON_NONE)
+                    {
+                        sendResponse(new DeleteRoomResponse());
+                    }
+                    else
+                    {
+                        sendResponse(new ErrorResponse(deleteRoomResult));
+                    }
+
+                }
 
                 //
                 // Room
@@ -263,6 +281,7 @@ public class ServerNetworkSocketHandler implements Runnable
                         sendResponse(new ErrorResponse(error));
                     }
                 }
+
 
                 //
                 // Update user room data
