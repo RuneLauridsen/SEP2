@@ -50,15 +50,13 @@ public class DatabaseHandler implements Persistence
         closeConnection(connection);
     }
 
-    public User getUser(String username)
+    public User getUser(int viaid)
     {
-        return getUser(username, null);
+        return getUser(viaid, null);
     }
 
-    public User getUser(String username, String passwordHash)
+    public User getUser(int viaid, String passwordHash)
     {
-        Objects.requireNonNull(username);
-
         Map<Integer, UserType> userTypes = getUserTypes();
 
         PreparedStatement statement = null;
@@ -76,13 +74,13 @@ public class DatabaseHandler implements Persistence
                 FROM 
                     sep2."user" u 
                 WHERE 
-                    u.user_name = ?
+                    u.user_viaid = ?
                 AND
                     u.user_password_hash = COALESCE(?, u.user_password_hash)
                 """;
 
             statement = connection.prepareStatement(query);
-            statement.setString(1, username);
+            statement.setInt(1, viaid);
             statement.setString(2, passwordHash);
             resultSet = statement.executeQuery();
 
@@ -101,52 +99,6 @@ public class DatabaseHandler implements Persistence
             {
                 return null;
             }
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
-        }
-        finally
-        {
-            closeResultSet(resultSet);
-            closeStatement(statement);
-        }
-    }
-
-    public boolean isAvailable(String roomName)
-    {
-
-        Map<Integer, RoomType> roomTypes = getRoomTypes();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-
-        try
-        {
-            String query = """
-                SELECT
-                    b.booking_date,
-                    b.booking_start_time, 
-                    b.booking_end_time "
-                FROM 
-                    sep2.booking b "
-                INNER JOIN 
-                    sep2.room r ON b.room_id = r.room_id "
-                WHERE 
-                    r.room_name = ?;
-                """;
-
-            statement = connection.prepareStatement(query);
-            statement.setString(1, roomName);
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next())
-            {
-                BookingInterval bookingInterval = new BookingInterval(resultSet.getDate("booking_date").toLocalDate(), resultSet.getTime("booking_start_time").toLocalTime(), resultSet.getTime("booking_end_time").toLocalTime());
-                if (bookingInterval.getDate().equals(LocalDate.now()) && bookingInterval.isOverlapWith(LocalTime.now()))
-                    return false;
-            }
-            return true;
-
         }
         catch (SQLException e)
         {
@@ -289,7 +241,9 @@ public class DatabaseHandler implements Persistence
                 FROM 
                     sep2.room r
                 LEFT OUTER JOIN 
-                    sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? ;
+                    sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ? 
+                ORDER BY
+                    r.room_name
                 """;
 
             statement = connection.prepareStatement(query);
@@ -338,7 +292,7 @@ public class DatabaseHandler implements Persistence
             String query = """
                 SELECT
                     ut.user_type_id,
-                    ut.user_type_name, 
+                    ut.user_type_name,
                     ut.can_edit_rooms, 
                     ut.can_edit_users, 
                     ut.can_edit_bookings, 
@@ -368,8 +322,8 @@ public class DatabaseHandler implements Persistence
                     userType = new UserType(
                         resultSet.getInt("user_type_id"),
                         resultSet.getString("user_type_name"),
-                        resultSet.getBoolean("can_edit_rooms"),
                         resultSet.getBoolean("can_edit_users"),
+                        resultSet.getBoolean("can_edit_rooms"),
                         resultSet.getBoolean("can_edit_bookings"),
                         resultSet.getBoolean("can_overlap_bookings"),
                         resultSet.getInt("max_booking_count"),
@@ -383,63 +337,6 @@ public class DatabaseHandler implements Persistence
             }
 
             return userTypes;
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
-        }
-        finally
-        {
-            closeResultSet(resultSet);
-            closeStatement(statement);
-        }
-    }
-
-    //TODO måske optimere på dette
-    @Override public List<BookingInterval> getBookingsFromRoomName(String roomName)
-    {
-        Objects.requireNonNull(roomName);
-
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-
-        try
-        {
-            String query = """
-                SELECT 
-                    b.booking_id, 
-                    b.booking_date, 
-                    b.booking_start_time, 
-                    b.booking_end_time 
-                FROM 
-                    sep2.booking b 
-                INNER JOIN 
-                    sep2.room r ON b.room_id = r.room_id 
-                WHERE 
-                    r.room_name = ? 
-                ORDER BY 
-                    b.booking_date, 
-                    b.booking_start_time;
-                """;
-
-            statement = connection.prepareStatement(query);
-            statement.setString(1, roomName);
-            resultSet = statement.executeQuery();
-
-            List<BookingInterval> bookings = new ArrayList<>();
-            while (resultSet.next())
-            {
-                // Map resultSet til Booking objekt
-                bookings.add(
-                    new BookingInterval(
-                        resultSet.getDate("booking_date").toLocalDate(),
-                        resultSet.getTime("booking_start_time").toLocalTime(),
-                        resultSet.getTime("booking_end_time").toLocalTime()
-                    )
-                );
-            }
-
-            return bookings;
         }
         catch (SQLException e)
         {
@@ -572,7 +469,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate, User activeUser)
+    @Override public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate)
     {
         Objects.requireNonNull(room);
         Objects.requireNonNull(startDate);
@@ -770,47 +667,50 @@ public class DatabaseHandler implements Persistence
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
         String query = """
-             SELECT 
-                r.room_id, 
-                r.room_name, 
-                r.room_size, 
-                r.room_comfort_capacity, 
-                r.room_fire_capacity, 
-                r.room_comment, 
-                r.room_type_id, 
+            SELECT DISTINCT
+                r.room_id,
+                r.room_name,
+                r.room_size,
+                r.room_comfort_capacity,
+                r.room_fire_capacity,
+                r.room_comment,
+                r.room_type_id,
                 COALESCE(urd.comment, '') AS user_data_comment,
                 COALESCE(urd.color, CAST(x'ffffffff' AS int)) AS user_data_color
-            FROM 
+            FROM
                 sep2.room r
-            INNER JOIN 
+            INNER JOIN
                 sep2."user" u ON u.user_id = ?
-            INNER JOIN 
+            INNER JOIN
                 sep2.user_type_allowed_room_type utart ON r.room_type_id = utart.room_type_id AND u.user_type_id = utart.user_type_id
-            LEFT OUTER JOIN 
-                sep2.booking b ON r.room_id = b.room_id
-            LEFT OUTER JOIN 
-                sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = ?
-            WHERE 
-                ((b.booking_id IS NULL) OR (b.booking_date <> ?) OR NOT (b.booking_end_time > ? AND b.booking_start_time < ?))
-            AND 
-                ((r.room_comfort_capacity >= ?)) 
-            AND 
-                ((r.room_comfort_capacity <= ?)) 
-            AND 
+            LEFT OUTER JOIN
+                sep2.user_room_data urd ON urd.room_id = r.room_id AND urd.user_id = u.user_id
+            WHERE
+                ((r.room_comfort_capacity >= ?))
+            AND
+                ((r.room_comfort_capacity <= ?))
+            AND
                 ((substr(r.room_name, 1, 1) = ?) OR (? IS NULL))
-            AND 
+            AND
                 ((substr(r.room_name, 3, 1) = ?) OR (? IS NULL))
-            GROUP BY 
-                r.room_id, 
-                r.room_name, 
-                r.room_size, 
-                r.room_comfort_capacity, 
-                r.room_fire_capacity, 
-                r.room_comment, 
-                r.room_type_id, 
-                urd.comment, 
-                urd.color
-            ORDER BY 
+            AND
+                r.room_id NOT IN
+                (
+                     -- find all optagede lokaler
+                    SELECT
+                        r.room_id
+                    FROM
+                        sep2.room r
+                    INNER JOIN
+                        sep2.booking b ON r.room_id = b.room_id
+                    WHERE
+                        b.booking_date = ?
+                    AND
+                        (b.booking_start_time < ? OR b.booking_start_time = ?)
+                    AND
+                        (b.booking_end_time > ? OR b.booking_end_time = ?)
+                )
+            ORDER BY
                 r.room_name;
             """;
 
@@ -821,16 +721,19 @@ public class DatabaseHandler implements Persistence
         {
             statement = connection.prepareStatement(query);
             statement.setInt(1, activeUser.getId());
-            statement.setInt(2, activeUser.getId());
-            statement.setDate(3, Date.valueOf(interval.getDate()));
-            statement.setTime(4, Time.valueOf(interval.getStart()));
-            statement.setTime(5, Time.valueOf(interval.getEnd()));
-            statement.setInt(6, minCapacity);
-            statement.setInt(7, maxCapacity);
-            statement.setString(8, buildingString);
-            statement.setString(9, buildingString);
-            statement.setString(10, floorString);
-            statement.setString(11, floorString);
+            statement.setInt(2, minCapacity);
+            statement.setInt(3, maxCapacity);
+            statement.setString(4, buildingString);
+            statement.setString(5, buildingString);
+            statement.setString(6, floorString);
+            statement.setString(7, floorString);
+
+            statement.setDate(8, Date.valueOf(interval.getDate()));
+            statement.setTime(9, Time.valueOf(interval.getEnd()));
+            statement.setTime(10, Time.valueOf(interval.getStart()));
+            statement.setTime(11, Time.valueOf(interval.getStart()));
+            statement.setTime(12, Time.valueOf(interval.getEnd()));
+
             resultSet = statement.executeQuery();
 
             List<Room> rooms = new ArrayList<>();
@@ -864,16 +767,16 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type)
+    public boolean createUser(String name, String initials, int viaid, String passwordHash, UserType type)
     {
         Objects.requireNonNull(name);
         Objects.requireNonNull(passwordHash);
         Objects.requireNonNull(type);
 
-        User userWithSameName = getUser(name, passwordHash);
-        if (userWithSameName != null)
+        User userWithViaid = getUser(viaid, passwordHash);
+        if (userWithViaid != null)
         {
-            // Brugernavn er optaget.
+            // Viaid er optaget.
             return false;
         }
 
@@ -882,7 +785,7 @@ public class DatabaseHandler implements Persistence
         try
         {
             String query = """
-                INSERT INTO sep2.\"user\" 
+                INSERT INTO sep2."user" 
                     (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
                 VALUES 
                     (?, ?, ?, ?, ?);
@@ -891,16 +794,7 @@ public class DatabaseHandler implements Persistence
             statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, initials);
-
-            // TODO(rune): Brug setObject i stedet?
-            if (viaid == null)
-            {
-                statement.setNull(3, Types.INTEGER);
-            }
-            else
-            {
-                statement.setInt(3, viaid);
-            }
+            statement.setInt(3, viaid);
 
             statement.setString(4, passwordHash);
             statement.setInt(5, type.getId());
@@ -935,7 +829,9 @@ public class DatabaseHandler implements Persistence
                 FROM 
                     sep2.course c
                 INNER JOIN 
-                    sep2.user_group ug ON c.course_id = ug.course_id; 
+                    sep2.user_group ug ON c.course_id = ug.course_id
+                ORDER BY
+                    ug.user_group_name 
                 """;
 
             statement = connection.createStatement();
@@ -987,13 +883,15 @@ public class DatabaseHandler implements Persistence
                     u.user_type_id, 
                     u.user_name, 
                     u.user_initials, 
-                    u.user_viaid "
+                    u.user_viaid
                 FROM 
                     sep2.user_group_user ugu
                 INNER JOIN 
-                    sep2.\"user\" u ON u.user_id = ugu.user_id
+                    sep2."user" u ON u.user_id = ugu.user_id
                 WHERE 
                     ugu.user_group_id = ? 
+                ORDER BY
+                    u.user_name
                 """;
 
             statement = connection.prepareStatement(query);

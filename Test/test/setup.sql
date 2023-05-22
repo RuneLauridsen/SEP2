@@ -37,7 +37,7 @@ CREATE TABLE "user"
     user_id                 serial      NOT NULL PRIMARY KEY,
     user_name               varchar(99) NOT NULL,
     user_initials           varchar(10) NULL, -- null hvis ikke medarbejder
-    user_viaid              int         NULL, -- null hvis ikke studerende
+    user_viaid              int         NOT NULL UNIQUE,
     user_password_hash      varchar(40) NOT NULL,
     user_type_id            int         NOT NULL REFERENCES user_type(user_type_id)
 
@@ -133,7 +133,7 @@ INSERT INTO room_type
 VALUES
     /* id = 1 */ ('Grupperum'),
     /* id = 2 */ ('Bachelorrum'),
-    /* id = 3 */ ('Medarbejderum'),
+    /* id = 3 */ ('Medarbejderrum'),
     /* id = 4 */ ('Klasselokale'),
     /* id = 5 */ ('Auditorium'),
     /* id = 6 */ ('Laboratorium'),
@@ -179,7 +179,7 @@ VALUES
 INSERT INTO room
     (room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id, multi_room_id)
 VALUES
-    /* id = 1 */ ('A02.01', 1, 11, 111, '', 1, NULL),
+    /* id = 1 */ ('A02.01', 1, 11, 111, 'global kommentar', 1, NULL),
     /* id = 2 */ ('A02.02', 2, 22, 222, '', 1, NULL),
     /* id = 3 */ ('A02.03', 3, 33, 333, '', 1, NULL),
     /* id = 4 */ ('B02.04', 4, 44, 444, '', 1, NULL),
@@ -204,7 +204,7 @@ VALUES
     /* id = 20 */ ('C06.01', 1, 11, 111, '', 3, NULL),
 
     -- klasslokale
-    /* id = 20 */ ('C05.15', 2, 22, 222, '', 4, NULL);
+    /* id = 21 */ ('C05.15', 2, 22, 222, '', 4, NULL);
 
 INSERT INTO "user"
     (user_name, user_initials, user_viaid, user_password_hash, user_type_id)
@@ -212,8 +212,10 @@ VALUES
     /* id = 1 */ ('Maja',   null,  111111, 0, 3),
     /* id = 2 */ ('Julie',  null,  222222, 0, 3),
     /* id = 3 */ ('Simon',  null,  333333, 0, 3),
-    /* id = 4 */ ('Rune',   null,  444444, '287571E774CFC9E46649185E68A7918C', 3),
-    /* id = 5 */ ('Gitte', 'GITT', 555555, '015C1B5BD250CD4280B65B58B1BE50D5', 1); -- password = 1234
+    /* id = 4 */ ('Rune',   null,  444444, '1081D018BC52CF305616BFFDA861FFF2', 3), -- asdasd
+    /* id = 5 */ ('Gitte', 'GITT', 555555, '015C1B5BD250CD4280B65B58B1BE50D5', 1), -- password = 1234
+    /* id = 6 */ ('Michael', 'MIVI', 666666, 0, 2),
+    /* id = 7 */ ('Henrik', 'HEKP', 777777, 0, 2); 
 
 INSERT INTO user_room_data
     (user_id, room_id, color, comment)
@@ -231,18 +233,21 @@ INSERT INTO user_group
     (user_group_name, course_id)
 VALUES
     ('SDJ-2023', 1),
-    ('DBS-2023', 2);
+    ('DBS-2023', 2),
+    ('SWE-2023', 3);
 
 INSERT INTO user_group_user
     (user_group_id, user_id)
 VALUES
-    /* SDJ Maja  */ (1, 1),
-    /* SDJ Julie */ (1, 2),
-    /* SDJ Simon */ (1, 3),
-
-    /* DBS Julie */ (2, 2),
-    /* DBS Simon */ (2, 3),
-    /* DBS Rune  */ (2, 4);
+    /* SDJ Micheal */ (1, 6),
+    /* SDJ Maja    */ (1, 1),
+    /* SDJ Julie   */ (1, 2),
+    /* SDJ Simon   */ (1, 3),
+    
+    /* SWE Henrik  */ (3, 7),
+    /* SWE Julie   */ (3, 2),
+    /* SWE Simon   */ (3, 3),
+    /* SWE Rune    */ (3, 4);
 
 INSERT INTO time_slot
     (time_slot_start, time_slot_end)
@@ -256,14 +261,12 @@ VALUES
     /* Rune,  A02.01 */ (4, 1,  '2023-05-08', '10:00', '16:00', NULL),
     /* Rune,  A02.02 */ (4, 2,  '2023-05-09', '10:00', '16:00', NULL),
     /* Rune,  A02.03 */ (4, 3,  '2023-05-10', '10:00', '16:00', NULL),
+    
     /* Gitte, B02.04 */ (5, 4,  '2023-05-11', '10:00', '16:00', NULL),
     /* Gitte, B02.05 */ (5, 5,  '2023-05-12', '10:00', '16:00', NULL),
 
-    -- til testOverlap
-    /* Maja,  A03.01 */ (5, 11, '2023-05-12', '11:00', '13:00', NULL),
-    /* Maja,  A03.01 */ (5, 11, '2023-05-12', '16:00', '16:45', NULL),
-
-
-    -- til testOverlap_withUserGroups
-    /* Gitte,  A03.02 SDJ */ (5, 12, '2023-05-12', '11:00', '13:00', 1),
-    /* Gitte,  A03.02 DBS */ (5, 12, '2023-05-12', '16:00', '16:45', 2);
+    /* Maja,  A03.01 */ (1, 11, '2023-05-12', '11:00', '13:00', NULL),
+    /* Maja,  A03.01 */ (1, 11, '2023-05-12', '16:00', '16:45', NULL),
+    
+    /* Gitte,  A03.02 SDJ-2023 */ (5, 12, '2023-05-12', '11:00', '13:00', 1),
+    /* Gitte,  A03.02 DBS-2023 */ (5, 12, '2023-05-12', '16:00', '16:45', 3);

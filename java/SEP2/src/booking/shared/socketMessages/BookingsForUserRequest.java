@@ -1,23 +1,25 @@
 package booking.shared.socketMessages;
 
+import booking.shared.objects.User;
+
 import java.time.LocalDate;
 
 public class BookingsForUserRequest extends Request
 {
-    private final String username;
+    private final User user;
     private final LocalDate from;
     private final LocalDate to;
 
-    public BookingsForUserRequest(String username, LocalDate from, LocalDate to)
+    public BookingsForUserRequest(User user, LocalDate from, LocalDate to)
     {
-        this.username = username;
+        this.user = user;
         this.from = from;
         this.to = to;
     }
 
-    public String getUsername()
+    public User getUser()
     {
-        return username;
+        return user;
     }
 
     public LocalDate getFrom()

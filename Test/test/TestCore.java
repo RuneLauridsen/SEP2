@@ -1,3 +1,5 @@
+package test;
+
 import booking.shared.objects.*;
 import org.junit.jupiter.api.Test;
 

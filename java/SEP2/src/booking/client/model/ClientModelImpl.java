@@ -4,6 +4,7 @@ import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkException;
 import booking.client.networking.ClientResponseException;
 import booking.shared.CreateBookingParameters;
+import booking.shared.NowProvider;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -20,12 +21,14 @@ import java.util.List;
 
 public class ClientModelImpl implements ClientModel
 {
+    private final NowProvider nowProvider;
     private final ClientNetwork networkLayer;
     private User user;
 
-    public ClientModelImpl(ClientNetwork networkLayer)
+    public ClientModelImpl(ClientNetwork networkLayer, NowProvider nowProvider)
     {
         this.networkLayer = networkLayer;
+        this.nowProvider = nowProvider;
     }
 
     @Override public void deleteBooking(Booking booking)
@@ -49,11 +52,11 @@ public class ClientModelImpl implements ClientModel
         return user;
     }
 
-    @Override public void login(String username, String password)
+    @Override public void login(int viaid, String password)
     {
         try
         {
-            user = networkLayer.connect(username, password);
+            user = networkLayer.connect(viaid, password);
         }
         catch (ClientResponseException e)
         {
@@ -75,7 +78,7 @@ public class ClientModelImpl implements ClientModel
         try
         {
             networkLayer.createUser(username, password, initials, viaid, userType);
-            login(username, password);
+            login(viaid, password);
         }
         catch (ClientResponseException e)
         {
@@ -135,11 +138,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public List<Booking> getActiveBookings(LocalDate start, LocalDate end)
+    @Override public List<Booking> getActiveBookings()
     {
         try
         {
-            return networkLayer.getBookingsForUser(user.getName(), start, end);
+            return networkLayer.getBookingsForUser(user, nowProvider.nowDate(), LocalDate.MAX);
         }
         catch (ClientResponseException e)
         {
@@ -231,11 +234,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end)
+    @Override public List<Booking> getBookingsForUser(User user, LocalDate start, LocalDate end)
     {
         try
         {
-            return networkLayer.getBookingsForUser(userName, start, end);
+            return networkLayer.getBookingsForUser(user, start, end);
         }
         catch (ClientResponseException e)
         {
@@ -337,11 +340,13 @@ public class ClientModelImpl implements ClientModel
             // Er det nødvendigt at lave smartere? Hvis vi laver en kalender er den en god idé
             // at hente alle dagens bookinger ned fra serveren.
 
-            LocalTime now = LocalTime.now();
-            List<Booking> bookingsToday = networkLayer.getBookingsForRoom(room.getName(), LocalDate.now(), LocalDate.now());
+            LocalTime nowTime = nowProvider.nowTime();
+            LocalDate nowDate = nowProvider.nowDate();
+
+            List<Booking> bookingsToday = networkLayer.getBookingsForRoom(room.getName(), nowDate, nowDate);
             for (Booking bookingToday : bookingsToday)
             {
-                if (bookingToday.getInterval().isOverlapWith(now))
+                if (bookingToday.getInterval().isOverlapWith(nowTime))
                 {
                     return false;
                 }

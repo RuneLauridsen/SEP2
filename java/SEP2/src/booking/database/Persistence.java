@@ -21,34 +21,35 @@ public interface Persistence
     // Henter all brugertyper. Key = UserType.id.
     public Map<Integer, UserType> getUserTypes();
 
-    public List<BookingInterval> getBookingsFromRoomName(String roomName);
+    // Henter all lokaletyper. Key = RoomType.id.
+    public Map<Integer, RoomType> getRoomTypes();
 
-    public boolean isAvailable(String roomName);
-
-    // Henter bruger ud fra brugernavn. Flere brugere kan ikke have samme brugernavn.
-    // Returnerer null hvis der ikke findes nogen bruger med brugernavnet.
+    // Henter bruger ud fra viaid.
+    // Returnerer null hvis der ikke findes nogen bruger med viaid'en.
     // Hvis passwordHash er null, ignoreres password.
-    public User getUser(String username, String passwordhash);
-    public User getUser(String username);
+    public User getUser(int viaid, String passwordHash);
+
+    // Henter bruger ud fra viaid.
+    // Ignorerer passwordHash.
+    public User getUser(int viaid);
 
     // Henter et lokale, dets lokaltype og dets bruger-specifikke data.
     public Room getRoom(String room, User activeUser);
-
-    // Henter all lokaletyper. Key = RoomType.id.
-    public Map<Integer, RoomType> getRoomTypes();
 
     // Henter all lokaler, deres lokaltype og deres bruger-specifikke data.
     public List<Room> getRooms(User activeUser);
 
     // Henter all bookinger for en bestemt bruger, i et bestemt dato interval.
+    // activeUser fortæller hvilken bruger der skal hentes bruger-specifik lokale data for.
     public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate, User activeUser);
 
     // Henter alle booking for et bestemt lokale, i et bestemt dato interval.
-    public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate, User activeUser);
+    public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate);
 
     // Tilføjer en ny booking. Checker ikke efter overlap, lokalets ledighed osv.
     public void createBooking(User activeUser, CreateBookingParameters parameters);
 
+    // Sletter en booking. Checker ikke efter tilladelse.
     public void deleteBooking(Booking booking);
 
     // Henter alle ledige lokaler.
@@ -57,13 +58,24 @@ public interface Persistence
     // vil getAvailableRooms aldrig returnere medarbejderrum, selvom er eller flere medarbejderrum er ledige.
     public List<Room> getAvailableRooms(User activeUser, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor);
 
-    // Tilføjer en ny bruger. Returnere false hvis brugernavnet er optaget.
-    public boolean createUser(String name, String initials, Integer viaid, String passwordHash, UserType type);
+    // Tilføjer en ny bruger. Returnere false hvis viaid'en er optaget.
+    public boolean createUser(String name, String initials, int viaid, String passwordHash, UserType type);
 
+    // Henter alle klasse/hold
     public List<UserGroup> getUserGroups();
+
+    // Henter all brugere i en klasse/hold
     public List<User> getUserGroupUsers(UserGroup userGroup);
+
+    // Opdatere ikke-bruger-specifik data på et lokale.
     public void updateRoom(Room room);
+
+    // Opdatere bruger-specifik data på et lokale.
     public void updateUserRoomData(User user, Room room, String comment, int color);
+
+    // Henter all faste booking intervaller
     public List<TimeSlot> getTimeSlots();
+
+    // Indsætter nyt lokale uden bruger-specifik data.
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
 }

@@ -7,6 +7,8 @@ import booking.client.model.ClientModel;
 import booking.client.model.ClientModelImpl;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkSocket;
+import booking.shared.NowProvider;
+import booking.shared.ReadTimeNowProvider;
 import booking.shared.objects.User;
 import booking.database.DatabaseHandler;
 import booking.shared.objects.UserType;
@@ -20,9 +22,9 @@ public class App extends Application
         DatabaseHandler database = new DatabaseHandler();
         database.open();
 
-
+        NowProvider nowProvider = new ReadTimeNowProvider();
         ClientNetwork network = new ClientNetworkSocket();
-        ClientModel model = new ClientModelImpl(network);
+        ClientModel model = new ClientModelImpl(network, nowProvider);
 
         ViewModelFactory viewModelFactory = new ViewModelFactory();
         ViewHandler viewHandler = new ViewHandlerImpl(primaryStage, viewModelFactory, model);

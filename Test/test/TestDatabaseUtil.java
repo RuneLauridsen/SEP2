@@ -1,3 +1,5 @@
+package test;
+
 import booking.database.DatabaseHandler;
 
 import java.net.URL;

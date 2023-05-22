@@ -41,7 +41,7 @@ public class UserHomeScreenViewModel
     {
         username.set(model.getUser().getName());
 
-        List<Booking> bookings = model.getActiveBookings(LocalDate.now(), LocalDate.MAX);
+        List<Booking> bookings = model.getActiveBookings();
         activeBookings.clear();
         activeBookings.addAll(bookings);
     }

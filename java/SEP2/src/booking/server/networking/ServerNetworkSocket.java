@@ -5,10 +5,15 @@ import booking.server.model.ServerModel;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerNetworkSocket implements ServerNetwork
 {
     private final ServerModel model;
+
+    private boolean keepRunning;
+    private ServerSocket serverSocket;
 
     public ServerNetworkSocket(ServerModel model)
     {
@@ -17,11 +22,13 @@ public class ServerNetworkSocket implements ServerNetwork
 
     public void run()
     {
+        keepRunning = true;
+
         try
         {
-            ServerSocket serverSocket = new ServerSocket(2910);
+            serverSocket = new ServerSocket(2910);
 
-            while (true)
+            while (keepRunning)
             {
                 Socket socket = serverSocket.accept();
                 ServerNetworkSocketHandler socketHandler = new ServerNetworkSocketHandler(socket, model);
@@ -34,6 +41,24 @@ public class ServerNetworkSocket implements ServerNetwork
         catch (IOException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            close();
+        }
+    }
+
+    public void close()
+    {
+        keepRunning = false;
+
+        try
+        {
+            serverSocket.close();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 }

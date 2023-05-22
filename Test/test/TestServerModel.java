@@ -1,3 +1,5 @@
+package test;
+
 import booking.database.DatabaseHandler;
 import booking.server.model.ServerModel;
 import booking.server.model.ServerModelImpl;
@@ -6,6 +8,8 @@ import booking.shared.objects.*;
 import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
+
+import static test.TestConstants.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +30,7 @@ public class TestServerModel
     @BeforeEach void setup()
     {
         database = TestDatabaseUtil.setup();
-        model = new ServerModelImpl(database);
+        model = new ServerModelImpl(database, new FakeNowProvider());
     }
 
     @AfterEach void setdown()
@@ -34,11 +38,10 @@ public class TestServerModel
         TestDatabaseUtil.setdown(database);
     }
 
-    // Tester om server model retunere korrekte overlap,
-    // når man prøver at lave en ny booking.
+    // Tester om server model returnere korrekte overlap, når man prøver at lave en ny booking.
     @Test void testOverlap()
     {
-        User user = database.getUser("Rune");
+        User user = database.getUser(VIAID_RUNE);
         Room room = database.getRoom("A03.01", user);
 
         BookingInterval interval0 = new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(8, 0), LocalTime.of(18, 0));
@@ -76,8 +79,8 @@ public class TestServerModel
     // når man prøver at lave en ny booking.
     @Test void testOverlap_withUserGroups()
     {
-        User user = database.getUser("Gitte");
-        UserGroup userGroup = database.getUserGroups().get(0);
+        User user = database.getUser(VIAID_GITTE);
+        UserGroup userGroup = database.getUserGroups().get(1);
 
         Room room = database.getRoom("A03.02", user);
 
@@ -107,15 +110,15 @@ public class TestServerModel
         assertEquals(overlaps1.size(), 1);
         assertEquals(overlaps2.size(), 0);
 
-        assertEquals(overlaps0.get(0).getUsers().size(), 3);
+        assertEquals(overlaps0.get(0).getUsers().size(), 4);
         assertEquals(overlaps0.get(1).getUsers().size(), 2);
-        assertEquals(overlaps1.get(0).getUsers().size(), 3);
+        assertEquals(overlaps1.get(0).getUsers().size(), 4);
     }
 
     @Test void testLogin()
     {
-        User userCorrect = model.login("Gitte", "1234");
-        User userIncorrect = model.login("Gitte", "abcd");
+        User userCorrect = model.login(VIAID_GITTE, "1234");
+        User userIncorrect = model.login(VIAID_GITTE, "abcd");
 
         assertEquals(userCorrect.getName(), "Gitte");
         assertEquals(userCorrect.getViaId(), 555555);
@@ -126,30 +129,32 @@ public class TestServerModel
 
     @Test void testCreateUser()
     {
+        final int VIAID_TEST = 123456;
+
         List<UserType> userTypes = model.getUserTypes();
 
-        User userBefore = model.getUser("Test testesen");
+        User userBefore = model.getUser(VIAID_TEST);
         assertEquals(userBefore, null);
 
         model.createUser(
             "Test testesen",
             "abc123",
             "R2D2",
-            123456,
+            VIAID_TEST,
             userTypes.get(2)
         );
 
-        User userWithPassword = model.getUser("Test testesen");
-        User userWithoutPassword = model.login("Test testesen", "abc123");
+        User userWithPassword = model.getUser(VIAID_TEST);
+        User userWithoutPassword = model.login(VIAID_TEST, "abc123");
 
         assertEquals(userWithPassword.getName(), "Test testesen");
         assertEquals(userWithPassword.getInitials(), "R2D2");
-        assertEquals(userWithPassword.getViaId(), 123456);
+        assertEquals(userWithPassword.getViaId(), VIAID_TEST);
         assertEquals(userWithPassword.getType(), userTypes.get(2));
 
         assertEquals(userWithoutPassword.getName(), "Test testesen");
         assertEquals(userWithoutPassword.getInitials(), "R2D2");
-        assertEquals(userWithoutPassword.getViaId(), 123456);
+        assertEquals(userWithoutPassword.getViaId(), VIAID_TEST);
         assertEquals(userWithoutPassword.getType(), userTypes.get(2));
     }
 }

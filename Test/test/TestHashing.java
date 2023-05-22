@@ -1,3 +1,5 @@
+package test;
+
 import booking.client.model.HashingEncrypter;
 import org.junit.jupiter.api.Test;
 

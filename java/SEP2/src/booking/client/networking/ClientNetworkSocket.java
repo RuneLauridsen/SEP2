@@ -18,7 +18,7 @@ public class ClientNetworkSocket implements ClientNetwork
     private ObjectOutputStream outToServer;
     private ObjectInputStream inFromServer;
 
-    @Override public User connect(String username, String password)
+    @Override public User connect(int viaid, String password)
         throws ClientNetworkException, ClientResponseException
     {
         try
@@ -27,7 +27,7 @@ public class ClientNetworkSocket implements ClientNetwork
             outToServer = new ObjectOutputStream(socket.getOutputStream());
             inFromServer = new ObjectInputStream(socket.getInputStream());
 
-            sendRequest(new ConnectionRequest(username, password));
+            sendRequest(new ConnectionRequest(viaid, password));
             ConnectionResponse connectionResponse = (ConnectionResponse) readResponse();
             return connectionResponse.getUser();
         }
@@ -113,10 +113,10 @@ public class ClientNetworkSocket implements ClientNetwork
         return response.getBookings();
     }
 
-    public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end)
+    public List<Booking> getBookingsForUser(User user, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException
     {
-        sendRequest(new BookingsForUserRequest(userName, start, end));
+        sendRequest(new BookingsForUserRequest(user, start, end));
         BookingsForUserResponse response = (BookingsForUserResponse) readResponse();
         return response.getBookings();
     }

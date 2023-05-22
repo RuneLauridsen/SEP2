@@ -1,3 +1,5 @@
+package test;
+
 import booking.client.core.ViewHandler;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
@@ -53,6 +55,7 @@ public class FakeViewHandler implements ViewHandler
     {
 
     }
+
     public void showInfoDialog(String header, String content)
     {
 

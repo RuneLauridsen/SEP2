@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface ClientNetwork
 {
-    public User connect(String username, String password)
+    public User connect(int viaid, String password)
         throws ClientNetworkException, ClientResponseException;
 
     public void disconnect()
@@ -33,7 +33,7 @@ public interface ClientNetwork
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException;
 
-    public List<Booking> getBookingsForUser(String userName, LocalDate start, LocalDate end)
+    public List<Booking> getBookingsForUser(User user, LocalDate start, LocalDate end)
         throws ClientNetworkException, ClientResponseException;
 
     public List<Room> getRooms()

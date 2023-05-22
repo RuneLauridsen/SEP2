@@ -10,11 +10,10 @@ import java.util.List;
 
 public interface ServerModel
 {
-    public User getUser(String username);
+    public User getUser(int viaid);
     public Room getRoom(String roomName, User activeUser);
 
-    // Samme som getUser men checker password, og returnerer null hvis password ikke passer.
-    public User login(String username, String password);
+    public User login(int viaid, String password);
 
     public List<Room> getRooms(User activeUser);
 
@@ -35,7 +34,7 @@ public interface ServerModel
     // indeholder bruger-specifik data (Room.userComment og Room.userColor).
     // userName fortæller hvilken bruger der skal hentes bookings for, og activeUser,
     // fortæller hvilken bruger der skal hentes bruger-specifik data for.
-    public List<Booking> getBookingsForUser(String userName, LocalDate from, LocalDate to, User activeUser);
+    public List<Booking> getBookingsForUser(User user, LocalDate from, LocalDate to, User activeUser);
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate from, LocalDate to, User activeUser);
     public List<UserGroup> getUserGroups();

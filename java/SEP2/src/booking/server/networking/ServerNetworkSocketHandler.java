@@ -48,7 +48,7 @@ public class ServerNetworkSocketHandler implements Runnable
             // Login
             //
             ConnectionRequest connectionRequest = (ConnectionRequest) readRequest();
-            User user = model.login(connectionRequest.getUsername(), connectionRequest.getPassword());
+            User user = model.login(connectionRequest.getViaid(), connectionRequest.getPassword());
             if (user != null)
             {
                 sendResponse(new ConnectionResponse(user));
@@ -112,7 +112,7 @@ public class ServerNetworkSocketHandler implements Runnable
                 else if (request instanceof BookingsForUserRequest bookingsForUserRequest)
                 {
                     List<Booking> bookingsForUser = model.getBookingsForUser(
-                        bookingsForUserRequest.getUsername(),
+                        bookingsForUserRequest.getUser(),
                         bookingsForUserRequest.getFrom(),
                         bookingsForUserRequest.getTo(),
                         user
@@ -220,7 +220,7 @@ public class ServerNetworkSocketHandler implements Runnable
                 //
                 // User types
                 //
-                else if(request instanceof UserTypesRequest userTypesRequest)
+                else if (request instanceof UserTypesRequest userTypesRequest)
                 {
                     List<UserType> userTypes = model.getUserTypes();
                     sendResponse(new UserTypesResponse(userTypes));
@@ -289,7 +289,7 @@ public class ServerNetworkSocketHandler implements Runnable
                 //
                 // Create user
                 //
-                else if(request instanceof CreateUserRequest createUserRequest)
+                else if (request instanceof CreateUserRequest createUserRequest)
                 {
                     ErrorResponseReason createUserResult = model.createUser(
                         createUserRequest.getUsername(),
@@ -299,7 +299,7 @@ public class ServerNetworkSocketHandler implements Runnable
                         createUserRequest.getUserType()
                     );
 
-                    if(createUserResult == ERROR_RESPONSE_REASON_NONE)
+                    if (createUserResult == ERROR_RESPONSE_REASON_NONE)
                     {
                         sendResponse(new CreateUserResponse());
                     }
@@ -318,9 +318,11 @@ public class ServerNetworkSocketHandler implements Runnable
                 }
             }
         }
-        catch (ServerNetworkException e)
+        catch (IOException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            // NOTE(rune): Når server er ved at lukke smider readObject en IOException
+            // fordi readObject stream bliver lukket, så readObject ikke blokere tråden længere.
+            // Hvis vi IOException har en anden årsag, lukker vi også bare socket'en.
         }
         finally
         {
@@ -328,19 +330,12 @@ public class ServerNetworkSocketHandler implements Runnable
         }
     }
 
-    private void sendResponse(Response response) throws ServerNetworkException
+    private void sendResponse(Response response) throws IOException
     {
-        try
-        {
-            outToClient.writeObject(response);
-        }
-        catch (IOException e)
-        {
-            throw new ServerNetworkException("IO error when sending response.", e);
-        }
+        outToClient.writeObject(response);
     }
 
-    private Request readRequest() throws ServerNetworkException
+    private Request readRequest() throws IOException
     {
         try
         {
@@ -350,13 +345,9 @@ public class ServerNetworkSocketHandler implements Runnable
         {
             return null; // Caller handles null and returns ErrorResponse
         }
-        catch (IOException e)
-        {
-            throw new ServerNetworkException("IO error when receiving request.", e);
-        }
     }
 
-    private void close()
+    public void close()
     {
         try
         {

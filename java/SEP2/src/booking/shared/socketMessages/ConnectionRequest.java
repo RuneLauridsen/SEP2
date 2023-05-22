@@ -1,24 +1,21 @@
 package booking.shared.socketMessages;
 
-import booking.client.model.HashingEncrypter;
-
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class ConnectionRequest extends Request
 {
-    private final String username;
+    private final int viaid;
     private final String password;
 
-    public ConnectionRequest(String username, String password)
+    public ConnectionRequest(int viaid, String password)
     {
-        this.username = Objects.requireNonNull(username);
+        this.viaid = viaid;
         this.password = Objects.requireNonNull(password);
     }
 
-    public String getUsername()
+    public int getViaid()
     {
-        return username;
+        return viaid;
     }
 
     public String getPassword()
