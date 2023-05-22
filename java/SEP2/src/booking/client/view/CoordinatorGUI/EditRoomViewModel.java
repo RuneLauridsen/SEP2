@@ -46,41 +46,39 @@ public class EditRoomViewModel
     room.setUserComment(personalComment);
 
     if (color != null && !color.isEmpty()){
-      int colorInt;
-      switch (color){
-        case "Red":
-          colorInt = ArgbIntConverter.argbToInt(243, 131, 131);
-          break;
-        case "Blue":
-          colorInt = ArgbIntConverter.argbToInt(130,137,243);
-          break;
-        case "Yellow":
-          colorInt = ArgbIntConverter.argbToInt(250,250,100);
-          break;
-        case "Orange":
-          colorInt = ArgbIntConverter.argbToInt(255,178,61);
-          break;
-        case "Green":
-          colorInt = ArgbIntConverter.argbToInt(141,238,127);
-          break;
-        case "Purple":
-          colorInt = ArgbIntConverter.argbToInt(214,142,236);
-          break;
-        case "Pink":
-          colorInt = ArgbIntConverter.argbToInt(255,134,211);
-          break;
-        case "Mint":
-          colorInt = ArgbIntConverter.argbToInt(162,255,255);
-          break;
-        case "Gray":
-        default:
-          colorInt = ArgbIntConverter.argbToInt(222,222,222);
-          break;
-      }
+      int colorInt = switch (color)
+          {
+            case "Red" -> ArgbIntConverter.argbToInt(243, 131, 131);
+            case "Blue" -> ArgbIntConverter.argbToInt(130, 137, 243);
+            case "Yellow" -> ArgbIntConverter.argbToInt(250, 250, 100);
+            case "Orange" -> ArgbIntConverter.argbToInt(255, 178, 61);
+            case "Green" -> ArgbIntConverter.argbToInt(141, 238, 127);
+            case "Purple" -> ArgbIntConverter.argbToInt(214, 142, 236);
+            case "Pink" -> ArgbIntConverter.argbToInt(255, 134, 211);
+            case "Mint" -> ArgbIntConverter.argbToInt(162, 255, 255);
+            case "Gray", default -> ArgbIntConverter.argbToInt(222, 222, 222);
+          };
       room.setUserColor(colorInt);
     }
 
     model.updateRoom(room);
   }
 
+  //Kunne være gjort smartere hvis vi brugte de preset farver i Color klassen
+  public String getRoomColor()
+  {
+    return switch (room.getUserColor())
+        {
+          case -818301 -> "Red";
+          case -8222221 -> "Blue";
+          case -329116 -> "Yellow";
+          case -19907 -> "Orange";
+          case -7475585 -> "Green";
+          case -2715924 -> "Purple";
+          case -31021 -> "Pink";
+          case -6094849 -> "Mint";
+          case -2171170, default -> "Gray";
+        };
+
+  }
 }

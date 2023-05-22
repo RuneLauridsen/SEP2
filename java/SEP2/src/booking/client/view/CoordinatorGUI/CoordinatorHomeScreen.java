@@ -5,10 +5,17 @@ import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import booking.client.model.ArgbIntConverter;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 
 public class CoordinatorHomeScreen
 {
@@ -25,7 +32,21 @@ public class CoordinatorHomeScreen
     this.viewModel = viewModel;
 
 
-    
+    tvtRooms.setRowFactory(tv -> {
+      return new TableRow<Room>() {
+        @Override
+        protected void updateItem(Room room, boolean empty) {
+          super.updateItem(room, empty);
+
+          if (room != null && room.getUserColor() != 0) {
+              Color color = ArgbIntConverter.intToColor(room.getUserColor());
+              setBackground(new Background(new BackgroundFill(color,
+                  CornerRadii.EMPTY, Insets.EMPTY)));
+              //setStyle("-fx-background-color: rgb("+color.getRed()+","+color.getGreen()+","+color.getBlue()+");");
+            }
+        }
+      };
+    });
 
 
 

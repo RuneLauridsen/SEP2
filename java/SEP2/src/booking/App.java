@@ -30,6 +30,6 @@ public class App extends Application
         ViewHandler viewHandler = new ViewHandlerImpl(primaryStage, viewModelFactory, model);
 
         model.login(555555, "1234");
-        viewHandler.showCoordinatorBookingMenu();
+        viewHandler.showCoordinatorHomeScreen(model.getUser());
     }
 }
