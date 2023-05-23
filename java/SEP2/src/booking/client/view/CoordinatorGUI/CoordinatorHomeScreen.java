@@ -3,6 +3,7 @@ package booking.client.view.CoordinatorGUI;
 import booking.client.view.userGUI.ButtonTableCell;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
@@ -29,6 +30,8 @@ public class CoordinatorHomeScreen
   CoordinatorHomeScreenViewModel viewModel;
   public void init(CoordinatorHomeScreenViewModel viewModel){
     this.viewModel = viewModel;
+
+    lblName.textProperty().bind(Bindings.concat("Hello ").concat(viewModel.usernameProperty()));
 
 
     tvtRooms.setRowFactory(tv -> {

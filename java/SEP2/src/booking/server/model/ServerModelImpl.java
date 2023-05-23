@@ -199,7 +199,6 @@ public class ServerModelImpl implements ServerModel
 
     @Override public List<Booking> getBookingsForUser(User activeUser, User user, LocalDate from, LocalDate to) throws ServerModelException
     {
-        // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
 
         if (activeUser == null)
         {

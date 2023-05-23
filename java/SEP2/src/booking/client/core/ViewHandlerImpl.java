@@ -161,8 +161,9 @@ public class ViewHandlerImpl implements ViewHandler
             view.init(viewModel);
 
             scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            Stage bookingStage = new Stage();
+            bookingStage.setScene(scene);
+            bookingStage.show();
         }
         catch (IOException ex)
         {

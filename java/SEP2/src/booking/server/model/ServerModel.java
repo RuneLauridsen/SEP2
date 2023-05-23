@@ -26,7 +26,6 @@ public interface ServerModel
     public List<Overlap> createBooking(User activeUser, CreateBookingParameters parameters) throws ServerModelException;
     public void deleteBooking(User activeUser, Booking booking) throws ServerModelException;
 
-    // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
     // NOTE(rune): Tager både userName og activeUser som argument, da returnerede objekter
     // indeholder bruger-specifik data (Room.userComment og Room.userColor).
     // userName fortæller hvilken bruger der skal hentes bookings for, og activeUser,

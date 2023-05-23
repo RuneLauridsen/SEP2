@@ -43,7 +43,7 @@ public class ServerNetworkSocketHandler implements Runnable
     {
         try
         {
-            // TODO(rune): Lav sådan at man kan registerer ny bruger uden at være logget ind.
+
 
             // NOTE(rune): Så længe activeUser er null, er klienten ikke logget ind. Nogle request
             // kan godt behandles uden af være logget ind, f.eks. CreateUserRequest.

@@ -47,8 +47,11 @@ public class UserBookRoomViewModel
 
         buildings = FXCollections.observableArrayList(null, 'A', 'B', 'C');
 
-        //TODO only 5 floors for normal
-        floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5, 6);
+
+        if (model.getUser().getType().getId() == 1 || model.getUser().getType().getId() ==4)
+            floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5, 6);
+        else
+            floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5);
 
         selectedDate = new SimpleObjectProperty<>();
         selectedFromTime = new SimpleObjectProperty<>();

@@ -32,7 +32,7 @@ public class EditRoomViewModel
 
   public ObservableList<String> getColors(){
     ObservableList<String> colors = FXCollections.observableArrayList();
-    colors.addAll("Red","Blue","Yellow","Orange", "Green","Purple","Pink","Mint","Green","Gray");
+    colors.addAll("","Red","Blue","Yellow","Orange", "Green","Purple","Pink","Mint","Green","Gray");
     return colors;
   }
 

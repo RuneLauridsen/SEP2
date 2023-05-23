@@ -39,11 +39,6 @@
             <Button mnemonicParsing="false" onMouseClicked="#AddRoomClicked" text="Add Room" />
             <HBox alignment="TOP_RIGHT" prefHeight="48.0" prefWidth="564.0">
                <children>
-                  <Button mnemonicParsing="false" onMouseClicked="#CoursesClicked" text="Courses">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Button>
                   <Button mnemonicParsing="false" onMouseClicked="#BookingsClicked" text="Bookings" />
                </children>
             </HBox>

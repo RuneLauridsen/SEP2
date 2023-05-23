@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 
 public class CoordinatorBookRoom
 {
+    public ComboBox<String> cbbCategory;
     @FXML
     private DatePicker dpStartDate;
     @FXML
@@ -59,6 +60,7 @@ public class CoordinatorBookRoom
         cbbPrefixTime.setItems(viewModel.getPreFixTimes());
         cbbDayTime.setItems(viewModel.getDays());
         cbbCourse.setItems(viewModel.getCourses());
+        cbbCategory.setItems(viewModel.getColors());
 
 
         dpStartDate.valueProperty().bindBidirectional(viewModel.selectedStartDateProperty());
@@ -70,6 +72,7 @@ public class CoordinatorBookRoom
         cbbBuilding.valueProperty().bindBidirectional(viewModel.selectedBuildingProperty());
         cbbFloor.valueProperty().bindBidirectional(viewModel.selectedFloorProperty());
         cbbCourse.valueProperty().bindBidirectional(viewModel.selectedCourseProperty());
+        cbbCategory.valueProperty().bindBidirectional(viewModel.selectedCategoryProperty());
 
         lvRooms.setCellFactory(listView -> new RoomListCell("Book", viewModel::bookRoom));
         lvRooms.setItems(viewModel.getRoomList());
@@ -105,6 +108,7 @@ public class CoordinatorBookRoom
         cbbBuilding.setValue(null);
         cbbFloor.setValue(null);
         cbbCourse.setValue(null);
+        cbbCategory.setValue(null);
     }
 
     public void listViewClicked(MouseEvent Event)

@@ -4,6 +4,8 @@ import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,13 +14,20 @@ import java.util.List;
 
 public class CoordinatorHomeScreenViewModel
 {
+  private final StringProperty username;
   ObservableList<Room> rooms = FXCollections.observableArrayList();
   ViewHandler viewHandler;
   ClientModel model;
   public CoordinatorHomeScreenViewModel(ViewHandler viewHandler, ClientModel model)
   {
+    username = new SimpleStringProperty();
+    username.set(model.getUser().getName());
     this.viewHandler = viewHandler;
     this.model =model;
+  }
+  public StringProperty usernameProperty()
+  {
+    return username;
   }
 
   public ObservableList<Room> getAllRooms(){
