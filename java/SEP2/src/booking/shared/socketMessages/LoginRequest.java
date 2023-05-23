@@ -2,12 +2,12 @@ package booking.shared.socketMessages;
 
 import java.util.Objects;
 
-public class ConnectionRequest extends Request
+public class LoginRequest extends Request
 {
     private final int viaid;
     private final String password;
 
-    public ConnectionRequest(int viaid, String password)
+    public LoginRequest(int viaid, String password)
     {
         this.viaid = viaid;
         this.password = Objects.requireNonNull(password);

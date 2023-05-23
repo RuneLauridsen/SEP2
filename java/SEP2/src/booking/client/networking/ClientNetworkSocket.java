@@ -1,5 +1,6 @@
 package booking.client.networking;
 
+import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
@@ -18,18 +19,13 @@ public class ClientNetworkSocket implements ClientNetwork
     private ObjectOutputStream outToServer;
     private ObjectInputStream inFromServer;
 
-    @Override public User connect(int viaid, String password)
-        throws ClientNetworkException, ClientResponseException
+    @Override public void connect()
     {
         try
         {
             Socket socket = new Socket("localhost", 2910);
             outToServer = new ObjectOutputStream(socket.getOutputStream());
             inFromServer = new ObjectInputStream(socket.getInputStream());
-
-            sendRequest(new ConnectionRequest(viaid, password));
-            ConnectionResponse connectionResponse = (ConnectionResponse) readResponse();
-            return connectionResponse.getUser();
         }
         catch (IOException e)
         {
@@ -37,14 +33,22 @@ public class ClientNetworkSocket implements ClientNetwork
         }
     }
 
-    @Override public void disconnect()
-        throws ClientNetworkException, ClientResponseException
+    @Override public User login(int viaid, String password)
+        throws ClientNetworkException, ClientNetworkResponseException
+    {
+        sendRequest(new LoginRequest(viaid, password));
+        LoginResponse response = (LoginResponse) readResponse();
+        return response.getUser();
+    }
+
+    @Override public void logout()
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         // TODO(rune): Disconnect
     }
 
     public void createUser(String username, String password, String initials, int viaid, UserType userType)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         CreateUserRequest createUserRequest = new CreateUserRequest(
             username,
@@ -60,29 +64,30 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new AvailableRoomsRequest(parameters));
         AvailableRoomsResponse response = (AvailableRoomsResponse) readResponse();
         return response.getRooms();
     }
 
-    @Override public void createBooking(CreateBookingParameters parameters)
-        throws ClientNetworkException, ClientResponseException
+    @Override public List<Overlap> createBooking(CreateBookingParameters parameters)
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new CreateBookingRequest(parameters));
         CreateBookingResponse response = (CreateBookingResponse) readResponse();
+        return response.getOverlaps();
     }
 
     @Override public void deleteBooking(Booking booking)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new DeleteBookingRequest(booking));
         DeleteBookingResponse response = (DeleteBookingResponse) readResponse();
     }
 
     @Override public Room getRoom(String roomName)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new RoomRequest(roomName));
         RoomResponse response = (RoomResponse) readResponse();
@@ -90,7 +95,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public List<RoomType> getRoomTypes()
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new RoomTypesRequest());
         RoomTypesResponse response = (RoomTypesResponse) readResponse();
@@ -98,7 +103,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public List<UserType> getUserTypes()
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new UserTypesRequest());
         UserTypesResponse response = (UserTypesResponse) readResponse();
@@ -106,7 +111,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new BookingsForRoomRequest(roomName, start, end));
         BookingsForRoomResponse response = (BookingsForRoomResponse) readResponse();
@@ -114,7 +119,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     public List<Booking> getBookingsForUser(User user, LocalDate start, LocalDate end)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new BookingsForUserRequest(user, start, end));
         BookingsForUserResponse response = (BookingsForUserResponse) readResponse();
@@ -122,7 +127,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public List<Room> getRooms()
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new RoomsRequest());
         RoomsResponse response = (RoomsResponse) readResponse();
@@ -130,7 +135,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     public List<UserGroup> getUserGroups()
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new UserGroupsRequest());
         UserGroupsResponse response = (UserGroupsResponse) readResponse();
@@ -138,26 +143,26 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     public List<User> getUserGroupUsers(UserGroup userGroup)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new UserGroupUsersRequest(userGroup));
         UserGroupUsersResponse response = (UserGroupUsersResponse) readResponse();
         return response.getUsers();
     }
 
-    @Override public void updateRoom(Room room) throws ClientNetworkException, ClientResponseException
+    @Override public void updateRoom(Room room) throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new UpdateRoomRequest(room));
         UpdateRoomResponse response = (UpdateRoomResponse) readResponse();
     }
 
-    @Override public void updateUserRoomData(Room room, String comment, Integer color) throws ClientNetworkException, ClientResponseException
+    @Override public void updateUserRoomData(Room room, String comment, Integer color) throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new UpdateUserRoomDataRequest(room, comment, color));
         UpdateUserRoomDataResponse response = (UpdateUserRoomDataResponse) readResponse();
     }
 
-    @Override public List<TimeSlot> getTimeSlots() throws ClientNetworkException, ClientResponseException
+    @Override public List<TimeSlot> getTimeSlots() throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new TimeSlotsRequest());
         TimeSlotsResponse response = (TimeSlotsResponse) readResponse();
@@ -165,14 +170,22 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new CreateRoomRequest(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName));
         CreateRoomResponse response = (CreateRoomResponse) readResponse();
     }
 
+    @Override public ImportFileResult importFile(String fileContent)
+        throws ClientNetworkException, ClientNetworkResponseException
+    {
+        sendRequest(new ImportFileRequest(fileContent));
+        ImportFileResponse response = (ImportFileResponse) readResponse();
+        return response.getResult();
+    }
+
     private void sendRequest(Request request)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException
     {
         try
         {
@@ -180,12 +193,12 @@ public class ClientNetworkSocket implements ClientNetwork
         }
         catch (IOException e)
         {
-            throw new ClientNetworkException("IO error when sending request.", e);
+            throw new ClientNetworkException("IO error when sending request: " + e.getMessage(), e);
         }
     }
 
     private Response readResponse()
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         try
         {
@@ -193,7 +206,7 @@ public class ClientNetworkSocket implements ClientNetwork
 
             if (response instanceof ErrorResponse errorResponse)
             {
-                throw new ClientResponseException(errorResponse.getReason());
+                throw new ClientNetworkResponseException(errorResponse.getReason());
             }
             else
             {
@@ -202,7 +215,7 @@ public class ClientNetworkSocket implements ClientNetwork
         }
         catch (IOException e)
         {
-            throw new ClientNetworkException("IO error when receiving response.", e);
+            throw new ClientNetworkException("IO error when receiving response: " + e.getMessage(), e);
         }
         catch (ClassNotFoundException e)
         {

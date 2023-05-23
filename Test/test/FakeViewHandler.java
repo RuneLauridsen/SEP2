@@ -6,6 +6,13 @@ import booking.shared.objects.User;
 
 public class FakeViewHandler implements ViewHandler
 {
+    private String latestDialog;
+
+    public String getLatestDialog()
+    {
+        return latestDialog;
+    }
+
     public void showLogin()
     {
 
@@ -58,32 +65,32 @@ public class FakeViewHandler implements ViewHandler
 
     public void showInfoDialog(String text)
     {
-
+        latestDialog = text;
     }
 
     public void showInfoDialog(String header, String content)
     {
-
+        latestDialog = content;
     }
 
     public void showWarningDialog(String text)
     {
-
+        latestDialog = text;
     }
 
     public void showWarningDialog(String header, String content)
     {
-
+        latestDialog = content;
     }
 
     public void showErrorDialog(String text)
     {
-
+        latestDialog = text;
     }
 
     public void showErrorDialog(String header, String content)
     {
-
+        latestDialog = content;
     }
 }
 

@@ -21,7 +21,7 @@
                     <children>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                             <children>
-                                <Button mnemonicParsing="false" text="Book Room" textAlignment="CENTER">
+                                <Button mnemonicParsing="false" text="Book Room" textAlignment="CENTER" onMouseClicked="#btnBookRoomClicked">
                                     <VBox.margin>
                                         <Insets bottom="20.0" top="10.0"/>
                                     </VBox.margin>
@@ -29,7 +29,7 @@
                                         <Insets bottom="5.0" left="14.0" right="14.0" top="5.0"/>
                                     </padding>
                                 </Button>
-                                <Button mnemonicParsing="false" text="Insert File" textAlignment="CENTER">
+                                <Button mnemonicParsing="false" text="Insert File" textAlignment="CENTER" onMouseClicked="#btnInsertFileClicked">
                                     <VBox.margin>
                                         <Insets bottom="10.0"/>
                                     </VBox.margin>
@@ -48,7 +48,7 @@
                                 <Label text="[File]"/>
                                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="370.0">
                                     <children>
-                                        <Button mnemonicParsing="false" text="Cancel">
+                                        <Button mnemonicParsing="false" text="Cancel" onMouseClicked="#btnCancelClicked">
                                             <HBox.margin>
                                                 <Insets bottom="5.0" left="50.0" right="30.0" top="5.0"/>
                                             </HBox.margin>
@@ -56,7 +56,7 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                             </padding>
                                         </Button>
-                                        <Button mnemonicParsing="false" text="Confirm">
+                                        <Button mnemonicParsing="false" text="Confirm" onMouseClicked="#btnConfirmClicked">
                                             <HBox.margin>
                                                 <Insets bottom="5.0" left="30.0" right="50.0" top="5.0"/>
                                             </HBox.margin>

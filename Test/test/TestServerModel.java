@@ -1,14 +1,20 @@
 package test;
 
+import booking.client.model.ClientModelException;
+import booking.client.model.FileIO;
 import booking.database.DatabaseHandler;
 import booking.server.model.ServerModel;
+import booking.server.model.ServerModelException;
 import booking.server.model.ServerModelImpl;
+import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
 import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static test.TestConstants.*;
 
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -26,11 +33,13 @@ public class TestServerModel
 {
     private DatabaseHandler database;
     private ServerModel model;
+    private FileIO fileIO;
 
     @BeforeEach void setup()
     {
         database = TestDatabaseUtil.setup();
         model = new ServerModelImpl(database, new FakeNowProvider());
+        fileIO = new FakeFileIO();
     }
 
     @AfterEach void setdown()
@@ -39,9 +48,9 @@ public class TestServerModel
     }
 
     // Tester om server model returnere korrekte overlap, når man prøver at lave en ny booking.
-    @Test void testOverlap()
+    @Test void testOverlap() throws ServerModelException
     {
-        User user = database.getUser(VIAID_RUNE);
+        User user = database.getUser(VIAID_HENRIK);
         Room room = database.getRoom("A03.01", user);
 
         BookingInterval interval0 = new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(8, 0), LocalTime.of(18, 0));
@@ -52,32 +61,24 @@ public class TestServerModel
         CreateBookingParameters parameters1 = new CreateBookingParameters(room, interval1, false, null);
         CreateBookingParameters parameters2 = new CreateBookingParameters(room, interval2, false, null);
 
-        List<Overlap> overlaps0 = new ArrayList<>();
-        List<Overlap> overlaps1 = new ArrayList<>();
-        List<Overlap> overlaps2 = new ArrayList<>();
+        List<Overlap> overlaps0 = model.createBooking(user, parameters0);
+        List<Overlap> overlaps1 = model.createBooking(user, parameters1);
+        List<Overlap> overlaps2 = model.createBooking(user, parameters2);
 
-        ErrorResponseReason reason0 = model.createBooking(user, parameters0, overlaps0);
-        ErrorResponseReason reason1 = model.createBooking(user, parameters1, overlaps1);
-        ErrorResponseReason reason2 = model.createBooking(user, parameters2, overlaps2);
-
-        // Forsøg på at lavende en overlappende booking giver ikke ErrorResponse,
-        // i stedet får man en list af overlap tilbage.
-        assertEquals(reason0, ERROR_RESPONSE_REASON_NONE);
-        assertEquals(reason1, ERROR_RESPONSE_REASON_NONE);
-        assertEquals(reason2, ERROR_RESPONSE_REASON_NONE);
-
-        assertEquals(overlaps0.size(), 2);
-        assertEquals(overlaps1.size(), 1);
+        assertEquals(overlaps0.size(), 3); // Overlap med begge Majas bookinger + SWE-2023
+        assertEquals(overlaps1.size(), 1); // Overlap med en af Majas bookinger
         assertEquals(overlaps2.size(), 0);
 
         assertEquals(overlaps0.get(0).getUsers().size(), 0);
         assertEquals(overlaps0.get(1).getUsers().size(), 0);
+        assertEquals(overlaps0.get(2).getUsers().size(), 1);
+
         assertEquals(overlaps1.get(0).getUsers().size(), 0);
     }
 
     // Tester om server model returnerer korrekte overlap med korrekte brugere
     // når man prøver at lave en ny booking.
-    @Test void testOverlap_withUserGroups()
+    @Test void testOverlap_withUserGroups() throws ServerModelException
     {
         User user = database.getUser(VIAID_GITTE);
         UserGroup userGroup = database.getUserGroups().get(1);
@@ -92,42 +93,35 @@ public class TestServerModel
         CreateBookingParameters parameters1 = new CreateBookingParameters(room, interval1, false, userGroup);
         CreateBookingParameters parameters2 = new CreateBookingParameters(room, interval2, false, userGroup);
 
-        List<Overlap> overlaps0 = new ArrayList<>();
-        List<Overlap> overlaps1 = new ArrayList<>();
-        List<Overlap> overlaps2 = new ArrayList<>();
+        List<Overlap> overlaps0 = model.createBooking(user, parameters0);
+        List<Overlap> overlaps1 = model.createBooking(user, parameters1);
+        List<Overlap> overlaps2 = model.createBooking(user, parameters2);
 
-        ErrorResponseReason reason0 = model.createBooking(user, parameters0, overlaps0);
-        ErrorResponseReason reason1 = model.createBooking(user, parameters1, overlaps1);
-        ErrorResponseReason reason2 = model.createBooking(user, parameters2, overlaps2);
-
-        // Forsøg på at lavende en overlappende booking giver ikke ErrorResponse,
-        // i stedet får man en list af overlap tilbage.
-        assertEquals(reason0, ERROR_RESPONSE_REASON_NONE);
-        assertEquals(reason1, ERROR_RESPONSE_REASON_NONE);
-        assertEquals(reason2, ERROR_RESPONSE_REASON_NONE);
-
-        assertEquals(overlaps0.size(), 2);
-        assertEquals(overlaps1.size(), 1);
+        assertEquals(overlaps0.size(), 4);
+        assertEquals(overlaps1.size(), 2);
         assertEquals(overlaps2.size(), 0);
 
-        assertEquals(overlaps0.get(0).getUsers().size(), 4);
-        assertEquals(overlaps0.get(1).getUsers().size(), 2);
-        assertEquals(overlaps1.get(0).getUsers().size(), 4);
+        assertEquals(overlaps0.get(0).getUsers().size(), 1); // Overlap med Majas booking
+        assertEquals(overlaps0.get(1).getUsers().size(), 1); // Overlap med Majas booking
+        assertEquals(overlaps0.get(2).getUsers().size(), 4); // Overlap med SDJ-2023
+        assertEquals(overlaps0.get(3).getUsers().size(), 2); // Overlap med SWE-2023
     }
 
-    @Test void testLogin()
+    @Test void testLogin() throws ServerModelException
     {
-        User userCorrect = model.login(VIAID_GITTE, "1234");
-        User userIncorrect = model.login(VIAID_GITTE, "abcd");
-
-        assertEquals(userCorrect.getName(), "Gitte");
-        assertEquals(userCorrect.getViaId(), 555555);
-        assertEquals(userCorrect.getInitials(), "GITT");
-        assertEquals(userCorrect.getType().getName(), "Skemalægger");
-        assertEquals(userIncorrect, null);
+        User user = model.login(VIAID_GITTE, "1234");
+        assertEquals(user.getName(), "Gitte");
+        assertEquals(user.getViaId(), 555555);
+        assertEquals(user.getInitials(), "GITT");
+        assertEquals(user.getType().getName(), "Skemalægger");
     }
 
-    @Test void testCreateUser()
+    @Test void testLogin_invalidCredentials()
+    {
+        assertThrows(ServerModelException.class, () -> model.login(VIAID_GITTE, "forkert password"), "Invalid credentials");
+    }
+
+    @Test void testCreateUser() throws ServerModelException
     {
         final int VIAID_TEST = 123456;
 

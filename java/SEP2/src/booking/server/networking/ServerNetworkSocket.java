@@ -40,7 +40,7 @@ public class ServerNetworkSocket implements ServerNetwork
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         finally
         {

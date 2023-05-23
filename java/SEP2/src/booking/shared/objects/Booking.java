@@ -46,6 +46,30 @@ public class Booking implements Serializable
 
     @Override public String toString()
     {
-        return user + " " + room + " " + interval;
+        if (userGroup == null)
+        {
+            return user + " " + room + " " + interval;
+        }
+        else
+        {
+            return user + " " + room + " " + interval + " " + userGroup;
+        }
+    }
+
+    @Override public boolean equals(Object obj)
+    {
+        if (obj instanceof Booking other)
+        {
+            return this.id == other.id;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override public int hashCode()
+    {
+        return Integer.hashCode(id);
     }
 }

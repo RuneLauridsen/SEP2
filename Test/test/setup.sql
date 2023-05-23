@@ -211,8 +211,8 @@ INSERT INTO "user"
 VALUES
     /* id = 1 */ ('Maja',   null,  111111, 0, 3),
     /* id = 2 */ ('Julie',  null,  222222, 0, 3),
-    /* id = 3 */ ('Simon',  null,  333333, 0, 3),
-    /* id = 4 */ ('Rune',   null,  444444, '1081D018BC52CF305616BFFDA861FFF2', 3), -- abc
+    /* id = 3 */ ('Simon',  null,  333333, '79DF162B5B5AB7E5CC33AACD3C3A9B80', 3), -- password = qwertyuiopåasdfghjklæøzxcvbnm
+    /* id = 4 */ ('Rune',   null,  444444, '1081D018BC52CF305616BFFDA861FFF2', 3), -- password = abc
     /* id = 5 */ ('Gitte', 'GITT', 555555, '015C1B5BD250CD4280B65B58B1BE50D5', 1), -- password = 1234
     /* id = 6 */ ('Michael', 'MIVI', 666666, 0, 2),
     /* id = 7 */ ('Henrik', 'HEKP', 777777, 0, 2); 
@@ -269,4 +269,4 @@ VALUES
     /* Maja,  A03.01 */ (1, 11, '2023-05-12', '16:00', '16:45', NULL),
     
     /* Gitte,  A03.02 SDJ-2023 */ (5, 12, '2023-05-12', '11:00', '13:00', 1),
-    /* Gitte,  A03.02 DBS-2023 */ (5, 12, '2023-05-12', '16:00', '16:45', 3);
+    /* Gitte,  A03.02 SWE-2023 */ (5, 12, '2023-05-12', '16:00', '16:45', 3);

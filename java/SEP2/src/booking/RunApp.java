@@ -19,7 +19,7 @@ public class RunApp
             {
                 DatabaseHandler db = new DatabaseHandler();
                 db.open();
-
+    
                 NowProvider nowProvider = new ReadTimeNowProvider();
                 ServerModel serverModel = new ServerModelImpl(db, nowProvider);
                 ServerNetworkSocket socketServer = new ServerNetworkSocket(serverModel);

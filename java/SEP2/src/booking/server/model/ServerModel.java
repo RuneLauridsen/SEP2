@@ -1,5 +1,6 @@
 package booking.server.model;
 
+import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
@@ -13,40 +14,37 @@ public interface ServerModel
     public User getUser(int viaid);
     public Room getRoom(String roomName, User activeUser);
 
-    public User login(int viaid, String password);
+    public User login(int viaid, String password) throws ServerModelException;
 
-    public List<Room> getRooms(User activeUser);
+    public List<Room> getRooms(User activeUser) throws ServerModelException;
 
     public List<RoomType> getRoomTypes();
     public List<UserType> getUserTypes();
 
-    public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters);
+    public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters) throws ServerModelException;
 
-    // NOTE(rune): Returnerer en fejlkode, hvis bruger ikke har adgang til at booke lokaler,
-    // eller har for mange igangværende bookinger. Checker ikke efter overlap.
-    public ErrorResponseReason createBooking(User activeUser, CreateBookingParameters parameters, List<Overlap> overlaps);
+    public List<Overlap> createBooking(User activeUser, CreateBookingParameters parameters) throws ServerModelException;
 
-    // NOTE(rune): Returnerer en fejlkode, hvis bruger ikke har adgang til at slette bookinger.
-    public ErrorResponseReason deleteBooking(User activeUser, Booking booking);
+    public void deleteBooking(User activeUser, Booking booking) throws ServerModelException;
 
     // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
     // NOTE(rune): Tager både userName og activeUser som argument, da returnerede objekter
     // indeholder bruger-specifik data (Room.userComment og Room.userColor).
     // userName fortæller hvilken bruger der skal hentes bookings for, og activeUser,
     // fortæller hvilken bruger der skal hentes bruger-specifik data for.
-    public List<Booking> getBookingsForUser(User user, LocalDate from, LocalDate to, User activeUser);
+    public List<Booking> getBookingsForUser(User activeUser, User user, LocalDate from, LocalDate to) throws ServerModelException;
+    public List<Booking> getBookingsForRoom(User activeUser, String roomName, LocalDate from, LocalDate to) throws ServerModelException;
 
-    public List<Booking> getBookingsForRoom(String roomName, LocalDate from, LocalDate to, User activeUser);
     public List<UserGroup> getUserGroups();
-
     public List<User> getUserGroupUsers(UserGroup userGroup);
 
-    public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
-    public ErrorResponseReason updateRoom(Room room, User activeUser);
-    public void updateUserRoomData(User user, Room room, String comment, int color);
+    public void createRoom(User activeUser, String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ServerModelException;
+    public void updateRoom(User activeUser, Room room) throws ServerModelException;
+    public void updateUserRoomData(User activeUser, Room room, String comment, int color) throws ServerModelException;
 
-    public ErrorResponseReason createUser(String username, String password, String initials, int viaid, UserType userType);
+    public void createUser(String username, String password, String initials, int viaid, UserType userType) throws ServerModelException;
 
     public List<TimeSlot> getTimeSlots();
 
+    public ImportFileResult importFile(User activeUser, String fileContent) throws ServerModelException;
 }

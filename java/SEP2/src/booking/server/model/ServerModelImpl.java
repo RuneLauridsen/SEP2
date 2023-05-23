@@ -1,12 +1,14 @@
 package booking.server.model;
 
 import booking.client.model.HashingEncrypter;
+import booking.server.model.importFile.ImportFile;
+import booking.server.model.importFile.ImportFileResult;
+import booking.server.model.overlapCheck.OverlapChecker;
 import booking.shared.CreateBookingParameters;
 import booking.shared.NowProvider;
 import booking.shared.objects.*;
 import booking.database.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
@@ -38,25 +40,40 @@ public class ServerModelImpl implements ServerModel
         return persistence.getUser(viaid);
     }
 
-    @Override public User login(int viaid, String password)
+    @Override public User login(int viaid, String password) throws ServerModelException
     {
         try
         {
-            return persistence.getUser(viaid, HashingEncrypter.encrypt(password));
+            User user = persistence.getUser(viaid, HashingEncrypter.encrypt(password));
+            if (user == null)
+            {
+                throw new ServerModelException(ERROR_RESPONSE_REASON_INVALID_CREDENTIALS);
+            }
+            else
+            {
+                return user;
+            }
         }
         catch (NoSuchAlgorithmException e)
         {
-            return null; // TODO(rune): Måske en måde er rapportere fejl
+            // TODO(rune): En måde at logge fejl på.
+            throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override public Room getRoom(String roomName, User activeUser)
     {
+        // NOTE(rune): Checker ikke om activeUser er logget ind, da vi bare returnere
+        // lokale uden bruger specifik data, hvis activeUser ikke er logged ind.
+
         return persistence.getRoom(roomName, activeUser);
     }
 
     @Override public List<Room> getRooms(User activeUser)
     {
+        // NOTE(rune): Checker ikke om activeUser er logget ind, da vi bare returnere
+        // lokale uden bruger specifik data, hvis activeUser ikke er logged ind.
+
         return persistence.getRooms(activeUser);
     }
 
@@ -70,8 +87,13 @@ public class ServerModelImpl implements ServerModel
         return new ArrayList<>(persistence.getUserTypes().values());
     }
 
-    @Override public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters)
+    @Override public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters) throws ServerModelException
     {
+        if (activeUser == null)
+        {
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+        }
+
         return persistence.getAvailableRooms(
             activeUser,
             parameters.getInterval(),
@@ -82,95 +104,121 @@ public class ServerModelImpl implements ServerModel
         );
     }
 
-    @Override public ErrorResponseReason createBooking(User user, CreateBookingParameters parameters, List<Overlap> overlaps)
+    @Override public List<Overlap> createBooking(User activeUser, CreateBookingParameters parameters) throws ServerModelException
     {
-        // NOTE(rune): Vi stoler på at klienten sender Room med korrekt RoomType værdi. Dette er ikke en sikker måde
-        // a styre adgang til lokaler på, da klienten nemt kunne sende en Room instans med modificeret RoomType,
-        // for at få adgang til at booke lokaler, som klienten normalt ikke ville have adgang til.
-        // Dog holder SocketHandler'en selv styr på User objektet, så der kan klienten ikke snyde.
-
-        boolean isAllowedToBookRoom = user.getType().getAllowedRoomTypes().contains(parameters.getRoom().getType());
-        if (isAllowedToBookRoom)
+        if (activeUser == null)
         {
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+        }
+
+        synchronized (createBookingLock)
+        {
+            // NOTE(rune): Vi stoler på at klienten sender Room med korrekt RoomType værdi. Dette er ikke en sikker måde
+            // a styre adgang til lokaler på, da klienten nemt kunne sende en Room instans med modificeret RoomType,
+            // for at få adgang til at booke lokaler, som klienten normalt ikke ville have adgang til.
+            // Dog holder SocketHandler'en selv styr på User objektet, så der kan klienten ikke snyde.
+
+            boolean isAllowedToBookRoom = activeUser.getType().getAllowedRoomTypes().contains(parameters.getRoom().getType());
+            if (!isAllowedToBookRoom)
+            {
+                throw new ServerModelException(ERROR_RESPONSE_REASON_ROOM_TYPE_NOT_ALLOWED);
+            }
+
             List<Booking> activeBookings = persistence.getBookingsForUser(
-                user,
-                LocalDate.now(), // TODO(rune): Lav om så det kan unit testes
+                activeUser,
+                nowProvider.nowDate(),
                 LocalDate.MAX,
-                user
+                activeUser
             );
 
-            if (activeBookings.size() < user.getType().getMaxBookingCount())
+            if (activeBookings.size() >= activeUser.getType().getMaxBookingCount())
             {
-                // TODO(rune): Overvej om der kan ske deadlock her
-                synchronized (createBookingLock)
-                {
-                    overlaps.addAll(getOverlaps(parameters));
+                throw new ServerModelException(ERROR_RESPONSE_REASON_TOO_MANY_ACTIVE_BOOKINGS);
+            }
 
-                    // NOTE(rune): Selvom klient sender isOverlapAllowed kan det godt være
-                    // at klientens brugertype ikke har tilladelse til at overlappe bookinger.
-                    boolean isOverlapAllowed = false;
-                    if (parameters.isOverlapAllowed() && user.getType().canOverlapBookings())
-                    {
-                        isOverlapAllowed = true;
-                    }
+            // NOTE(rune): Selvom klient sender isOverlapAllowed kan det godt være
+            // at klientens brugertype ikke har tilladelse til at overlappe bookinger.
+            boolean isOverlapAllowed = parameters.isOverlapAllowed() && activeUser.getType().canOverlapBookings();
 
-                    // NOTE(rune): Overlap kan enten betyde at lokalet er optaget i booking interval,
-                    // eller at en af medlemmerne i en bookings user group er optaget.
-                    // Planlæggere skal have mulighed for at overlappe bookinger alligvel, så vi tjekker
-                    // ikke hvis klient eksplicit siger at den nye booking godt må overlappe.
-                    if (overlaps.size() == 0 || isOverlapAllowed)
-                    {
-                        persistence.createBooking(user, parameters);
-                    }
+            List<Overlap> overlaps = OverlapChecker.getOverlaps(parameters, activeUser, persistence);
 
-                    return ERROR_RESPONSE_REASON_NONE;
-                }
+            // NOTE(rune): Overlap kan enten betyde at lokalet er optaget i booking interval,
+            // eller at en af medlemmerne i en bookings user group er optaget. Planlæggere skal
+            // have mulighed for at overlappe bookinger alligevel, så vi ignorerer overlap hvis
+            // klient eksplicit siger at den nye booking godt må overlappe.
+            if (overlaps.size() == 0 || isOverlapAllowed)
+            {
+                persistence.createBooking(
+                    activeUser,
+                    parameters.getRoom(),
+                    parameters.getInterval(),
+                    parameters.getUserGroup()
+                );
+
+                return List.of();
             }
             else
             {
-                return ERROR_RESPONSE_REASON_TOO_MANY_ACTIVE_BOOKINGS;
+                return overlaps;
             }
-        }
-        else
-        {
-            return ERROR_RESPONSE_REASON_ROOM_TYPE_NOT_ALLOWED;
         }
     }
 
-    @Override public ErrorResponseReason createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    @Override public void createRoom(User activeUser, String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ServerModelException
     {
+        if (activeUser == null)
+        {
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+        }
+
+        if (!activeUser.getType().canEditRooms())
+        {
+            throw new ServerModelException(ERROR_RESPONSE_REASON_ACCESS_DENIED);
+        }
+
         //TODO(julie) errorhandle stuff
 
         persistence.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
-        return ERROR_RESPONSE_REASON_NONE;
     }
 
-    @Override public ErrorResponseReason deleteBooking(User activeUser, Booking booking)
+    @Override public void deleteBooking(User activeUser, Booking booking) throws ServerModelException
     {
-        if (activeUser.getType().canEditBookings() || activeUser.equals(booking.getUser()))
+        if (activeUser == null)
         {
-            persistence.deleteBooking(booking);
-            return ERROR_RESPONSE_REASON_NONE;
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
         }
-        else
+
+        if (!activeUser.getType().canEditBookings() && !activeUser.equals(booking.getUser()))
         {
-            return ERROR_RESPONSE_REASON_ACCESS_DENIED;
+            throw new ServerModelException(ERROR_RESPONSE_REASON_ACCESS_DENIED);
         }
+
+        persistence.deleteBooking(booking);
     }
 
-    @Override public List<Booking> getBookingsForUser(User user, LocalDate from, LocalDate to, User activeUser)
+    @Override public List<Booking> getBookingsForUser(User activeUser, User user, LocalDate from, LocalDate to) throws ServerModelException
     {
         // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
+
+        if (activeUser == null)
+        {
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+        }
 
         return persistence.getBookingsForUser(user, from, to, activeUser);
     }
 
-    @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate from, LocalDate to, User activeUser)
+    @Override public List<Booking> getBookingsForRoom(User activeUser, String roomName, LocalDate from, LocalDate to) throws ServerModelException
     {
+        if (activeUser == null)
+        {
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+        }
+
         Room room = persistence.getRoom(roomName, activeUser);
         if (room != null)
         {
-            return persistence.getBookingsForRoom(room, from, to);
+            return persistence.getBookingsForRoom(room, from, to, activeUser);
         }
         else
         {
@@ -190,22 +238,29 @@ public class ServerModelImpl implements ServerModel
         return users;
     }
 
-    @Override public ErrorResponseReason updateRoom(Room room, User activeUser)
+    @Override public void updateRoom(User activeUser, Room room) throws ServerModelException
     {
-        if (activeUser.getType().canEditRooms())
+        if (activeUser == null)
         {
-            persistence.updateRoom(room);
-            return ERROR_RESPONSE_REASON_NONE;
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
         }
-        else
+
+        if (!activeUser.getType().canEditRooms())
         {
-            return ERROR_RESPONSE_REASON_ACCESS_DENIED;
+            throw new ServerModelException(ERROR_RESPONSE_REASON_ACCESS_DENIED);
         }
+
+        persistence.updateRoom(room);
     }
 
-    @Override public void updateUserRoomData(User user, Room room, String comment, int color)
+    @Override public void updateUserRoomData(User activeUser, Room room, String comment, int color) throws ServerModelException
     {
-        persistence.updateUserRoomData(user, room, comment, color);
+        if (activeUser == null)
+        {
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+        }
+
+        persistence.updateUserRoomData(activeUser, room, comment, color);
     }
 
     @Override public List<TimeSlot> getTimeSlots()
@@ -213,7 +268,7 @@ public class ServerModelImpl implements ServerModel
         return persistence.getTimeSlots();
     }
 
-    public ErrorResponseReason createUser(String username, String password, String initials, int viaid, UserType userType)
+    public void createUser(String username, String password, String initials, int viaid, UserType userType) throws ServerModelException
     {
         try
         {
@@ -226,66 +281,27 @@ public class ServerModelImpl implements ServerModel
                 userType
             );
 
-            if (createUserResult)
+            if (!createUserResult)
             {
-                return ERROR_RESPONSE_REASON_NONE;
-            }
-            else
-            {
-                return ERROR_RESPONSE_REASON_USERNAME_TAKEN;
+                throw new ServerModelException(ERROR_RESPONSE_REASON_USERNAME_TAKEN);
             }
         }
         catch (NoSuchAlgorithmException e)
         {
-            return ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR;
+            throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
 
-    private List<Overlap> getOverlaps(CreateBookingParameters parameters)
+    @Override public ImportFileResult importFile(User activeUser, String fileContent) throws ServerModelException
     {
-        List<Overlap> overlaps = new ArrayList<>();
-
-        List<User> newBookingUsers = List.of();
-        if (parameters.getUserGroup() != null)
+        if (activeUser == null)
         {
-            newBookingUsers = persistence.getUserGroupUsers(parameters.getUserGroup());
+            throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
         }
 
-        List<Booking> oldBookings = persistence.getBookingsForRoom(
-            parameters.getRoom(),
-            parameters.getInterval().getDate(),
-            parameters.getInterval().getDate()
-        );
-
-        for (Booking oldBooking : oldBookings)
+        synchronized (createBookingLock)
         {
-            if (parameters.getInterval().isOverlapWith(oldBooking.getInterval()))
-            {
-                List<User> overlapUsers = new ArrayList<>();
-
-                // NOTE(rune): Hvis booking er til bestemt klasse/hold, så skal
-                // vi tjekke om den nye booking ill overlappe med en eller flere
-                // users fra andre klasers/holds eksisterende bookinger.
-                if (oldBooking.getUserGroup() != null)
-                {
-                    List<User> oldBookingUsers = persistence.getUserGroupUsers(oldBooking.getUserGroup());
-
-                    for (User newBookingUser : newBookingUsers)
-                    {
-                        if (oldBookingUsers.contains(newBookingUser))
-                        {
-                            overlapUsers.add(newBookingUser);
-                        }
-                    }
-                }
-
-                overlaps.add(new Overlap(
-                    oldBooking,
-                    overlapUsers
-                ));
-            }
+            return ImportFile.importFile(fileContent, activeUser, persistence);
         }
-
-        return overlaps;
     }
 }

@@ -1,8 +1,8 @@
 package booking.client.model;
 
+import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.User;
@@ -15,15 +15,15 @@ import java.util.List;
 
 public interface ClientModel
 {
-    public void login(int viaid, String password);
+    public void login(int viaid, String password) throws ClientModelException;
     public void logout();
-    public void register(String username, String password, String initials, int viaid, UserType userType);
+    public void register(String username, String password, String initials, int viaid, UserType userType) throws ClientModelException;
 
     public User getUser(); // NOTE(rune): Returns null if user is not logged in.
 
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters);
     public List<Booking> getActiveBookings();
-    public void createBooking(CreateBookingParameters parameters);
+    public void createBooking(CreateBookingParameters parameters) throws ClientModelOverlapException;
     public void deleteBooking(Booking booking);
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
     public Room getRoom(String room);
@@ -44,4 +44,6 @@ public interface ClientModel
     public List<TimeSlot> getTimeSlots();
 
     public boolean isAvailable(Room room);
+
+    public ImportFileResult importFile(String fileName);
 }

@@ -4,11 +4,11 @@ import booking.shared.objects.User;
 
 import java.util.Objects;
 
-public class ConnectionResponse extends Response
+public class LoginResponse extends Response
 {
     private final User user;
 
-    public ConnectionResponse(User user)
+    public LoginResponse(User user)
     {
         this.user = Objects.requireNonNull(user);
     }

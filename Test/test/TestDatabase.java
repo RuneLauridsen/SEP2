@@ -1,7 +1,6 @@
 package test;
 
 import booking.database.DatabaseHandler;
-import booking.shared.CreateBookingParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -23,6 +22,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+
+// TODO(rune): Tjek at alle database funktioner er testet
+// (kig i Persistence interfacet)
 
 public class TestDatabase
 {
@@ -172,7 +174,12 @@ public class TestDatabase
     @Test void testGetBookingsForRoom()
     {
         Room room = database.getRoom("A03.02", null);
-        List<Booking> bookings = database.getBookingsForRoom(room, LocalDate.of(2023, 5, 12), LocalDate.MAX);
+        List<Booking> bookings = database.getBookingsForRoom(
+            room,
+            LocalDate.of(2023, 5, 12),
+            LocalDate.MAX,
+            null
+        );
 
         assertEquals(bookings.size(), 2);
 
@@ -183,6 +190,18 @@ public class TestDatabase
         assertEquals(bookings.get(1).getInterval().getEnd(), LocalTime.of(16, 45));
     }
 
+    @Test void testGetBookingsForUserGroupUser()
+    {
+        User user = database.getUser(VIAID_SIMON);
+
+        List<Booking> bookings = database.getBookingsForUserGroupUser(user, LocalDate.MIN, LocalDate.MAX, null);
+
+        assertEquals(bookings.size(), 2);
+
+        assertEquals(bookings.get(0).getUserGroup().getName(), "SDJ-2023");
+        assertEquals(bookings.get(1).getUserGroup().getName(), "SWE-2023");
+    }
+
     @Test void testCreateBooking()
     {
         User user = database.getUser(VIAID_RUNE);
@@ -191,7 +210,8 @@ public class TestDatabase
         List<Booking> bookingsBefore = database.getBookingsForRoom(
             room,
             LocalDate.MIN,
-            LocalDate.MAX
+            LocalDate.MAX,
+            null
         );
 
         BookingInterval interval = new BookingInterval(
@@ -200,19 +220,13 @@ public class TestDatabase
             LocalTime.of(15, 30)
         );
 
-        CreateBookingParameters parameters = new CreateBookingParameters(
-            room,
-            interval,
-            false,
-            null
-        );
-
-        database.createBooking(user, parameters);
+        database.createBooking(user, room, interval, null);
 
         List<Booking> bookingsAfter = database.getBookingsForRoom(
             room,
             LocalDate.MIN,
-            LocalDate.MAX
+            LocalDate.MAX,
+            null
         );
 
         assertEquals(bookingsBefore.size(), 1);
@@ -224,13 +238,15 @@ public class TestDatabase
         assertEquals(bookingsAfter.get(1).getUserGroup(), null);
     }
 
+    // TODO(rune): testCreatBooking_withUserGroup
+
     @Test void testDeleteBooking()
     {
         Room room = database.getRoom("A03.01", null);
 
-        List<Booking> bookingsBefore = database.getBookingsForRoom(room, LocalDate.MIN, LocalDate.MAX);
+        List<Booking> bookingsBefore = database.getBookingsForRoom(room, LocalDate.MIN, LocalDate.MAX, null);
         database.deleteBooking(bookingsBefore.get(0));
-        List<Booking> bookingsAfter = database.getBookingsForRoom(room, LocalDate.MIN, LocalDate.MAX);
+        List<Booking> bookingsAfter = database.getBookingsForRoom(room, LocalDate.MIN, LocalDate.MAX, null);
 
         assertEquals(bookingsBefore.size(), 2);
         assertEquals(bookingsAfter.size(), 1);
@@ -266,7 +282,7 @@ public class TestDatabase
         assertEquals(userAfter.getType(), userTypes.get(2));
     }
 
-    @Test void testCreateUserGroups()
+    @Test void testGetUserGroups()
     {
         List<UserGroup> userGroups = database.getUserGroups();
 

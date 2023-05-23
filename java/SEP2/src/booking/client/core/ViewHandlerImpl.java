@@ -157,7 +157,7 @@ public class ViewHandlerImpl implements ViewHandler
             CoordinatorBookingMenuViewModel viewModel = viewModelFactory.getCoordinatorBookingMenuViewModel(this, model);
 
             CoordinatorBookingMenu view = loader.getController();
-            view.init(viewModel, this);
+            view.init(viewModel);
 
             scene = new Scene(root);
             primaryStage.setScene(scene);

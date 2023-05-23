@@ -1,14 +1,14 @@
-package booking.shared.socketMessages;
+package booking.client.model;
 
 import booking.shared.objects.Overlap;
 
 import java.util.List;
 
-public class CreateBookingResponse extends Response
+public class ClientModelOverlapException extends Exception
 {
     private final List<Overlap> overlaps;
 
-    public CreateBookingResponse(List<Overlap> overlaps)
+    public ClientModelOverlapException(List<Overlap> overlaps)
     {
         this.overlaps = overlaps;
     }

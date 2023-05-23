@@ -44,10 +44,15 @@ public interface Persistence
     public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate, User activeUser);
 
     // Henter alle booking for et bestemt lokale, i et bestemt dato interval.
-    public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate);
+    // activeUser fortæller hvilken bruger der skal hentes bruger-specifik lokale data for.
+    public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate, User activeUser);
+
+    // Henter alle booking for klasser/hold, som en bestemt bruger er medlem af.
+    // activeUser fortæller hvilken bruger der skal hentes bruger-specifik lokale data for.
+    public List<Booking> getBookingsForUserGroupUser(User user, LocalDate startDate, LocalDate endDate, User activeUser);
 
     // Tilføjer en ny booking. Checker ikke efter overlap, lokalets ledighed osv.
-    public void createBooking(User activeUser, CreateBookingParameters parameters);
+    public void createBooking(User activeUser, Room room, BookingInterval bookingInterval, UserGroup userGroup);
 
     // Sletter en booking. Checker ikke efter tilladelse.
     public void deleteBooking(Booking booking);

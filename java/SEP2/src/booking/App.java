@@ -5,13 +5,13 @@ import booking.client.core.ViewHandlerImpl;
 import booking.client.core.ViewModelFactory;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelImpl;
+import booking.client.model.FileIO;
+import booking.client.model.FileIOImpl;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkSocket;
 import booking.shared.NowProvider;
 import booking.shared.ReadTimeNowProvider;
-import booking.shared.objects.User;
 import booking.database.DatabaseHandler;
-import booking.shared.objects.UserType;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -22,14 +22,15 @@ public class App extends Application
         DatabaseHandler database = new DatabaseHandler();
         database.open();
 
+        FileIO fileIO = new FileIOImpl();
         NowProvider nowProvider = new ReadTimeNowProvider();
         ClientNetwork network = new ClientNetworkSocket();
-        ClientModel model = new ClientModelImpl(network, nowProvider);
+        ClientModel model = new ClientModelImpl(network, nowProvider, fileIO);
 
         ViewModelFactory viewModelFactory = new ViewModelFactory();
         ViewHandler viewHandler = new ViewHandlerImpl(primaryStage, viewModelFactory, model);
 
-        model.login(555555, "1234");
-        viewHandler.showCoordinatorBookingMenu();
+        network.connect();
+        viewHandler.showLogin();
     }
 }

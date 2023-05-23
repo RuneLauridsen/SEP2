@@ -2,6 +2,7 @@ package booking.client.view.login;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelException;
 import booking.shared.objects.User;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -50,21 +51,24 @@ public class LoginViewModel
 
         // TODO(rune): Input validering, eks. "abc" kan ikke parses som int
 
-        model.login(Integer.parseInt(username.get()), password.get());
-        
-        // TODO(rune): Håndter login fejl
+        try
+        {
+            model.login(Integer.parseInt(username.get()), password.get());
 
-        User user = model.getUser();
-        if (user != null)
-        {
+            User user = model.getUser();
+            
             if (user.getType().getId() == 1)
+            {
                 viewHandler.showCoordinatorHomeScreen(user);
+            }
             else
+            {
                 viewHandler.showUserHomeScreen(user);
+            }
         }
-        else
+        catch (ClientModelException e)
         {
-            viewHandler.showInfoDialog("Forkert brugernavn eller adgangskode");
+            viewHandler.showErrorDialog(e.getMessage());
         }
     }
 

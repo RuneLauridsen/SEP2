@@ -2,6 +2,7 @@ package booking.client.view.CoordinatorGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelOverlapException;
 import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.*;
@@ -223,7 +224,15 @@ public class CoordinatorBookRoomViewModel
             null    // ikke til nogne hold/klasse
         );
 
-        model.createBooking(parameters);
+        try
+        {
+            model.createBooking(parameters);
+        }
+        catch (ClientModelOverlapException e)
+        {
+            // TODO(rune): Hvis fejlbesked
+            throw new RuntimeException(e);
+        }
 
         viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
     }
