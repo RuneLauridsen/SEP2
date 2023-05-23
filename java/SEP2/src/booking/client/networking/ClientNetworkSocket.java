@@ -64,7 +64,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public void deleteRoom(Room room)
-        throws ClientNetworkException, ClientResponseException
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new DeleteRoomRequest(room));
         DeleteRoomResponse response = (DeleteRoomResponse) readResponse();

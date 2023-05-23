@@ -407,7 +407,7 @@ public class ClientModelImpl implements ClientModel
         {
             networkLayer.deleteRoom(room);
         }
-        catch (ClientResponseException e)
+        catch (ClientNetworkResponseException e)
         {
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
