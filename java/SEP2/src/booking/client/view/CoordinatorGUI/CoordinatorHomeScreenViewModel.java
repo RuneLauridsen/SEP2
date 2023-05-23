@@ -45,7 +45,7 @@ public class CoordinatorHomeScreenViewModel
     viewHandler.showRoomInfo(model.getRoom(name));
   }
 
-  public void refreshActiveBookings()
+  public void refreshRooms()
   {
     rooms.clear();
     rooms.addAll(model.getRooms());
@@ -54,5 +54,16 @@ public class CoordinatorHomeScreenViewModel
   public void changeToEditRoom(Room room)
   {
     viewHandler.showEditRoom(room);
+  }
+
+  public void deleteRoom(Room room)
+  {
+    model.deleteRoom(room);
+    refreshRooms();
+  }
+
+  public void changeToBooking()
+  {
+    viewHandler.showCoordinatorBookingMenu();
   }
 }

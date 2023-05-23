@@ -179,6 +179,25 @@ public class ServerNetworkSocketHandler implements Runnable
 
                         sendResponse(new RoomResponse(room));
                     }
+                    //
+                    //Delete room
+                    //
+                    else if (request instanceof DeleteRoomRequest deleteRoomRequest)
+                    {
+                        ErrorResponseReason deleteRoomResult = model.deleteRoom(
+                            deleteRoomRequest.getRoom(),
+                            activeUser
+                        );
+                        if (deleteRoomResult == ERROR_RESPONSE_REASON_NONE)
+                        {
+                            sendResponse(new DeleteRoomResponse());
+                        }
+                        else
+                        {
+                            sendResponse(new ErrorResponse(deleteRoomResult));
+                        }
+
+                    }
 
                     //
                     // Room types
@@ -238,6 +257,21 @@ public class ServerNetworkSocketHandler implements Runnable
                                                  updateUserRoomDataRequest.getRoom(),
                                                  updateUserRoomDataRequest.getComment(),
                                                  updateUserRoomDataRequest.getColor());
+
+                        sendResponse(new UpdateUserRoomDataResponse());
+                    }
+
+                    //
+                    // Update user room data
+                    //
+                    else if (request instanceof UpdateUserRoomDataRequest updateUserRoomDataRequest)
+                    {
+                        model.updateUserRoomData(
+                            activeUser,
+                            updateUserRoomDataRequest.getRoom(),
+                            updateUserRoomDataRequest.getComment(),
+                            updateUserRoomDataRequest.getColor()
+                        );
 
                         sendResponse(new UpdateUserRoomDataResponse());
                     }

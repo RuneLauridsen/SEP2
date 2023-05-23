@@ -46,6 +46,7 @@ public class CoordinatorBookRoom
 
     private CoordinatorBookRoomViewModel viewModel;
 
+    //TODO Farve filtrering
     public void init(CoordinatorBookRoomViewModel viewModel)
     {
         refresh();
@@ -58,6 +59,7 @@ public class CoordinatorBookRoom
         cbbPrefixTime.setItems(viewModel.getPreFixTimes());
         cbbDayTime.setItems(viewModel.getDays());
         cbbCourse.setItems(viewModel.getCourses());
+
 
         dpStartDate.valueProperty().bindBidirectional(viewModel.selectedStartDateProperty());
         dpEndDate.valueProperty().bindBidirectional(viewModel.selectedEndDateProperty());

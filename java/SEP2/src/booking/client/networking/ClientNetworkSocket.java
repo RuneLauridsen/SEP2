@@ -63,6 +63,13 @@ public class ClientNetworkSocket implements ClientNetwork
         CreateUserResponse response = (CreateUserResponse) readResponse();
     }
 
+    @Override public void deleteRoom(Room room)
+        throws ClientNetworkException, ClientResponseException
+    {
+        sendRequest(new DeleteRoomRequest(room));
+        DeleteRoomResponse response = (DeleteRoomResponse) readResponse();
+    }
+
     @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
         throws ClientNetworkException, ClientNetworkResponseException
     {

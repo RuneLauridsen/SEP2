@@ -46,4 +46,5 @@ public interface ClientModel
     public boolean isAvailable(Room room);
 
     public ImportFileResult importFile(String fileName);
+    public void deleteRoom(Room room);
 }

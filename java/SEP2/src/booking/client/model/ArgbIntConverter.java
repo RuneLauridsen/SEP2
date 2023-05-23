@@ -15,12 +15,12 @@ public class ArgbIntConverter
 
   public static Color intToColor(int argb)
   {
-    int a = (argb << 24) & 0xff;
-    int r = (argb << 16) & 0xff;
-    int g = (argb << 8) & 0xff;
-    int b = (argb << 0) & 0xff;
+    int a = (argb >> 24) & 0xff;
+    int r = (argb >> 16) & 0xff;
+    int g = (argb >> 8) & 0xff;
+    int b = (argb >> 0) & 0xff;
 
-    double af = (double) a / 256.0;
+    double af = 1.0;
     double rf = (double) r / 256.0;
     double gf = (double) g / 256.0;
     double bf = (double) b / 256.0;

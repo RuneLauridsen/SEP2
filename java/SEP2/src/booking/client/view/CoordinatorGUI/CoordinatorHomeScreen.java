@@ -5,10 +5,17 @@ import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import booking.client.model.ArgbIntConverter;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 
 public class CoordinatorHomeScreen
 {
@@ -17,19 +24,41 @@ public class CoordinatorHomeScreen
   public TableColumn<Room, String> tcolName;
   public TableColumn<Room, RoomType> tcolType;
   public TableColumn<Room, String> tcolStatus;
-  public TableColumn tcolBook;
   public TableColumn<Room, Room> tcolAlter;
+  public TableColumn <Room, Room> tcolDelete ;
 
   CoordinatorHomeScreenViewModel viewModel;
   public void init(CoordinatorHomeScreenViewModel viewModel){
     this.viewModel = viewModel;
+
+
+    tvtRooms.setRowFactory(tv -> {
+      return new TableRow<Room>() {
+        @Override
+        protected void updateItem(Room room, boolean empty) {
+          super.updateItem(room, empty);
+
+          if (room != null && room.getUserColor() != 0) {
+              Color color = ArgbIntConverter.intToColor(room.getUserColor());
+              setBackground(new Background(new BackgroundFill(color,
+                  CornerRadii.EMPTY, Insets.EMPTY)));
+              //setStyle("-fx-background-color: rgb("+color.getRed()+","+color.getGreen()+","+color.getBlue()+");");
+            }
+        }
+      };
+    });
+
+
+
     tvtRooms.setItems(viewModel.getAllRooms());
     tcolName.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getName()));
     tcolType.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getType()));
     tcolStatus.setCellValueFactory(p -> new SimpleStringProperty(viewModel.isAvailable(p.getValue())));
 
     tcolAlter.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue()));
-    tcolAlter.setCellFactory(p -> new ButtonTableCell<>("❌", viewModel::changeToEditRoom));
+    tcolDelete.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue()));
+    tcolAlter.setCellFactory(p -> new ButtonTableCell<>("Edit", viewModel::changeToEditRoom));
+    tcolDelete.setCellFactory(p -> new ButtonTableCell<>("❌", viewModel::deleteRoom));
   }
   public void AddRoomClicked(MouseEvent mouseEvent)
   {
@@ -42,6 +71,7 @@ public class CoordinatorHomeScreen
 
   public void BookingsClicked(MouseEvent mouseEvent)
   {
+    viewModel.changeToBooking();
   }
 
   public void tableViewClicked(MouseEvent mouseEvent)

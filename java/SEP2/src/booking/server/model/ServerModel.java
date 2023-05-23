@@ -47,4 +47,5 @@ public interface ServerModel
     public List<TimeSlot> getTimeSlots();
 
     public ImportFileResult importFile(User activeUser, String fileContent) throws ServerModelException;
+    public ErrorResponseReason deleteRoom(Room room, User activeUser);
 }

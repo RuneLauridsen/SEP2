@@ -33,6 +33,7 @@ public class EditRoom
     txtSize.setText(String.valueOf(viewModel.getRoom().getSize()));
     txaComment.setText(viewModel.getRoom().getComment());
     cbbRoomType.setValue(viewModel.getRoom().getType());
+    cbbColor.setValue(viewModel.getRoomColor());
   }
 
   public void saveButtonClick(MouseEvent mouseEvent)

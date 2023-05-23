@@ -400,4 +400,20 @@ public class ClientModelImpl implements ClientModel
             throw new RuntimeException(e); // TODO(rune): Bedre error handling
         }
     }
+
+    @Override public void deleteRoom(Room room)
+    {
+        try
+        {
+            networkLayer.deleteRoom(room);
+        }
+        catch (ClientResponseException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+        catch (ClientNetworkException e)
+        {
+            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+        }
+    }
 }

@@ -74,4 +74,7 @@ public interface ClientNetwork
 
     public ImportFileResult importFile(String fileContent)
         throws ClientNetworkException, ClientNetworkResponseException;
+
+    void deleteRoom(Room room)
+        throws ClientNetworkException, ClientNetworkResponseException;
 }

@@ -9,6 +9,7 @@ import booking.shared.NowProvider;
 import booking.shared.objects.*;
 import booking.database.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
@@ -266,6 +267,18 @@ public class ServerModelImpl implements ServerModel
     @Override public List<TimeSlot> getTimeSlots()
     {
         return persistence.getTimeSlots();
+    }
+
+    @Override public ErrorResponseReason deleteRoom(Room room, User activeUser)
+    {
+        if (activeUser.getType().canEditRooms())
+        {
+            persistence.deleteRoom(room);
+            return ERROR_RESPONSE_REASON_NONE;
+        }
+        else
+            return ERROR_RESPONSE_REASON_ACCESS_DENIED;
+
     }
 
     public void createUser(String username, String password, String initials, int viaid, UserType userType) throws ServerModelException

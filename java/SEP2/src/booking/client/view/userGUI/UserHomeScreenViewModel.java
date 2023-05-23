@@ -21,7 +21,7 @@ public class UserHomeScreenViewModel
 
     // TODO(rune): MVVM -> Må view godt kende til Booking klassen?
     // Det synes jeg godt, men måske er Micheal ikke enig.
-    private final ObservableList<Booking> activeBookings;
+    private  ObservableList<Booking> activeBookings;
 
     private ViewHandler viewHandler;
     private ClientModel model;

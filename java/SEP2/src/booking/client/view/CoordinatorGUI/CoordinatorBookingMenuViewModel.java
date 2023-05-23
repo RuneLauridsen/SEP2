@@ -10,16 +10,21 @@ import javafx.stage.FileChooser;
 
 import java.awt.*;
 import java.io.File;
+import booking.shared.objects.Booking;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class CoordinatorBookingMenuViewModel
 {
     private ViewHandler viewHandler;
+    private ObservableList<Booking> bookings;
     private ClientModel model;
 
     public CoordinatorBookingMenuViewModel(ViewHandler viewHandler, ClientModel model)
     {
         this.viewHandler = viewHandler;
         this.model = model;
+        bookings = FXCollections.observableArrayList();
     }
 
     public void bookRoomAction()
@@ -83,5 +88,27 @@ public class CoordinatorBookingMenuViewModel
     public void confirmAction()
     {
         // TODO(rune): Hvad skal confirm gøre?
+    }
+    
+    public ObservableList getBookings()
+    {
+        bookings = FXCollections.observableArrayList();
+        bookings.addAll(model.getActiveBookings());
+        return bookings;
+    }
+
+    public void refreshBookings(){
+        bookings.clear();
+        bookings.addAll(model.getActiveBookings());
+    }
+
+    public void cancelBooking(Booking booking)
+    {
+        model.deleteBooking(booking);
+    }
+
+    public void ChangeToSearch(String name)
+    {
+        viewHandler.showRoomInfo(model.getRoom(name));
     }
 }
