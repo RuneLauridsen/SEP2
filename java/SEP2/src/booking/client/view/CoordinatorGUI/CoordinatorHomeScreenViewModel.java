@@ -56,11 +56,6 @@ public class CoordinatorHomeScreenViewModel
     viewHandler.showEditRoom(room);
   }
 
-  public void deleteRoom(Room room)
-  {
-    model.deleteRoom(room);
-    refreshRooms();
-  }
 
   public void changeToBooking()
   {

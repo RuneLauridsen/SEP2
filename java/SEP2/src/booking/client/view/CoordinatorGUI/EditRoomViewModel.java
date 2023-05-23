@@ -81,4 +81,14 @@ public class EditRoomViewModel
         };
 
   }
+
+  public boolean deleteRoom()
+  {
+    if (viewHandler.showOkCancelDialog("Confirm delete","You're about to delete this room, are you sure?") == true){
+      model.deleteRoom(room);
+      return true;
+    }
+    else
+      return false;
+  }
 }
