@@ -269,16 +269,14 @@ public class ServerModelImpl implements ServerModel
         return persistence.getTimeSlots();
     }
 
-    @Override public ErrorResponseReason deleteRoom(Room room, User activeUser)
+    @Override public void deleteRoom(User activeUser, Room room) throws ServerModelException
     {
-        if (activeUser.getType().canEditRooms())
+        if (!activeUser.getType().canEditRooms())
         {
-            persistence.deleteRoom(room);
-            return ERROR_RESPONSE_REASON_NONE;
+            throw new ServerModelException(ERROR_RESPONSE_REASON_ACCESS_DENIED);
         }
-        else
-            return ERROR_RESPONSE_REASON_ACCESS_DENIED;
 
+        persistence.deleteRoom(room);
     }
 
     public void createUser(String username, String password, String initials, int viaid, UserType userType) throws ServerModelException

@@ -92,5 +92,11 @@ public class FakeViewHandler implements ViewHandler
     {
         latestDialog = content;
     }
+
+    @Override public boolean showOkCancelDialog(String header, String prompt)
+    {
+        latestDialog = prompt;
+        return true; // TODO(rune): Unit test cancel
+    }
 }
 

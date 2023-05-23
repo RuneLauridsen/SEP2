@@ -184,19 +184,11 @@ public class ServerNetworkSocketHandler implements Runnable
                     //
                     else if (request instanceof DeleteRoomRequest deleteRoomRequest)
                     {
-                        ErrorResponseReason deleteRoomResult = model.deleteRoom(
-                            deleteRoomRequest.getRoom(),
-                            activeUser
+                        model.deleteRoom(
+                            activeUser, deleteRoomRequest.getRoom()
                         );
-                        if (deleteRoomResult == ERROR_RESPONSE_REASON_NONE)
-                        {
-                            sendResponse(new DeleteRoomResponse());
-                        }
-                        else
-                        {
-                            sendResponse(new ErrorResponse(deleteRoomResult));
-                        }
-
+                        
+                        sendResponse(new DeleteRoomResponse());
                     }
 
                     //

@@ -4,7 +4,6 @@ import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.socketMessages.ErrorResponseReason;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +12,7 @@ public interface ServerModel
 {
     public User getUser(int viaid);
     public Room getRoom(String roomName, User activeUser);
+    public void createUser(String username, String password, String initials, int viaid, UserType userType) throws ServerModelException;
 
     public User login(int viaid, String password) throws ServerModelException;
 
@@ -24,7 +24,6 @@ public interface ServerModel
     public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters) throws ServerModelException;
 
     public List<Overlap> createBooking(User activeUser, CreateBookingParameters parameters) throws ServerModelException;
-
     public void deleteBooking(User activeUser, Booking booking) throws ServerModelException;
 
     // TODO(rune): Almindelige brugere må ikke se andre brugeres bookinger?
@@ -40,12 +39,11 @@ public interface ServerModel
 
     public void createRoom(User activeUser, String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ServerModelException;
     public void updateRoom(User activeUser, Room room) throws ServerModelException;
-    public void updateUserRoomData(User activeUser, Room room, String comment, int color) throws ServerModelException;
+    public void deleteRoom(User activeUser, Room room) throws ServerModelException;
 
-    public void createUser(String username, String password, String initials, int viaid, UserType userType) throws ServerModelException;
+    public void updateUserRoomData(User activeUser, Room room, String comment, int color) throws ServerModelException;
 
     public List<TimeSlot> getTimeSlots();
 
     public ImportFileResult importFile(User activeUser, String fileContent) throws ServerModelException;
-    public ErrorResponseReason deleteRoom(Room room, User activeUser);
 }

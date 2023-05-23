@@ -27,4 +27,5 @@ public interface ViewHandler
     public void showWarningDialog(String header, String content);
     public void showErrorDialog(String text);
     public void showErrorDialog(String header, String content);
+    public boolean showOkCancelDialog(String header, String prompt);
 }

@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
@@ -281,6 +282,19 @@ public class ViewHandlerImpl implements ViewHandler
     public void showErrorDialog(String header, String content)
     {
         showAlert(Alert.AlertType.ERROR, DEFAULT_WINDOW_TITLE, header, content);
+    }
+
+    public boolean showOkCancelDialog(String header, String prompt)
+    {
+        Optional<ButtonType> result = showAlert(Alert.AlertType.CONFIRMATION, DEFAULT_WINDOW_TITLE, header, prompt);
+        if (result.isPresent() && !result.get().getButtonData().isCancelButton())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public static Optional<ButtonType> showAlert(Alert.AlertType type, String title, String header, String content)
