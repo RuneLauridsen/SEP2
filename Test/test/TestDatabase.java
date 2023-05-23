@@ -1,6 +1,6 @@
 package test;
 
-import booking.database.DatabaseHandler;
+import booking.server.persistene.DatabaseHandler;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;

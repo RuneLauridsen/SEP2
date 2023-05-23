@@ -7,7 +7,7 @@ import booking.server.model.overlapCheck.OverlapChecker;
 import booking.shared.CreateBookingParameters;
 import booking.shared.NowProvider;
 import booking.shared.objects.*;
-import booking.database.Persistence;
+import booking.server.persistene.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.socketMessages.ErrorResponseReason;
 

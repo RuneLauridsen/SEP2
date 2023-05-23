@@ -1,7 +1,6 @@
 package booking.server.model.importFile;
 
-import booking.database.Persistence;
-import booking.shared.CreateBookingParameters;
+import booking.server.persistene.Persistence;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;

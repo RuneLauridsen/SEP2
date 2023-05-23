@@ -1,6 +1,5 @@
-package booking.database;
+package booking.server.persistene;
 
-import booking.shared.CreateBookingParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Course;
@@ -17,7 +16,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Types;
@@ -1039,7 +1037,7 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            String sql =  """
+            String sql = """
                 DELETE FROM sep2.booking WHERE room_id = ?;
                 DELETE FROM sep2.user_room_data WHERE room_id = ?;
                 DELETE FROM sep2.room WHERE room_id = ?;

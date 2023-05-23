@@ -1,6 +1,6 @@
 package booking;
 
-import booking.database.DatabaseHandler;
+import booking.server.persistene.DatabaseHandler;
 import booking.shared.NowProvider;
 import booking.shared.ReadTimeNowProvider;
 import booking.server.model.ServerModel;
@@ -19,7 +19,7 @@ public class RunApp
             {
                 DatabaseHandler db = new DatabaseHandler();
                 db.open();
-    
+
                 NowProvider nowProvider = new ReadTimeNowProvider();
                 ServerModel serverModel = new ServerModelImpl(db, nowProvider);
                 ServerNetworkSocket socketServer = new ServerNetworkSocket(serverModel);

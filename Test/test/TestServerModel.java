@@ -1,17 +1,12 @@
 package test;
 
-import booking.client.model.ClientModelException;
 import booking.client.model.FileIO;
-import booking.database.DatabaseHandler;
+import booking.server.persistene.DatabaseHandler;
 import booking.server.model.ServerModel;
 import booking.server.model.ServerModelException;
 import booking.server.model.ServerModelImpl;
-import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
-import booking.shared.socketMessages.ErrorResponseReason;
-
-import static booking.shared.socketMessages.ErrorResponseReason.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
@@ -23,10 +18,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestServerModel

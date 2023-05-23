@@ -1,19 +1,17 @@
 package test;
 
-import booking.client.core.ViewHandler;
 import booking.client.core.ViewModelFactory;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelImpl;
 import booking.client.model.FileIO;
 import booking.client.networking.ClientNetworkException;
-import booking.client.networking.ClientNetworkResponseException;
 import booking.server.model.importFile.ImportFileResult;
 import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkSocket;
 import booking.client.view.login.LoginViewModel;
 import booking.client.view.userGUI.UserBookRoomViewModel;
-import booking.database.DatabaseHandler;
+import booking.server.persistene.DatabaseHandler;
 import booking.shared.NowProvider;
 import booking.server.model.ServerModel;
 import booking.server.model.ServerModelImpl;

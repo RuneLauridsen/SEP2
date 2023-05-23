@@ -1,6 +1,6 @@
 package test;
 
-import booking.database.DatabaseHandler;
+import booking.server.persistene.DatabaseHandler;
 
 import java.net.URL;
 import java.nio.file.Files;

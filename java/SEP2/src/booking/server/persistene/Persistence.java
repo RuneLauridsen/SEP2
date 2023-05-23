@@ -1,6 +1,5 @@
-package booking.database;
+package booking.server.persistene;
 
-import booking.shared.CreateBookingParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -83,5 +82,5 @@ public interface Persistence
 
     // Indsætter nyt lokale uden bruger-specifik data.
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName);
-   public void deleteRoom(Room room);
+    public void deleteRoom(Room room);
 }

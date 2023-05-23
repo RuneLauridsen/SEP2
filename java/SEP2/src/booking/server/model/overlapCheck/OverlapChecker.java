@@ -1,6 +1,6 @@
 package booking.server.model.overlapCheck;
 
-import booking.database.Persistence;
+import booking.server.persistene.Persistence;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Overlap;
