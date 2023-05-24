@@ -1,4 +1,4 @@
-package booking.client.view.userGUI;
+package booking.client.view.shared;
 
 import booking.shared.objects.Room;
 import javafx.geometry.Pos;

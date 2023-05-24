@@ -1,5 +1,6 @@
 package booking.client.view.userGUI;
 
+import booking.client.view.shared.RoomListCell;
 import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
 import booking.shared.objects.Room;
 import javafx.fxml.FXML;

@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import booking.client.model.ArgbIntConverter;
-import booking.client.view.userGUI.ButtonTableCell;
+import booking.client.view.shared.ButtonTableCell;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;

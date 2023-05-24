@@ -1,4 +1,4 @@
-package booking.client.view.userGUI;
+package booking.client.view.shared;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;

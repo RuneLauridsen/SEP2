@@ -3,7 +3,7 @@ package booking.client.viewModel.coordinatorGUIVM;
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
-import booking.client.viewModel.ViewModelUtil;
+import booking.client.viewModel.sharedVM.ViewModelUtil;
 import booking.server.model.importFile.ImportFileResult;
 import javafx.stage.FileChooser;
 

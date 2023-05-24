@@ -1,4 +1,4 @@
-package booking.client.viewModel;
+package booking.client.viewModel.sharedVM;
 
 import booking.server.model.importFile.ImportFileError;
 import booking.server.model.importFile.ImportFileOverlap;

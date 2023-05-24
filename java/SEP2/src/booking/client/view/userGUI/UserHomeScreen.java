@@ -1,5 +1,6 @@
 package booking.client.view.userGUI;
 
+import booking.client.view.shared.ButtonTableCell;
 import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
@@ -19,7 +20,7 @@ import java.time.LocalTime;
 
 public class UserHomeScreen
 {
-    public TextField txtSearch;
+    @FXML private TextField txtSearch;
     @FXML private TableColumn<Booking, Room> colRoom;
     @FXML private TableColumn<Booking, LocalDate> colDate;
     @FXML private TableColumn<Booking, LocalTime> colFrom;
