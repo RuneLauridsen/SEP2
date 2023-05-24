@@ -1,4 +1,4 @@
-package booking.client.view.login;
+package booking.client.viewModel.loginVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;

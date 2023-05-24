@@ -1,5 +1,6 @@
 package booking.client.view.login;
 
+import booking.client.viewModel.loginVM.RegisterViewModel;
 import booking.shared.objects.UserType;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ComboBox;

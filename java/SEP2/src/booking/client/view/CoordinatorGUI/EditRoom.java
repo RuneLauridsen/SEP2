@@ -1,5 +1,6 @@
 package booking.client.view.CoordinatorGUI;
 
+import booking.client.viewModel.coordinatorGUIVM.EditRoomViewModel;
 import booking.shared.objects.RoomType;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;

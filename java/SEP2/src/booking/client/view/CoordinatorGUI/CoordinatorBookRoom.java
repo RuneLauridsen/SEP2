@@ -1,6 +1,7 @@
 package booking.client.view.CoordinatorGUI;
 
 import booking.client.view.userGUI.RoomListCell;
+import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookRoomViewModel;
 import booking.shared.objects.Room;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.UserGroup;

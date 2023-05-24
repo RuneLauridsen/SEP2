@@ -1,4 +1,4 @@
-package booking.client.view.userGUI;
+package booking.client.viewModel.userGUIVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;

@@ -1,22 +1,18 @@
 package booking.client.view.userGUI;
 
+import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

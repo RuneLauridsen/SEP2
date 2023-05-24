@@ -1,6 +1,6 @@
 package booking.client.view.CoordinatorGUI;
 
-import booking.client.core.ViewHandler;
+import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookingMenuViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,21 +14,16 @@ import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import booking.shared.objects.UserGroup;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

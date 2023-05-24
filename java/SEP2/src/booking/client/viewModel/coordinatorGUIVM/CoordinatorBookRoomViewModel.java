@@ -1,10 +1,10 @@
-package booking.client.view.CoordinatorGUI;
+package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelOverlapException;
-import booking.client.view.ViewModelUtil;
+import booking.client.viewModel.ViewModelUtil;
 import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.*;

@@ -1,5 +1,6 @@
 package booking.client.view.CoordinatorGUI;
 
+import booking.client.viewModel.coordinatorGUIVM.AddRoomViewModel;
 import booking.shared.objects.RoomType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;

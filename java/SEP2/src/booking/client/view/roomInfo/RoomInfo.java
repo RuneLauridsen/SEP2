@@ -1,7 +1,7 @@
 package booking.client.view.roomInfo;
 
+import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
 import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 

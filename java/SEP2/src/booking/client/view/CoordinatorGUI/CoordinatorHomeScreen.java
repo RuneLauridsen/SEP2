@@ -1,6 +1,7 @@
 package booking.client.view.CoordinatorGUI;
 
 import booking.client.view.userGUI.ButtonTableCell;
+import booking.client.viewModel.coordinatorGUIVM.CoordinatorHomeScreenViewModel;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import javafx.beans.binding.Bindings;

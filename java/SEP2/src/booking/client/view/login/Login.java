@@ -1,5 +1,6 @@
 package booking.client.view.login;
 
+import booking.client.viewModel.loginVM.LoginViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

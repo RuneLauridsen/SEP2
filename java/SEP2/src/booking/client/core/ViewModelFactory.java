@@ -1,17 +1,15 @@
 package booking.client.core;
 
 import booking.client.model.ClientModel;
-import booking.client.view.CoordinatorGUI.CoordinatorBookRoomViewModel;
-import booking.client.view.CoordinatorGUI.CoordinatorBookingMenuViewModel;
-import booking.client.view.login.RegisterViewModel;
-import booking.client.view.userGUI.UserBookRoomViewModel;
-import booking.client.view.userGUI.UserHomeScreenViewModel;
+import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookRoomViewModel;
+import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookingMenuViewModel;
+import booking.client.viewModel.loginVM.RegisterViewModel;
+import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
+import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.shared.objects.Room;
-import booking.client.view.roomInfo.RoomInfoViewModel;
-import booking.client.view.CoordinatorGUI.CoordinatorHomeScreenViewModel;
-import booking.client.view.login.LoginViewModel;
-
-import javax.swing.text.View;
+import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
+import booking.client.viewModel.coordinatorGUIVM.CoordinatorHomeScreenViewModel;
+import booking.client.viewModel.loginVM.LoginViewModel;
 
 public class ViewModelFactory
 {

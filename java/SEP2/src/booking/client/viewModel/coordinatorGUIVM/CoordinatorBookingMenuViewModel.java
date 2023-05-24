@@ -1,13 +1,10 @@
-package booking.client.view.CoordinatorGUI;
+package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
-import booking.client.view.ViewModelUtil;
-import booking.server.model.importFile.ImportFileError;
-import booking.server.model.importFile.ImportFileOverlap;
+import booking.client.viewModel.ViewModelUtil;
 import booking.server.model.importFile.ImportFileResult;
-import booking.shared.objects.User;
 import javafx.stage.FileChooser;
 
 import java.io.File;

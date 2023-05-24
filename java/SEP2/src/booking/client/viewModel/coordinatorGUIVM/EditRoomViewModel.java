@@ -1,4 +1,4 @@
-package booking.client.view.CoordinatorGUI;
+package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ArgbIntConverter;

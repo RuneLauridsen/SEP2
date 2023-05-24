@@ -1,4 +1,4 @@
-package booking.client.view.roomInfo;
+package booking.client.viewModel.roomInfoVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
