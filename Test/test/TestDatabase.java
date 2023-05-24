@@ -61,7 +61,7 @@ public class TestDatabase
         assertEquals(userTypes.get(3).canEditUsers(), false);
         assertEquals(userTypes.get(3).canEditRooms(), false);
         assertEquals(userTypes.get(3).canEditBookings(), false);
-        assertEquals(userTypes.get(3).canOverlapBookings(), false);
+        assertEquals(userTypes.get(3).canOverlapBookings(), true);
         assertEquals(userTypes.get(3).getMaxBookingCount(), 2);
         assertEquals(userTypes.get(3).getAllowedRoomTypes().size(), 1);
     }
