@@ -5,11 +5,11 @@ import booking.server.persistene.DatabaseHandler;
 import booking.server.model.ServerModel;
 import booking.server.model.ServerModelException;
 import booking.server.model.ServerModelImpl;
+import booking.server.persistene.PersistenceException;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static test.TestConstants.*;
 
 import org.junit.jupiter.api.AfterEach;
@@ -41,7 +41,7 @@ public class TestServerModel
     }
 
     // Tester om server model returnere korrekte overlap, når man prøver at lave en ny booking.
-    @Test void testOverlap() throws ServerModelException
+    @Test void testOverlap() throws ServerModelException, PersistenceException
     {
         User user = database.getUser(VIAID_HENRIK);
         Room room = database.getRoom("A03.01", user);
@@ -71,7 +71,7 @@ public class TestServerModel
 
     // Tester om server model returnerer korrekte overlap med korrekte brugere
     // når man prøver at lave en ny booking.
-    @Test void testOverlap_withUserGroups() throws ServerModelException
+    @Test void testOverlap_withUserGroups() throws ServerModelException, PersistenceException
     {
         User user = database.getUser(VIAID_GITTE);
         UserGroup userGroup = database.getUserGroups().get(1);

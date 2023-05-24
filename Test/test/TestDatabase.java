@@ -1,6 +1,7 @@
 package test;
 
 import booking.server.persistene.DatabaseHandler;
+import booking.server.persistene.PersistenceException;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -40,7 +41,7 @@ public class TestDatabase
         TestDatabaseUtil.setdown(database);
     }
 
-    @Test void testGetUserTypes()
+    @Test void testGetUserTypes() throws PersistenceException
     {
         Map<Integer, UserType> userTypes = database.getUserTypes();
 
@@ -65,7 +66,7 @@ public class TestDatabase
         assertEquals(userTypes.get(3).getAllowedRoomTypes().size(), 1);
     }
 
-    @Test void testGetRoomTypes()
+    @Test void testGetRoomTypes() throws PersistenceException
     {
         Map<Integer, RoomType> roomTypes = database.getRoomTypes();
 
@@ -78,7 +79,7 @@ public class TestDatabase
         assertEquals(roomTypes.get(4).getName(), "Klasselokale");
     }
 
-    @Test void testGetUser()
+    @Test void testGetUser() throws PersistenceException
     {
         User user = database.getUser(VIAID_GITTE);
 
@@ -89,13 +90,13 @@ public class TestDatabase
         assertEquals(user.getType().getId(), 1);
     }
 
-    @Test void testGetUser_notFound()
+    @Test void testGetUser_notFound() throws PersistenceException
     {
         User user = database.getUser(99999);
         assertEquals(user, null);
     }
 
-    @Test void testGetUser_withPasswordHash()
+    @Test void testGetUser_withPasswordHash() throws PersistenceException
     {
         User userCorrect = database.getUser(VIAID_RUNE, "1081D018BC52CF305616BFFDA861FFF2");
         User userIncorrect = database.getUser(VIAID_RUNE, "0123456789ABCDEF0123456789ABCDEF");
@@ -103,7 +104,7 @@ public class TestDatabase
         assertEquals(userIncorrect, null);
     }
 
-    @Test void testGetRoom()
+    @Test void testGetRoom() throws PersistenceException
     {
         User user = database.getUser(VIAID_RUNE);
         Room room = database.getRoom("C06.01", user);
@@ -119,7 +120,7 @@ public class TestDatabase
         assertEquals(room.getUserColor(), -1);
     }
 
-    @Test void testGetRoom_notFound()
+    @Test void testGetRoom_notFound() throws PersistenceException
     {
         User user = database.getUser(VIAID_RUNE);
         Room room = database.getRoom("AAAAA", user);
@@ -127,7 +128,7 @@ public class TestDatabase
         assertEquals(room, null);
     }
 
-    @Test void testGetRooms()
+    @Test void testGetRooms() throws PersistenceException
     {
         User userGitte = database.getUser(VIAID_GITTE);
         User userSimon = database.getUser(VIAID_SIMON);
@@ -152,7 +153,7 @@ public class TestDatabase
         assertEquals(roomsSimon.get(0).getUserColor(), -1);
     }
 
-    @Test void testGetBookingsForUser()
+    @Test void testGetBookingsForUser() throws PersistenceException
     {
         User user = database.getUser(VIAID_GITTE);
 
@@ -171,7 +172,7 @@ public class TestDatabase
         assertEquals(bookings.get(1).getUserGroup().getName(), "SDJ-2023");
     }
 
-    @Test void testGetBookingsForRoom()
+    @Test void testGetBookingsForRoom() throws PersistenceException
     {
         Room room = database.getRoom("A03.02", null);
         List<Booking> bookings = database.getBookingsForRoom(
@@ -190,7 +191,7 @@ public class TestDatabase
         assertEquals(bookings.get(1).getInterval().getEnd(), LocalTime.of(16, 45));
     }
 
-    @Test void testGetBookingsForUserGroupUser()
+    @Test void testGetBookingsForUserGroupUser() throws PersistenceException
     {
         User user = database.getUser(VIAID_SIMON);
 
@@ -202,7 +203,7 @@ public class TestDatabase
         assertEquals(bookings.get(1).getUserGroup().getName(), "SWE-2023");
     }
 
-    @Test void testCreateBooking()
+    @Test void testCreateBooking() throws PersistenceException
     {
         User user = database.getUser(VIAID_RUNE);
         Room room = database.getRoom("A02.02", user);
@@ -240,7 +241,7 @@ public class TestDatabase
 
     // TODO(rune): testCreatBooking_withUserGroup
 
-    @Test void testDeleteBooking()
+    @Test void testDeleteBooking() throws PersistenceException
     {
         Room room = database.getRoom("A03.01", null);
 
@@ -257,7 +258,7 @@ public class TestDatabase
         // TODO(rune): Test getAvailableRooms. Der er mange parametre!!!
     }
 
-    @Test void testCreateUser()
+    @Test void testCreateUser() throws PersistenceException
     {
         final int VIAID_TEST = 123456;
 
@@ -282,7 +283,7 @@ public class TestDatabase
         assertEquals(userAfter.getType(), userTypes.get(2));
     }
 
-    @Test void testGetUserGroups()
+    @Test void testGetUserGroups() throws PersistenceException
     {
         List<UserGroup> userGroups = database.getUserGroups();
 
@@ -292,7 +293,7 @@ public class TestDatabase
         assertEquals(userGroups.get(2).getName(), "SWE-2023");
     }
 
-    @Test void testGetUserGroupUsers()
+    @Test void testGetUserGroupUsers() throws PersistenceException
     {
         List<UserGroup> userGroups = database.getUserGroups();
         List<User> users = database.getUserGroupUsers(userGroups.get(1));
@@ -304,7 +305,7 @@ public class TestDatabase
         assertEquals(users.get(1).getType().getName(), "Studerende");
     }
 
-    @Test void testUpdateRoom()
+    @Test void testUpdateRoom() throws PersistenceException
     {
         User user = database.getUser(VIAID_GITTE);
         Room roomToUpdate = database.getRoom("A02.03", user);
@@ -332,7 +333,7 @@ public class TestDatabase
         assertEquals(roomToUpdate.getType().getId(), 1);
     }
 
-    @Test void testUpdateUserRoomData()
+    @Test void testUpdateUserRoomData() throws PersistenceException
     {
         User user = database.getUser(VIAID_GITTE);
         Room roomBefore = database.getRoom("A02.01", user);
@@ -345,7 +346,7 @@ public class TestDatabase
         assertEquals(roomAfter.getUserColor(), 0x00ff00ff);
     }
 
-    @Test void testUpdateUserRoomData_insert()
+    @Test void testUpdateUserRoomData_insert() throws PersistenceException
     {
         // NOTE(rune): A02.03 har ikke Gitte-specifik data i forvejen, så her
         // tester vi også at indsætte en ny user_room_data række.
@@ -361,7 +362,7 @@ public class TestDatabase
         assertEquals(roomAfter.getUserColor(), 0xff00ff00);
     }
 
-    @Test void testGetTimeSlots()
+    @Test void testGetTimeSlots() throws PersistenceException
     {
         List<TimeSlot> timeSlots = database.getTimeSlots();
 
@@ -372,7 +373,7 @@ public class TestDatabase
         assertEquals(timeSlots.get(1).getEnd(), LocalTime.of(16, 5));
     }
 
-    @Test void testCreateRoom()
+    @Test void testCreateRoom() throws PersistenceException
     {
         Map<Integer, RoomType> roomTypes = database.getRoomTypes();
 

@@ -48,12 +48,12 @@ public class DatabaseHandler implements Persistence
         closeConnection(connection);
     }
 
-    public User getUser(int viaid)
+    public User getUser(int viaid) throws PersistenceException
     {
         return getUser(viaid, null);
     }
 
-    public User getUser(int viaid, String passwordHash)
+    public User getUser(int viaid, String passwordHash) throws PersistenceException
     {
         Map<Integer, UserType> userTypes = getUserTypes();
 
@@ -100,7 +100,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -109,7 +109,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public Room getRoom(String roomName, User activeUser)
+    public Room getRoom(String roomName, User activeUser) throws PersistenceException
     {
         Objects.requireNonNull(roomName);
 
@@ -168,7 +168,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -177,7 +177,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public Map<Integer, RoomType> getRoomTypes()
+    public Map<Integer, RoomType> getRoomTypes() throws PersistenceException
     {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -205,7 +205,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -214,7 +214,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public List<Room> getRooms(User activeUser)
+    public List<Room> getRooms(User activeUser) throws PersistenceException
     {
         int userId = activeUser == null ? 0 : activeUser.getId();
 
@@ -269,7 +269,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -278,7 +278,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public Map<Integer, UserType> getUserTypes()
+    public Map<Integer, UserType> getUserTypes() throws PersistenceException
     {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -338,7 +338,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -347,7 +347,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    private List<Booking> getBookings(User user, Room room, User userGroupUser, LocalDate startDate, LocalDate endDate, User activeUser)
+    private List<Booking> getBookings(User user, Room room, User userGroupUser, LocalDate startDate, LocalDate endDate, User activeUser) throws PersistenceException
     {
         Map<Integer, UserType> userTypes = getUserTypes();
         Map<Integer, RoomType> roomTypes = getRoomTypes();
@@ -487,7 +487,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -496,22 +496,22 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate, User activeUser)
+    @Override public List<Booking> getBookingsForUser(User user, LocalDate startDate, LocalDate endDate, User activeUser) throws PersistenceException
     {
         return getBookings(user, null, null, startDate, endDate, activeUser);
     }
 
-    @Override public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate, User activeUser)
+    @Override public List<Booking> getBookingsForRoom(Room room, LocalDate startDate, LocalDate endDate, User activeUser) throws PersistenceException
     {
         return getBookings(null, room, null, startDate, endDate, activeUser);
     }
 
-    @Override public List<Booking> getBookingsForUserGroupUser(User user, LocalDate startDate, LocalDate endDate, User activeUser)
+    @Override public List<Booking> getBookingsForUserGroupUser(User user, LocalDate startDate, LocalDate endDate, User activeUser) throws PersistenceException
     {
         return getBookings(null, null, user, startDate, endDate, activeUser);
     }
 
-    public void createBooking(User activeUser, Room room, BookingInterval bookingInterval, UserGroup userGroup)
+    @Override public void createBooking(User activeUser, Room room, BookingInterval bookingInterval, UserGroup userGroup) throws PersistenceException
     {
         Objects.requireNonNull(activeUser);
         Objects.requireNonNull(room);
@@ -548,7 +548,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e);  // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -556,7 +556,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public void deleteBooking(Booking booking)
+    @Override public void deleteBooking(Booking booking) throws PersistenceException
     {
         Objects.requireNonNull(booking);
 
@@ -574,7 +574,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -582,9 +582,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    // TODO(rune): Måske fjern denne funktion, men udvid getRooms til at tage minCap osv.
-    // Dato checkene kan gøres i modellen.
-    public List<Room> getAvailableRooms(User activeUser, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor)
+    @Override public List<Room> getAvailableRooms(User activeUser, BookingInterval interval, Integer minCapacity, Integer maxCapacity, Character building, Integer floor) throws PersistenceException
     {
         Objects.requireNonNull(activeUser);
         Objects.requireNonNull(interval);
@@ -705,7 +703,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -714,7 +712,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    public boolean createUser(String name, String initials, int viaid, String passwordHash, UserType type)
+    public boolean createUser(String name, String initials, int viaid, String passwordHash, UserType type) throws PersistenceException
     {
         Objects.requireNonNull(name);
         Objects.requireNonNull(passwordHash);
@@ -751,7 +749,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -759,7 +757,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public List<UserGroup> getUserGroups()
+    @Override public List<UserGroup> getUserGroups() throws PersistenceException
     {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -804,7 +802,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -813,7 +811,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public List<User> getUserGroupUsers(UserGroup userGroup)
+    @Override public List<User> getUserGroupUsers(UserGroup userGroup) throws PersistenceException
     {
         Objects.requireNonNull(userGroup);
 
@@ -864,7 +862,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -873,7 +871,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public void updateRoom(Room room)
+    @Override public void updateRoom(Room room) throws PersistenceException
     {
         Objects.requireNonNull(room);
 
@@ -907,7 +905,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -915,7 +913,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public void updateUserRoomData(User user, Room room, String comment, int color)
+    @Override public void updateUserRoomData(User user, Room room, String comment, int color) throws PersistenceException
     {
         Objects.requireNonNull(user);
         Objects.requireNonNull(room);
@@ -952,7 +950,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -960,7 +958,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public List<TimeSlot> getTimeSlots()
+    @Override public List<TimeSlot> getTimeSlots() throws PersistenceException
     {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -984,7 +982,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -993,7 +991,7 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws PersistenceException
     {
         Objects.requireNonNull(name);
         Objects.requireNonNull(type);
@@ -1020,7 +1018,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e);  // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {
@@ -1029,7 +1027,7 @@ public class DatabaseHandler implements Persistence
 
     }
 
-    @Override public void deleteRoom(Room room)
+    @Override public void deleteRoom(Room room) throws PersistenceException
     {
         Objects.requireNonNull(room);
 
@@ -1051,7 +1049,7 @@ public class DatabaseHandler implements Persistence
         }
         catch (SQLException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new PersistenceException(e);
         }
         finally
         {

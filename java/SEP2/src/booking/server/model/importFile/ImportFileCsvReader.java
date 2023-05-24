@@ -1,6 +1,7 @@
 package booking.server.model.importFile;
 
 import booking.server.persistene.Persistence;
+import booking.server.persistene.PersistenceException;
 import booking.shared.objects.Booking;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
@@ -22,7 +23,7 @@ public class ImportFileCsvReader
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static List<ImportFileRow> readCsvFile(ImportFileResult result, String fileContent, Persistence persistence, User activeUser)
+    public static List<ImportFileRow> readCsvFile(ImportFileResult result, String fileContent, Persistence persistence, User activeUser) throws PersistenceException
     {
         List<ImportFileRow> parsedRows = new ArrayList<>();
 
