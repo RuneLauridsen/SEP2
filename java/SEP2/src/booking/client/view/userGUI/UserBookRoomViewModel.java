@@ -138,32 +138,24 @@ public class UserBookRoomViewModel
         return roomList;
     }
 
-    public void bookRoom(Room room)
-    {
-        // TODO(rune): timeIntervals liste kunne evt. være med <LocalTime> i stedet,
-        // så vi slipper for at parse her.
+    public void bookRoom(Room room) { //TODO billede i rapport skal opdateres hvis metoden ændres
         LocalTime startTime = parseLocalDateTime(selectedFromTime.get());
         LocalTime endTime = parseLocalDateTime(selectedToTime.get());
         BookingInterval requestedInterval = new BookingInterval(selectedDate.get(), startTime, endTime);
-
         CreateBookingParameters parameters = new CreateBookingParameters(
             room,
             requestedInterval,
-            false,  // ingen overlap tilladt,
-            null    // ikke til hold/klassen
-        );
-
-        try
-        {
+            true,  // overlap tilladt,
+            null);    // ikke til hold/klassen
+        try{
             model.createBooking(parameters);
+            viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
         }
         catch (ClientModelOverlapException e)
         {
-            // TODO(rune): Vis fejlbesked
+            viewHandler.showErrorDialog("Something went wrong booking room");
             throw new RuntimeException(e);
         }
-
-        viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
     }
 
     private static LocalTime parseLocalDateTime(String s)
