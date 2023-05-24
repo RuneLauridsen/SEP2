@@ -23,10 +23,15 @@ public class ServerNetworkSocketHandler implements Runnable
 
     private ServerModel model;
 
+    // NOTE(rune): Så længe activeUser er null, er klienten ikke logget ind. Nogle request
+    // kan godt behandles uden af være logget ind, f.eks. CreateUserRequest.
+    private User activeUser;
+
     public ServerNetworkSocketHandler(Socket socket, ServerModel model)
     {
         this.socket = socket;
         this.model = model;
+        this.activeUser = null;
 
         try
         {
@@ -43,273 +48,14 @@ public class ServerNetworkSocketHandler implements Runnable
     {
         try
         {
-
-
-            // NOTE(rune): Så længe activeUser er null, er klienten ikke logget ind. Nogle request
-            // kan godt behandles uden af være logget ind, f.eks. CreateUserRequest.
-            User activeUser = null;
-
-            //
-            // Message loop indtil client logger af eller mister forbindelse
-            //
+            // Message loop indtil client mister forbindelse med IOException
             while (true)
             {
-                // TODO(rune): Open/Closed - ligesom Jens snakkede om.
-                // Enten kan vi lave et fælles Request interface som har en getResponse metode,
-                // eller også laver vi bare et Map<RequestType, RequestHandler>, med function pointere til,
-                // hvordan man finder response. Hælder mest til nr. 2.
                 Object request = readRequest();
 
                 try
                 {
-
-                    //
-                    // Login
-                    //
-                    if (request instanceof LoginRequest loginRequest)
-                    {
-                        activeUser = model.login(loginRequest.getViaid(), loginRequest.getPassword());
-                        sendResponse(new LoginResponse(activeUser));
-                    }
-
-                    //
-                    // Available rooms
-                    //
-                    else if (request instanceof AvailableRoomsRequest availableRoomsRequest)
-                    {
-                        List<Room> availableRooms = model.getAvailableRooms(activeUser, availableRoomsRequest.getParameters());
-                        sendResponse(new AvailableRoomsResponse(availableRooms));
-                    }
-
-                    //
-                    // All rooms
-                    //
-                    else if (request instanceof RoomsRequest roomsRequest)
-                    {
-                        List<Room> rooms = model.getRooms(activeUser);
-                        sendResponse(new RoomsResponse(rooms));
-                    }
-
-                    //
-                    // Get bookings for room
-                    //
-                    else if (request instanceof BookingsForRoomRequest bookingsForRoomRequest)
-                    {
-                        List<Booking> bookingsForRoom = model.getBookingsForRoom(
-                            activeUser, bookingsForRoomRequest.getRoomName(),
-                            bookingsForRoomRequest.getFrom(),
-                            bookingsForRoomRequest.getTo()
-                        );
-
-                        sendResponse(new BookingsForRoomResponse(bookingsForRoom));
-                    }
-
-                    //
-                    // Get bookings for user
-                    //
-                    else if (request instanceof BookingsForUserRequest bookingsForUserRequest)
-                    {
-                        List<Booking> bookingsForUser = model.getBookingsForUser(
-                            activeUser, bookingsForUserRequest.getUser(),
-                            bookingsForUserRequest.getFrom(),
-                            bookingsForUserRequest.getTo()
-                        );
-
-                        sendResponse(new BookingsForUserResponse(bookingsForUser));
-                    }
-
-                    //
-                    // Create booking
-                    //
-                    else if (request instanceof CreateBookingRequest createBookingRequest)
-                    {
-                        List<Overlap> overlaps = model.createBooking(
-                            activeUser,
-                            createBookingRequest.getParameters()
-                        );
-
-                        var remove = model.getBookingsForRoom(
-                            activeUser, createBookingRequest.getParameters().getRoom().getName(),
-                            LocalDate.MIN,
-                            LocalDate.MAX
-                        );
-
-                        sendResponse(new CreateBookingResponse(overlaps));
-                    }
-
-                    //
-                    // Create Room
-                    //
-                    else if (request instanceof CreateRoomRequest createRoomRequest)
-                    {
-                        model.createRoom(
-                            activeUser,
-                            createRoomRequest.getName(),
-                            createRoomRequest.getType(),
-                            createRoomRequest.getMaxComf(),
-                            createRoomRequest.getMaxSafety(),
-                            createRoomRequest.getSize(),
-                            createRoomRequest.getComment(),
-                            createRoomRequest.isDouble(),
-                            createRoomRequest.getDoubleName()
-                        );
-
-                        sendResponse(new CreateRoomResponse());
-                    }
-
-                    //
-                    // Delete booking
-                    //
-                    else if (request instanceof DeleteBookingRequest deleteBookingRequest)
-                    {
-                        model.deleteBooking(
-                            activeUser,
-                            deleteBookingRequest.getBooking()
-                        );
-
-                        sendResponse(new DeleteBookingResponse());
-                    }
-
-                    //
-                    // Room
-                    //
-                    else if (request instanceof RoomRequest roomRequest)
-                    {
-                        Room room = model.getRoom(roomRequest.getRoomName(), activeUser);
-
-                        sendResponse(new RoomResponse(room));
-                    }
-                    //
-                    //Delete room
-                    //
-                    else if (request instanceof DeleteRoomRequest deleteRoomRequest)
-                    {
-                        model.deleteRoom(
-                            activeUser, deleteRoomRequest.getRoom()
-                        );
-                        
-                        sendResponse(new DeleteRoomResponse());
-                    }
-
-                    //
-                    // Room types
-                    //
-                    else if (request instanceof RoomTypesRequest roomTypesRequest)
-                    {
-                        List<RoomType> roomTypes = model.getRoomTypes();
-
-                        sendResponse(new RoomTypesResponse(roomTypes));
-                    }
-
-                    //
-                    // User types
-                    //
-                    else if (request instanceof UserTypesRequest userTypesRequest)
-                    {
-                        List<UserType> userTypes = model.getUserTypes();
-                        sendResponse(new UserTypesResponse(userTypes));
-                    }
-
-                    //
-                    // User groups
-                    //
-                    else if (request instanceof UserGroupsRequest userGroupsRequest)
-                    {
-                        List<UserGroup> userGroups = model.getUserGroups();
-
-                        sendResponse(new UserGroupsResponse(userGroups));
-                    }
-
-                    //
-                    // User group users
-                    //
-                    else if (request instanceof UserGroupUsersRequest userGroupUsersRequest)
-                    {
-                        List<User> users = model.getUserGroupUsers(userGroupUsersRequest.getUserGroup());
-
-                        sendResponse(new UserGroupUsersResponse(users));
-                    }
-
-                    // Update room
-                    else if (request instanceof UpdateRoomRequest updateRoomRequest)
-                    {
-                        model.updateRoom(
-                            activeUser, updateRoomRequest.getRoom()
-                        );
-
-                        sendResponse(new UpdateRoomResponse());
-                    }
-
-                    //
-                    // Update user room data
-                    //
-                    else if (request instanceof UpdateUserRoomDataRequest updateUserRoomDataRequest)
-                    {
-                        model.updateUserRoomData(activeUser,
-                                                 updateUserRoomDataRequest.getRoom(),
-                                                 updateUserRoomDataRequest.getComment(),
-                                                 updateUserRoomDataRequest.getColor());
-
-                        sendResponse(new UpdateUserRoomDataResponse());
-                    }
-
-                    //
-                    // Update user room data
-                    //
-                    else if (request instanceof UpdateUserRoomDataRequest updateUserRoomDataRequest)
-                    {
-                        model.updateUserRoomData(
-                            activeUser,
-                            updateUserRoomDataRequest.getRoom(),
-                            updateUserRoomDataRequest.getComment(),
-                            updateUserRoomDataRequest.getColor()
-                        );
-
-                        sendResponse(new UpdateUserRoomDataResponse());
-                    }
-
-                    //
-                    // Time slots
-                    //
-                    else if (request instanceof TimeSlotsRequest timeSlotsRequest)
-                    {
-                        List<TimeSlot> timeSlots = model.getTimeSlots();
-                        sendResponse(new TimeSlotsResponse(timeSlots));
-                    }
-
-                    //
-                    // Create user
-                    //
-                    else if (request instanceof CreateUserRequest createUserRequest)
-                    {
-                        model.createUser(
-                            createUserRequest.getUsername(),
-                            createUserRequest.getPassword(),
-                            createUserRequest.getInitials(),
-                            createUserRequest.getViaid(),
-                            createUserRequest.getUserType()
-                        );
-
-                        sendResponse(new CreateUserResponse());
-                    }
-
-                    // Import file
-                    else if (request instanceof ImportFileRequest overlapsRequest)
-                    {
-                        ImportFileResult result = model.importFile(
-                            activeUser, overlapsRequest.getFileContent()
-                        );
-
-                        sendResponse(new ImportFileResponse(result));
-                    }
-
-                    //
-                    // Unknown request
-                    //
-                    else
-                    {
-                        sendResponse(new ErrorResponse(ERROR_RESPONSE_REASON_INVALID_REQUEST_TYPE));
-                    }
+                    sendResponse(getResponseForRequest(request));
                 }
                 catch (ServerModelException e)
                 {
@@ -320,13 +66,261 @@ public class ServerNetworkSocketHandler implements Runnable
         catch (IOException e)
         {
             // NOTE(rune): Når server er ved at lukke smider readObject en IOException
-            // fordi readObject stream bliver lukket, så readObject ikke blokere tråden længere.
+            // fordi readObject stream bliver lukket, så readObject ikke blokerer tråden længere.
             // Hvis vi IOException har en anden årsag, lukker vi også bare socket'en.
         }
         finally
         {
             close();
         }
+    }
+
+    private Response getResponseForRequest(Object request) throws ServerModelException
+    {
+        //
+        // Login
+        //
+        if (request instanceof LoginRequest loginRequest)
+        {
+            activeUser = model.login(loginRequest.getViaid(), loginRequest.getPassword());
+            return new LoginResponse(activeUser);
+        }
+
+        //
+        // Available rooms
+        //
+        if (request instanceof AvailableRoomsRequest availableRoomsRequest)
+        {
+            List<Room> availableRooms = model.getAvailableRooms(activeUser, availableRoomsRequest.getParameters());
+            return new AvailableRoomsResponse(availableRooms);
+        }
+
+        //
+        // All rooms
+        //
+        if (request instanceof RoomsRequest roomsRequest)
+        {
+            List<Room> rooms = model.getRooms(activeUser);
+            return new RoomsResponse(rooms);
+        }
+
+        //
+        // Get bookings for room
+        //
+        if (request instanceof BookingsForRoomRequest bookingsForRoomRequest)
+        {
+            List<Booking> bookingsForRoom = model.getBookingsForRoom(
+                activeUser, bookingsForRoomRequest.getRoomName(),
+                bookingsForRoomRequest.getFrom(),
+                bookingsForRoomRequest.getTo()
+            );
+
+            return new BookingsForRoomResponse(bookingsForRoom);
+        }
+
+        //
+        // Get bookings for user
+        //
+        if (request instanceof BookingsForUserRequest bookingsForUserRequest)
+        {
+            List<Booking> bookingsForUser = model.getBookingsForUser(
+                activeUser, bookingsForUserRequest.getUser(),
+                bookingsForUserRequest.getFrom(),
+                bookingsForUserRequest.getTo()
+            );
+
+            return new BookingsForUserResponse(bookingsForUser);
+        }
+
+        //
+        // Create booking
+        //
+        if (request instanceof CreateBookingRequest createBookingRequest)
+        {
+            List<Overlap> overlaps = model.createBooking(
+                activeUser,
+                createBookingRequest.getParameters()
+            );
+
+            var remove = model.getBookingsForRoom(
+                activeUser, createBookingRequest.getParameters().getRoom().getName(),
+                LocalDate.MIN,
+                LocalDate.MAX
+            );
+
+            return new CreateBookingResponse(overlaps);
+        }
+
+        //
+        // Create Room
+        //
+        if (request instanceof CreateRoomRequest createRoomRequest)
+        {
+            model.createRoom(
+                activeUser,
+                createRoomRequest.getName(),
+                createRoomRequest.getType(),
+                createRoomRequest.getMaxComf(),
+                createRoomRequest.getMaxSafety(),
+                createRoomRequest.getSize(),
+                createRoomRequest.getComment(),
+                createRoomRequest.isDouble(),
+                createRoomRequest.getDoubleName()
+            );
+
+            return new CreateRoomResponse();
+        }
+
+        //
+        // Delete booking
+        //
+        if (request instanceof DeleteBookingRequest deleteBookingRequest)
+        {
+            model.deleteBooking(
+                activeUser,
+                deleteBookingRequest.getBooking()
+            );
+
+            return new DeleteBookingResponse();
+        }
+
+        //
+        // Room
+        //
+        if (request instanceof RoomRequest roomRequest)
+        {
+            Room room = model.getRoom(roomRequest.getRoomName(), activeUser);
+
+            return new RoomResponse(room);
+        }
+        //
+        //Delete room
+        //
+        if (request instanceof DeleteRoomRequest deleteRoomRequest)
+        {
+            model.deleteRoom(
+                activeUser, deleteRoomRequest.getRoom()
+            );
+
+            return new DeleteRoomResponse();
+        }
+
+        //
+        // Room types
+        //
+        if (request instanceof RoomTypesRequest roomTypesRequest)
+        {
+            List<RoomType> roomTypes = model.getRoomTypes();
+
+            return new RoomTypesResponse(roomTypes);
+        }
+
+        //
+        // User types
+        //
+        if (request instanceof UserTypesRequest userTypesRequest)
+        {
+            List<UserType> userTypes = model.getUserTypes();
+            return new UserTypesResponse(userTypes);
+        }
+
+        //
+        // User groups
+        //
+        if (request instanceof UserGroupsRequest userGroupsRequest)
+        {
+            List<UserGroup> userGroups = model.getUserGroups();
+
+            return new UserGroupsResponse(userGroups);
+        }
+
+        //
+        // User group users
+        //
+        if (request instanceof UserGroupUsersRequest userGroupUsersRequest)
+        {
+            List<User> users = model.getUserGroupUsers(userGroupUsersRequest.getUserGroup());
+
+            return new UserGroupUsersResponse(users);
+        }
+
+        // Update room
+        if (request instanceof UpdateRoomRequest updateRoomRequest)
+        {
+            model.updateRoom(
+                activeUser, updateRoomRequest.getRoom()
+            );
+
+            return new UpdateRoomResponse();
+        }
+
+        //
+        // Update user room data
+        //
+        if (request instanceof UpdateUserRoomDataRequest updateUserRoomDataRequest)
+        {
+            model.updateUserRoomData(activeUser,
+                                     updateUserRoomDataRequest.getRoom(),
+                                     updateUserRoomDataRequest.getComment(),
+                                     updateUserRoomDataRequest.getColor());
+
+            return new UpdateUserRoomDataResponse();
+        }
+
+        //
+        // Update user room data
+        //
+        if (request instanceof UpdateUserRoomDataRequest updateUserRoomDataRequest)
+        {
+            model.updateUserRoomData(
+                activeUser,
+                updateUserRoomDataRequest.getRoom(),
+                updateUserRoomDataRequest.getComment(),
+                updateUserRoomDataRequest.getColor()
+            );
+
+            return new UpdateUserRoomDataResponse();
+        }
+
+        //
+        // Time slots
+        //
+        if (request instanceof TimeSlotsRequest timeSlotsRequest)
+        {
+            List<TimeSlot> timeSlots = model.getTimeSlots();
+            return new TimeSlotsResponse(timeSlots);
+        }
+
+        //
+        // Create user
+        //
+        if (request instanceof CreateUserRequest createUserRequest)
+        {
+            model.createUser(
+                createUserRequest.getUsername(),
+                createUserRequest.getPassword(),
+                createUserRequest.getInitials(),
+                createUserRequest.getViaid(),
+                createUserRequest.getUserType()
+            );
+
+            return new CreateUserResponse();
+        }
+
+        // Import file
+        if (request instanceof ImportFileRequest overlapsRequest)
+        {
+            ImportFileResult result = model.importFile(
+                activeUser, overlapsRequest.getFileContent()
+            );
+
+            return new ImportFileResponse(result);
+        }
+
+        //
+        // Unknown request
+        //
+        return new ErrorResponse(ERROR_RESPONSE_REASON_INVALID_REQUEST_TYPE);
     }
 
     private void sendResponse(Response response) throws IOException
