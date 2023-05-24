@@ -29,16 +29,15 @@ import java.time.LocalTime;
 
 public class CoordinatorBookingMenu
 {
-    public TableView<Booking> tvBookings;
-    public TableColumn<Booking, Room> colRoom;
-    public TableColumn<Booking, RoomType> colType;
-    public TableColumn<Booking, LocalDate> colDate;
-    public TableColumn<Booking, LocalTime> colFrom;
-    public TableColumn<Booking, LocalTime> colTo;
-    public TableColumn<Booking, UserGroup> colCourse;
-    public TableColumn<Booking, Booking> colDelete;
-    @FXML
-    private Button btnBookRoom;
+    @FXML private TableView<Booking> tvBookings;
+    @FXML private TableColumn<Booking, Room> colRoom;
+    @FXML private TableColumn<Booking, RoomType> colType;
+    @FXML private TableColumn<Booking, LocalDate> colDate;
+    @FXML private TableColumn<Booking, LocalTime> colFrom;
+    @FXML private TableColumn<Booking, LocalTime> colTo;
+    @FXML private TableColumn<Booking, UserGroup> colCourse;
+    @FXML private TableColumn<Booking, Booking> colDelete;
+    @FXML private Button btnBookRoom;
 
     @FXML private Button btnInsertFile;
 

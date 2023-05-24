@@ -2,6 +2,7 @@ package booking.client.view.CoordinatorGUI;
 
 import booking.client.viewModel.coordinatorGUIVM.AddRoomViewModel;
 import booking.shared.objects.RoomType;
+import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
@@ -10,14 +11,14 @@ import javafx.scene.input.MouseEvent;
 
 public class AddRoom
 {
-  public TextField txtName;
-  public TextField txtMaxComfortCap;
-  public TextField txtMaxSafetyCap;
-  public TextField txtSize;
-  public TextArea txaComment;
-  public CheckBox cbIsDoubleRoom;
-  public TextField txtDoubleRoomName;
-  public ComboBox<RoomType> cbbRoomType;
+  @FXML private TextField txtName;
+  @FXML private TextField txtMaxComfortCap;
+  @FXML private TextField txtMaxSafetyCap;
+  @FXML private TextField txtSize;
+  @FXML private TextArea txtComment;
+  @FXML private CheckBox cbIsDoubleRoom;
+  @FXML private TextField txtDoubleRoomName;
+  @FXML private ComboBox<RoomType> cbbRoomType;
 
   AddRoomViewModel viewModel;
 
@@ -28,6 +29,6 @@ public class AddRoom
   }
   public void saveButtonClick(MouseEvent mouseEvent)
   {
-    viewModel.createRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()),txaComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText());
+    viewModel.createRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()), txtComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText());
   }
 }
