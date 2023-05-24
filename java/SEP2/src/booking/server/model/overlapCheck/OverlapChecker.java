@@ -1,6 +1,7 @@
 package booking.server.model.overlapCheck;
 
 import booking.server.persistene.Persistence;
+import booking.server.persistene.PersistenceException;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Overlap;
@@ -20,6 +21,7 @@ public class OverlapChecker
         User activeUser,
         Persistence persistence
     )
+        throws PersistenceException
     {
         Booking newBooking = new Booking(
             0,
@@ -48,6 +50,7 @@ public class OverlapChecker
         List<Booking> checkAgainstBookings,
         Persistence persistence
     )
+        throws PersistenceException
     {
         List<User> newBookingUsers = getRelevantUsers(newBooking, persistence);
 
@@ -118,7 +121,9 @@ public class OverlapChecker
     public static List<Booking> getRelevantBookings(
         List<Booking> bookingsToCheck,
         //Map<UserGroup, List<User>> userGroupUsersCache,
-        Persistence persistence)
+        Persistence persistence
+    )
+        throws PersistenceException
     {
         LocalDate thisDate = bookingsToCheck.get(0).getInterval().getDate();
 
@@ -175,7 +180,7 @@ public class OverlapChecker
         return new ArrayList<>(relevantBookings);
     }
 
-    private static List<User> getRelevantUsers(Booking booking, Persistence persistence)
+    private static List<User> getRelevantUsers(Booking booking, Persistence persistence) throws PersistenceException
     {
         if (booking.getUserGroup() == null)
         {

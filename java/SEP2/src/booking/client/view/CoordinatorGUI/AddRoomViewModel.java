@@ -2,6 +2,7 @@ package booking.client.view.CoordinatorGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelException;
 import booking.shared.objects.RoomType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,12 +20,26 @@ public class AddRoomViewModel
 
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
     {
-        model.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
+        try
+        {
+            model.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
     public ObservableList<RoomType> getRoomTypes()
     {
-        ObservableList<RoomType> types = FXCollections.observableArrayList(model.getRoomTypes());
-        return types;
+        try
+        {
+            return FXCollections.observableArrayList(model.getRoomTypes());
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+            return FXCollections.observableArrayList();
+        }
     }
 }

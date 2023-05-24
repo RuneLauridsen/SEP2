@@ -10,16 +10,16 @@ import java.util.List;
 
 public interface ServerModel
 {
-    public User getUser(int viaid);
-    public Room getRoom(String roomName, User activeUser);
+    public User getUser(int viaid) throws ServerModelException;
+    public Room getRoom(String roomName, User activeUser) throws ServerModelException;
     public void createUser(String username, String password, String initials, int viaid, UserType userType) throws ServerModelException;
 
     public User login(int viaid, String password) throws ServerModelException;
 
     public List<Room> getRooms(User activeUser) throws ServerModelException;
 
-    public List<RoomType> getRoomTypes();
-    public List<UserType> getUserTypes();
+    public List<RoomType> getRoomTypes() throws ServerModelException;
+    public List<UserType> getUserTypes() throws ServerModelException;
 
     public List<Room> getAvailableRooms(User activeUser, GetAvailableRoomsParameters parameters) throws ServerModelException;
 
@@ -33,8 +33,8 @@ public interface ServerModel
     public List<Booking> getBookingsForUser(User activeUser, User user, LocalDate from, LocalDate to) throws ServerModelException;
     public List<Booking> getBookingsForRoom(User activeUser, String roomName, LocalDate from, LocalDate to) throws ServerModelException;
 
-    public List<UserGroup> getUserGroups();
-    public List<User> getUserGroupUsers(UserGroup userGroup);
+    public List<UserGroup> getUserGroups() throws ServerModelException;
+    public List<User> getUserGroupUsers(UserGroup userGroup) throws ServerModelException;
 
     public void createRoom(User activeUser, String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ServerModelException;
     public void updateRoom(User activeUser, Room room) throws ServerModelException;
@@ -42,7 +42,7 @@ public interface ServerModel
 
     public void updateUserRoomData(User activeUser, Room room, String comment, int color) throws ServerModelException;
 
-    public List<TimeSlot> getTimeSlots();
+    public List<TimeSlot> getTimeSlots() throws ServerModelException;
 
     public ImportFileResult importFile(User activeUser, String fileContent) throws ServerModelException;
 }

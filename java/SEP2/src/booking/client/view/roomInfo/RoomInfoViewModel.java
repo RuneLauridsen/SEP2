@@ -2,26 +2,27 @@ package booking.client.view.roomInfo;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelException;
 import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class RoomInfoViewModel
 {
-    private Room room;
-    private ClientModel model;
-    private ObservableList<BookingInterval> bookings;
+    private final Room room;
+    private final ClientModel model;
+    private final ViewHandler viewHandler;
+    private ObservableList<Booking> bookings;
 
     public RoomInfoViewModel(ViewHandler viewHandler, ClientModel model, Room room)
     {
         this.room = room;
         this.model = model;
-        bookings = FXCollections.observableArrayList();
+        this.viewHandler = viewHandler;
+        this.bookings = FXCollections.observableArrayList();
 
     }
 
@@ -30,16 +31,17 @@ public class RoomInfoViewModel
         return room;
     }
 
-    public ObservableList<BookingInterval> getBookings()
+    public ObservableList<Booking> getBookings()
     {
         bookings.clear();
 
-        // TODO(rune): Hvorfor er observeable list med BookingInterval?
-
-        List<Booking> bookingsFromModel = model.getBookingsForRoom(room.getName(), LocalDate.MIN, LocalDate.MAX);
-        for (Booking booking : bookingsFromModel)
+        try
         {
-            bookings.add(booking.getInterval());
+            bookings.addAll(model.getBookingsForRoom(room.getName(), LocalDate.MIN, LocalDate.MAX));
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
         }
 
         return bookings;
@@ -47,9 +49,21 @@ public class RoomInfoViewModel
 
     public String isAvailable()
     {
-        if (model.isAvailable(room))
-            return "Available";
-        else
-            return "Occupied";
+        try
+        {
+            if (model.isAvailable(room))
+            {
+                return "Available";
+            }
+            else
+            {
+                return "Occupied";
+            }
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+            return "";
+        }
     }
 }

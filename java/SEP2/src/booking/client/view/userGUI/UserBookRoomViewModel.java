@@ -2,6 +2,7 @@ package booking.client.view.userGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelOverlapException;
 import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
@@ -47,8 +48,7 @@ public class UserBookRoomViewModel
 
         buildings = FXCollections.observableArrayList(null, 'A', 'B', 'C');
 
-
-        if (model.getUser().getType().getId() == 1 || model.getUser().getType().getId() ==4)
+        if (model.getUser().getType().getId() == 1 || model.getUser().getType().getId() == 4)
             floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5, 6);
         else
             floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5);
@@ -107,35 +107,40 @@ public class UserBookRoomViewModel
         return roomList;
     }
 
-    public ObservableList<Room> showAvailableRooms()
+    public void showAvailableRooms()
     {
-        // TODO(rune): Min/max cap
+        try
+        {
+            // TODO(rune): Min/max cap
 
-        String startTimeString = selectedFromTime.get();
-        String endTimeString = selectedToTime.get();
-        Character building = selectedBuilding.get();
-        Integer floor = selectedFloor.get();
-        LocalDate date = selectedDate.get();
+            String startTimeString = selectedFromTime.get();
+            String endTimeString = selectedToTime.get();
+            Character building = selectedBuilding.get();
+            Integer floor = selectedFloor.get();
+            LocalDate date = selectedDate.get();
 
-        // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
-        // så vi slipper for at parse her.
-        LocalTime startTime = parseLocalDateTime(startTimeString);
-        LocalTime endTime = parseLocalDateTime(endTimeString);
-        BookingInterval requestedInterval = new BookingInterval(date, startTime, endTime);
+            // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
+            // så vi slipper for at parse her.
+            LocalTime startTime = parseLocalDateTime(startTimeString);
+            LocalTime endTime = parseLocalDateTime(endTimeString);
 
-        // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
-        GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
-            date, startTime, endTime
-        );
+            // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
+            GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
+                date, startTime, endTime
+            );
 
-        parameters.setBuilding(building);
-        parameters.setFloor(floor);
+            parameters.setBuilding(building);
+            parameters.setFloor(floor);
 
-        List<Room> roomsFromDatabase = model.getAvailableRooms(parameters);
-        roomList.clear();
-        roomList.addAll(roomsFromDatabase);
+            List<Room> roomsFromDatabase = model.getAvailableRooms(parameters);
+            roomList.clear();
+            roomList.addAll(roomsFromDatabase);
 
-        return roomList;
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
     public void bookRoom(Room room) { //TODO billede i rapport skal opdateres hvis metoden ændres
@@ -171,7 +176,14 @@ public class UserBookRoomViewModel
 
     public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(model.getRoom(roomName));
+        try
+        {
+            viewHandler.showRoomInfo(model.getRoom(roomName));
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
 }

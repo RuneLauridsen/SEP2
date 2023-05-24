@@ -2,7 +2,9 @@ package booking.client.view.CoordinatorGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelOverlapException;
+import booking.client.view.ViewModelUtil;
 import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.*;
@@ -13,7 +15,6 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 public class CoordinatorBookRoomViewModel
 {
@@ -53,8 +54,7 @@ public class CoordinatorBookRoomViewModel
             "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45",
             "15:00", "15:15", "15:30", "15:45", "16:00");
 
-        preFixTimes = FXCollections.observableArrayList(
-            model.getTimeSlots());
+        preFixTimes = FXCollections.observableArrayList();
 
         days = FXCollections.observableArrayList(
             null, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
@@ -68,9 +68,7 @@ public class CoordinatorBookRoomViewModel
             null, 1, 2, 3, 4, 5, 6
         );
 
-        courses = FXCollections.observableArrayList(
-            model.getUserGroups()
-        );
+        courses = FXCollections.observableArrayList();
 
         selectedStartDate = new SimpleObjectProperty<>();
         selectedEndDate = new SimpleObjectProperty<>();
@@ -86,6 +84,16 @@ public class CoordinatorBookRoomViewModel
         selectedCategory = new SimpleObjectProperty<>();
 
         roomList = FXCollections.observableArrayList();
+
+        try
+        {
+            preFixTimes.addAll(model.getTimeSlots());
+            courses.addAll(model.getUserGroups());
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
     public ObservableList<String> getTimeIntervals()
@@ -148,7 +156,8 @@ public class CoordinatorBookRoomViewModel
         return selectedPreFixTime;
     }
 
-    public ObjectProperty<String> selectedCategoryProperty(){
+    public ObjectProperty<String> selectedCategoryProperty()
+    {
         return selectedCategory;
     }
 
@@ -207,10 +216,18 @@ public class CoordinatorBookRoomViewModel
 
         parameters.setBuilding(building);
         parameters.setFloor(floor);
+        parameters.setMinCapacity(selectedMinCap.get());
+        parameters.setMaxCapacity(selectedMaxCap.get());
 
-        List<Room> roomsFromDatabase = model.getAvailableRooms(parameters);
-        roomList.removeAll();
-        roomList.addAll(roomsFromDatabase);
+        roomList.clear();
+        try
+        {
+            roomList.addAll(model.getAvailableRooms(parameters));
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
 
         return roomList;
 
@@ -218,30 +235,46 @@ public class CoordinatorBookRoomViewModel
 
     public void bookRoom(Room room)
     {
+        bookRoom(room, false);
+    }
+
+    public void bookRoom(Room room, boolean isOverlapAllowed)
+    {
         // TODO(rune): timeIntervals liste kunne evt. være med <LocalTime> i stedet,
         // så vi slipper for at parse her.
         LocalTime startTime = parseLocalDateTime(selectedFromTime.get());
         LocalTime endTime = parseLocalDateTime(selectedToTime.get());
+        UserGroup group = selectedCourse.get();
         BookingInterval requestedInterval = new BookingInterval(selectedStartDate.get(), startTime, endTime);
 
         CreateBookingParameters parameters = new CreateBookingParameters(
             room,
             requestedInterval,
-            false,  // ingen overlap
-            null    // ikke til nogne hold/klasse
+            isOverlapAllowed,
+            group
         );
 
         try
         {
             model.createBooking(parameters);
+            viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
         }
         catch (ClientModelOverlapException e)
         {
-            // TODO(rune): Hvis fejlbesked
+            boolean confirmed = viewHandler.showOkCancelDialog(
+                "Overlap with existing bookings. Book anyway?",
+                ViewModelUtil.getOverlapsDisplayText(e.getOverlaps())
+            );
+
+            if (confirmed)
+            {
+                bookRoom(room, true);
+            }
+        }
+        catch (ClientModelException e)
+        {
             throw new RuntimeException(e);
         }
-
-        viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
     }
 
     private static LocalTime parseLocalDateTime(String s)
@@ -255,14 +288,22 @@ public class CoordinatorBookRoomViewModel
         return LocalTime.of(hour, minute);
     }
 
-    public void ChangeToSearch(String roomName)
+    public void changeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(model.getRoom(roomName));
+        try
+        {
+            viewHandler.showRoomInfo(model.getRoom(roomName));
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
-    public ObservableList<String> getColors(){
+    public ObservableList<String> getColors()
+    {
         ObservableList<String> colors = FXCollections.observableArrayList();
-        colors.addAll("","Red","Blue","Yellow","Orange", "Green","Purple","Pink","Mint","Green","Gray");
+        colors.addAll("", "Red", "Blue", "Yellow", "Orange", "Green", "Purple", "Pink", "Mint", "Green", "Gray");
         return colors;
     }
 }

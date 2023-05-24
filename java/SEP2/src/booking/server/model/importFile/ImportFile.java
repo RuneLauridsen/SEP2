@@ -1,7 +1,9 @@
 package booking.server.model.importFile;
 
+import booking.server.model.ServerModelException;
 import booking.server.persistene.Persistence;
 import booking.server.model.overlapCheck.OverlapChecker;
+import booking.server.persistene.PersistenceException;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Overlap;
 import booking.shared.objects.User;
@@ -14,7 +16,7 @@ import java.util.Map;
 
 public class ImportFile
 {
-    public static ImportFileResult importFile(String fileContent, User activeUser, Persistence persistence)
+    public static ImportFileResult importFile(String fileContent, User activeUser, Persistence persistence) throws PersistenceException
     {
         ImportFileResult result = new ImportFileResult();
 

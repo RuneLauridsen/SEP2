@@ -62,7 +62,6 @@ public class CoordinatorBookRoom
         cbbCourse.setItems(viewModel.getCourses());
         cbbCategory.setItems(viewModel.getColors());
 
-
         dpStartDate.valueProperty().bindBidirectional(viewModel.selectedStartDateProperty());
         dpEndDate.valueProperty().bindBidirectional(viewModel.selectedEndDateProperty());
         cbbFromTime.valueProperty().bindBidirectional(viewModel.selectedFromTimeProperty());
@@ -95,6 +94,7 @@ public class CoordinatorBookRoom
         }
         vbAvailableRooms.setVisible(true);
     }
+
     public void refresh()
     {
         dpStartDate.setValue(null);
@@ -113,7 +113,7 @@ public class CoordinatorBookRoom
 
     public void listViewClicked(MouseEvent Event)
     {
-        viewModel.ChangeToSearch(lvRooms.getSelectionModel().getSelectedItem().getName());
+        viewModel.changeToSearch(lvRooms.getSelectionModel().getSelectedItem().getName());
     }
 
 }

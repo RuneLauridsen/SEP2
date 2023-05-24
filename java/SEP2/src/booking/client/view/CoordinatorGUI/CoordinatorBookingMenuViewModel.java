@@ -2,14 +2,16 @@ package booking.client.view.CoordinatorGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelException;
+import booking.client.view.ViewModelUtil;
 import booking.server.model.importFile.ImportFileError;
 import booking.server.model.importFile.ImportFileOverlap;
 import booking.server.model.importFile.ImportFileResult;
 import booking.shared.objects.User;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.File;
+
 import booking.shared.objects.Booking;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,49 +36,34 @@ public class CoordinatorBookingMenuViewModel
 
     public void insertFileAction()
     {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().add(
-            new FileChooser.ExtensionFilter("csv", "*.csv")
-        );
-        File file = fileChooser.showOpenDialog(null);
-
-        if (file != null)
+        try
         {
-            ImportFileResult result = model.importFile(file.getAbsolutePath());
-            if (result.isOk())
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("csv", "*.csv")
+            );
+            File file = fileChooser.showOpenDialog(null);
+
+            if (file != null)
             {
-                viewHandler.showInfoDialog("Bookings imported.");
-            }
-            else
-            {
-                // TODO(rune): ImportFileResult burde have et view for sig, da det
-                // bliver uoverskueligt, hvis der er mange fejl og/eller overlap.
-                StringBuilder message = new StringBuilder();
-                message.append("Bookings not imported:");
-                message.append("\n");
-
-                for (ImportFileError error : result.getErrors())
+                ImportFileResult result = model.importFile(file.getAbsolutePath());
+                if (result.isOk())
                 {
-                    message.append(error);
-                    message.append("\n");
+                    viewHandler.showInfoDialog("Bookings imported.");
                 }
-
-                for (ImportFileOverlap overlap : result.getOverlaps())
+                else
                 {
-                    message.append(overlap);
-                    message.append("\n");
-
-                    for (User user : overlap.getOverlap().getUsers())
-                    {
-                        message.append("\t");
-                        message.append(user);
-                        message.append("\n");
-                    }
+                    // TODO(rune): ImportFileResult burde have et view for sig, da det
+                    // bliver uoverskueligt, hvis der er mange fejl og/eller overlap.
+                    String message = ViewModelUtil.getImportFileResultDisplayText(result);
+                    viewHandler.showWarningDialog(message);
                 }
-
-                viewHandler.showWarningDialog(message.toString());
             }
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
         }
     }
 
@@ -89,27 +76,60 @@ public class CoordinatorBookingMenuViewModel
     {
         // TODO(rune): Hvad skal confirm gøre?
     }
-    
+
     public ObservableList<Booking> getBookings()
     {
         bookings = FXCollections.observableArrayList();
-        bookings.addAll(model.getActiveBookings());
+
+        try
+        {
+            bookings.addAll(model.getActiveBookings());
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
+
         return bookings;
     }
 
+    public void refreshBookings()
+    {
+        // TODO(rune): Fælles ViewModelState
 
-    public void refreshBookings(){
         bookings.clear();
-        bookings.addAll(model.getActiveBookings());
+
+        try
+        {
+            bookings.addAll(model.getActiveBookings());
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
     public void cancelBooking(Booking booking)
     {
-        model.deleteBooking(booking);
+        try
+        {
+            model.deleteBooking(booking);
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
     public void ChangeToSearch(String name)
     {
-        viewHandler.showRoomInfo(model.getRoom(name));
+        try
+        {
+            viewHandler.showRoomInfo(model.getRoom(name));
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 }
