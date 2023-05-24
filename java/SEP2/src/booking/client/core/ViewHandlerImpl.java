@@ -82,8 +82,9 @@ public class ViewHandlerImpl implements ViewHandler
             view.init(viewModel);
 
             scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            Stage bookingStage = new Stage();
+            bookingStage.setScene(scene);
+            bookingStage.show();
         }
         catch (IOException ex)
         {
@@ -216,9 +217,9 @@ public class ViewHandlerImpl implements ViewHandler
             view.init(viewModel);
 
             scene = new Scene(root);
-            Stage infoStage = new Stage();
-            infoStage.setScene(scene);
-            infoStage.show();
+            Stage fomularStage = new Stage();
+            fomularStage.setScene(scene);
+            fomularStage.show();
         }
         catch (IOException ex)
         {
@@ -325,9 +326,9 @@ public class ViewHandlerImpl implements ViewHandler
             view.init(viewModel);
 
             scene = new Scene(root);
-            Stage infoStage = new Stage();
-            infoStage.setScene(scene);
-            infoStage.show();
+            Stage editStage = new Stage();
+            editStage.setScene(scene);
+            editStage.show();
         }
         catch (IOException ex)
         {
