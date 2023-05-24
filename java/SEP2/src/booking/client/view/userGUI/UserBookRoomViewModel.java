@@ -156,9 +156,9 @@ public class UserBookRoomViewModel
             model.createBooking(parameters);
             viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
         }
-        catch (ClientModelOverlapException e)
+        catch (ClientModelException e)
         {
-            viewHandler.showErrorDialog("Something went wrong booking room");
+            viewHandler.showErrorDialog(e.getMessage());
             throw new RuntimeException(e);
         }
     }
