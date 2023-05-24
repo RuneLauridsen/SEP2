@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 // TODO(rune): Meget gentaget kode i showXYZ metoder.
-//TODO(Julie): Muligvis ændre User persistance til singleton klasser.
 public class ViewHandlerImpl implements ViewHandler
 {
     private static final String DEFAULT_WINDOW_TITLE = "Bookingsystem";
