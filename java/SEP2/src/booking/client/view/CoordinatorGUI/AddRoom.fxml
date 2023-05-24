@@ -51,7 +51,7 @@
                   <TextField fx:id="txtMaxComfortCap" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="txtMaxSafetyCap" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="txtSize" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextArea fx:id="txaComment" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                  <TextArea fx:id="txtComment" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets top="4.0" />
                      </GridPane.margin>

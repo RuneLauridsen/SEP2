@@ -12,7 +12,8 @@ import javafx.scene.layout.VBox;
 
 public class CoordinatorBookRoom
 {
-    public ComboBox<String> cbbCategory;
+    @FXML
+    private ComboBox<String> cbbCategory;
     @FXML
     private DatePicker dpStartDate;
     @FXML
