@@ -197,21 +197,17 @@ public class ServerModelImpl implements ServerModel
                     // eller at en af medlemmerne i en bookings user group er optaget. Planlæggere skal
                     // have mulighed for at overlappe bookinger alligevel, så vi ignorerer overlap hvis
                     // klient eksplicit siger at den nye booking godt må overlappe.
-                    if (overlaps.size() == 0 || isOverlapAllowed)
-                    {
+                    if (overlaps.size() == 0 || isOverlapAllowed) {
                         persistence.createBooking(
                             activeUser,
                             parameters.getRoom(),
                             parameters.getInterval(),
                             parameters.getUserGroup()
                         );
-
                         return List.of();
                     }
                     else
-                    {
                         return overlaps;
-                    }
                 }
             }
             else

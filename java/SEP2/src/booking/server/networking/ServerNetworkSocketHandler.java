@@ -44,13 +44,11 @@ public class ServerNetworkSocketHandler implements Runnable
         }
     }
 
-    public void run()
-    {
-        try
-        {
+
+    public void run() {
+        try {
             // Message loop indtil client mister forbindelse med IOException
-            while (true)
-            {
+            while (true) {
                 Object request = readRequest();
 
                 try
@@ -135,19 +133,13 @@ public class ServerNetworkSocketHandler implements Runnable
         //
         // Create booking
         //
+
         if (request instanceof CreateBookingRequest createBookingRequest)
         {
             List<Overlap> overlaps = model.createBooking(
                 activeUser,
                 createBookingRequest.getParameters()
             );
-
-            var remove = model.getBookingsForRoom(
-                activeUser, createBookingRequest.getParameters().getRoom().getName(),
-                LocalDate.MIN,
-                LocalDate.MAX
-            );
-
             return new CreateBookingResponse(overlaps);
         }
 

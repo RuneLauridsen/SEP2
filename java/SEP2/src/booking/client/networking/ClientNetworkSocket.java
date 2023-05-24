@@ -79,7 +79,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public List<Overlap> createBooking(CreateBookingParameters parameters)
-        throws ClientNetworkException, ClientNetworkResponseException
+        throws ClientNetworkException, ClientNetworkResponseException //TODO billede i rapport skal opdateres hvis metoden ændres
     {
         sendRequest(new CreateBookingRequest(parameters));
         CreateBookingResponse response = (CreateBookingResponse) readResponse();

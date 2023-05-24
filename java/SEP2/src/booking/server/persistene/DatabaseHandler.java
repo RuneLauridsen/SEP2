@@ -511,8 +511,8 @@ public class DatabaseHandler implements Persistence
         return getBookings(null, null, user, startDate, endDate, activeUser);
     }
 
-    @Override public void createBooking(User activeUser, Room room, BookingInterval bookingInterval, UserGroup userGroup) throws PersistenceException
-    {
+    @Override public void createBooking(User activeUser, Room room, BookingInterval bookingInterval, UserGroup userGroup)
+        throws PersistenceException {
         Objects.requireNonNull(activeUser);
         Objects.requireNonNull(room);
         Objects.requireNonNull(bookingInterval);
@@ -520,12 +520,8 @@ public class DatabaseHandler implements Persistence
         String query = """
             INSERT INTO sep2.booking
                 (booking_date, booking_start_time, booking_end_time, room_id, user_id, user_group_id) 
-            VALUES 
-                (?, ?, ?, ?, ?, ?);
-            """;
-
+            VALUES (?, ?, ?, ?, ?, ?);""";
         PreparedStatement statement = null;
-
         try
         {
             statement = connection.prepareStatement(query);
