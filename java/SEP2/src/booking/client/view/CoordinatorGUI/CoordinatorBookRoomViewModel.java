@@ -235,11 +235,6 @@ public class CoordinatorBookRoomViewModel
 
     public void bookRoom(Room room)
     {
-        bookRoom(room, false);
-    }
-
-    public void bookRoom(Room room, boolean isOverlapAllowed)
-    {
         // TODO(rune): timeIntervals liste kunne evt. være med <LocalTime> i stedet,
         // så vi slipper for at parse her.
         LocalTime startTime = parseLocalDateTime(selectedFromTime.get());
@@ -250,7 +245,7 @@ public class CoordinatorBookRoomViewModel
         CreateBookingParameters parameters = new CreateBookingParameters(
             room,
             requestedInterval,
-            isOverlapAllowed,
+            false,
             group
         );
 
@@ -261,15 +256,11 @@ public class CoordinatorBookRoomViewModel
         }
         catch (ClientModelOverlapException e)
         {
-            boolean confirmed = viewHandler.showOkCancelDialog(
-                "Overlap with existing bookings. Book anyway?",
-                ViewModelUtil.getOverlapsDisplayText(e.getOverlaps())
+            viewHandler.showErrorDialog(
+                ViewModelUtil.getOverlapsDisplayText(
+                    e.getOverlaps()
+                )
             );
-
-            if (confirmed)
-            {
-                bookRoom(room, true);
-            }
         }
         catch (ClientModelException e)
         {
