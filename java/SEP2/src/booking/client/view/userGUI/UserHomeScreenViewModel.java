@@ -2,9 +2,8 @@ package booking.client.view.userGUI;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelException;
 import booking.shared.objects.Booking;
-import booking.shared.objects.Room;
-import booking.shared.objects.User;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,16 +11,13 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.time.LocalDate;
-import java.util.List;
-
 public class UserHomeScreenViewModel
 {
     private final StringProperty username;
 
     // TODO(rune): MVVM -> Må view godt kende til Booking klassen?
     // Det synes jeg godt, men måske er Micheal ikke enig.
-    private  ObservableList<Booking> activeBookings;
+    private ObservableList<Booking> activeBookings;
 
     private ViewHandler viewHandler;
     private ClientModel model;
@@ -41,9 +37,16 @@ public class UserHomeScreenViewModel
     {
         username.set(model.getUser().getName());
 
-        List<Booking> bookings = model.getActiveBookings();
         activeBookings.clear();
-        activeBookings.addAll(bookings);
+
+        try
+        {
+            activeBookings.addAll(model.getActiveBookings());
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
     public StringProperty usernameProperty()
@@ -68,12 +71,26 @@ public class UserHomeScreenViewModel
 
     public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(model.getRoom(roomName));
+        try
+        {
+            viewHandler.showRoomInfo(model.getRoom(roomName));
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 
     public void cancelBooking(Booking booking)
     {
-        model.deleteBooking(booking);
-        refreshActiveBookings();
+        try
+        {
+            model.deleteBooking(booking);
+            refreshActiveBookings();
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
 }

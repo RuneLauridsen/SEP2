@@ -21,7 +21,16 @@ public class RegisterViewModel
     public ObservableList<UserType> getUserTypes()
     {
         ObservableList<UserType> userTypes = FXCollections.observableArrayList();
-        userTypes.addAll(model.getUserTypes());
+        
+        try
+        {
+            userTypes.addAll(model.getUserTypes());
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
+
         return userTypes;
     }
 
@@ -41,7 +50,7 @@ public class RegisterViewModel
         {
             viewHandler.showErrorDialog(e.getMessage());
         }
-        
+
         viewHandler.showLogin();
     }
 

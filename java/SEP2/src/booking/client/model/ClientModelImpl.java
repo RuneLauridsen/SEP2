@@ -34,7 +34,7 @@ public class ClientModelImpl implements ClientModel
         this.fileIO = fileIO;
     }
 
-    @Override public void deleteBooking(Booking booking)
+    @Override public void deleteBooking(Booking booking) throws ClientModelException
     {
         try
         {
@@ -42,11 +42,11 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
@@ -63,17 +63,17 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new ClientModelException(e.getMessage(), e);
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public void logout()
+    @Override public void logout() throws ClientModelException
     {
-
+        // TODO(rune): Logout
     }
 
     @Override public void register(String username, String password, String initials, int viaid, UserType userType) throws ClientModelException
@@ -85,15 +85,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<RoomType> getRoomTypes()
+    @Override public List<RoomType> getRoomTypes() throws ClientModelException
     {
         try
         {
@@ -101,15 +101,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<UserType> getUserTypes()
+    @Override public List<UserType> getUserTypes() throws ClientModelException
     {
         try
         {
@@ -117,15 +117,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters)
+    @Override public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters) throws ClientModelException
     {
         try
         {
@@ -133,15 +133,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<Booking> getActiveBookings()
+    @Override public List<Booking> getActiveBookings() throws ClientModelException
     {
         try
         {
@@ -149,16 +149,16 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
     @Override public void createBooking(CreateBookingParameters parameters)
-        throws ClientModelOverlapException
+        throws ClientModelOverlapException, ClientModelException
     {
         try
         {
@@ -170,15 +170,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ClientModelException
     {
         try
         {
@@ -186,15 +186,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public Room getRoom(String room)
+    @Override public Room getRoom(String room) throws ClientModelException
     {
         try
         {
@@ -202,15 +202,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<Room> getRooms()
+    @Override public List<Room> getRooms() throws ClientModelException
     {
         try
         {
@@ -218,15 +218,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end)
+    @Override public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end) throws ClientModelException
     {
         try
         {
@@ -234,15 +234,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<Booking> getBookingsForUser(User user, LocalDate start, LocalDate end)
+    @Override public List<Booking> getBookingsForUser(User user, LocalDate start, LocalDate end) throws ClientModelException
     {
         try
         {
@@ -250,15 +250,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<UserGroup> getUserGroups()
+    @Override public List<UserGroup> getUserGroups() throws ClientModelException
     {
         try
         {
@@ -266,15 +266,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<User> getUserGroupUsers(UserGroup userGroup)
+    @Override public List<User> getUserGroupUsers(UserGroup userGroup) throws ClientModelException
     {
         try
         {
@@ -282,15 +282,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public void updateRoom(Room room)
+    @Override public void updateRoom(Room room) throws ClientModelException
     {
         try
         {
@@ -300,15 +300,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e);
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e);
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public void updateUserRoomData(Room room, String comment, Integer color)
+    @Override public void updateUserRoomData(Room room, String comment, Integer color) throws ClientModelException
     {
         try
         {
@@ -316,15 +316,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public List<TimeSlot> getTimeSlots()
+    @Override public List<TimeSlot> getTimeSlots() throws ClientModelException
     {
         try
         {
@@ -332,15 +332,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public boolean isAvailable(Room room)
+    @Override public boolean isAvailable(Room room) throws ClientModelException
     {
         try
         {
@@ -364,15 +364,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public ImportFileResult importFile(String fileName)
+    @Override public ImportFileResult importFile(String fileName) throws ClientModelException
     {
         String fileContent = null;
 
@@ -393,15 +393,15 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
     }
 
-    @Override public void deleteRoom(Room room)
+    @Override public void deleteRoom(Room room) throws ClientModelException
     {
         try
         {
@@ -409,11 +409,27 @@ public class ClientModelImpl implements ClientModel
         }
         catch (ClientNetworkResponseException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetworkResponse(e);
         }
         catch (ClientNetworkException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw wrapNetwork(e);
         }
+    }
+
+    // NOTE(rune): Separate exceptiontyper er ikke strengt tager nødvendigt, men
+    // holder lagene adskilt. Det er også praktisk at kunne skelne mellem egentlige
+    // netværksfejl, og et response med eksempelvis TOO_MANY_ACTIVE_BOOKINGS, hvis man
+    // kun ville logge egentlige netværksfejl.
+
+    private static ClientModelException wrapNetworkResponse(ClientNetworkResponseException e)
+    {
+        return new ClientModelException(e.getMessage(), e);
+    }
+
+    private static ClientModelException wrapNetwork(ClientNetworkException e)
+    {
+        // TODO(rune): Client-side logging
+        return new ClientModelException("Netværksfejl " + e.getMessage(), e);
     }
 }

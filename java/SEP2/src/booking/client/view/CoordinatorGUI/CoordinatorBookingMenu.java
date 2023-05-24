@@ -41,7 +41,7 @@ public class CoordinatorBookingMenu
     public TableColumn<Booking, LocalTime> colFrom;
     public TableColumn<Booking, LocalTime> colTo;
     public TableColumn<Booking, UserGroup> colCourse;
-    public TableColumn<Booking,Booking> colDelete;
+    public TableColumn<Booking, Booking> colDelete;
     @FXML
     private Button btnBookRoom;
 
@@ -59,20 +59,23 @@ public class CoordinatorBookingMenu
 
     private CoordinatorBookingMenuViewModel viewModel;
 
-
     public void init(CoordinatorBookingMenuViewModel viewModel)
     {
         this.viewModel = viewModel;
         tvBookings.setRowFactory(tv -> {
-            return new TableRow<Booking>() {
+            return new TableRow<Booking>()
+            {
                 @Override
-                protected void updateItem(Booking booking, boolean empty) {
+                protected void updateItem(Booking booking, boolean empty)
+                {
                     super.updateItem(booking, empty);
-                    if (booking !=null){
-                        if (booking.getRoom().getUserColor() != 0) {
+                    if (booking != null)
+                    {
+                        if (booking.getRoom().getUserColor() != 0)
+                        {
                             Color color = ArgbIntConverter.intToColor(booking.getRoom().getUserColor());
                             setBackground(new Background(new BackgroundFill(color,
-                                CornerRadii.EMPTY, Insets.EMPTY)));
+                                                                            CornerRadii.EMPTY, Insets.EMPTY)));
                             //setStyle("-fx-background-color: rgb("+color.getRed()+","+color.getGreen()+","+color.getBlue()+");");
                         }
                     }
@@ -82,8 +85,6 @@ public class CoordinatorBookingMenu
         });
 
         tvBookings.setItems(viewModel.getBookings());
-
-
 
         colRoom.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getRoom()));
         colDate.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getInterval().getDate()));
@@ -103,8 +104,8 @@ public class CoordinatorBookingMenu
     @FXML
     public void btnInsertFileClicked(ActionEvent actionEvent)
     {
-        //TODO indset stifinder til file
         VBoxFile.setVisible(true);
+        viewModel.insertFileAction();
     }
 
     @FXML
@@ -118,7 +119,7 @@ public class CoordinatorBookingMenu
     {
         viewModel.confirmAction();
     }
-    
+
     public void tableviewClicked(MouseEvent mouseEvent)
     {
         viewModel.ChangeToSearch(tvBookings.getSelectionModel().getSelectedItem().getRoom().getName());
