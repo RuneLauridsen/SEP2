@@ -7,6 +7,7 @@ import booking.shared.objects.RoomType;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -21,12 +22,12 @@ import javafx.scene.paint.Color;
 
 public class CoordinatorHomeScreen
 {
-    public Label lblName;
-    public TableView<Room> tvtRooms;
-    public TableColumn<Room, String> tcolName;
-    public TableColumn<Room, RoomType> tcolType;
-    public TableColumn<Room, String> tcolStatus;
-    public TableColumn<Room, Room> tcolAlter;
+    @FXML private Label lblName;
+    @FXML private TableView<Room> tvtRooms;
+    @FXML private TableColumn<Room, String> tcolName;
+    @FXML private TableColumn<Room, RoomType> tcolType;
+    @FXML private TableColumn<Room, String> tcolStatus;
+    @FXML private TableColumn<Room, Room> tcolAlter;
 
     CoordinatorHomeScreenViewModel viewModel;
 

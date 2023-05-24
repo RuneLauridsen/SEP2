@@ -3,25 +3,26 @@ package booking.client.view.CoordinatorGUI;
 import booking.client.viewModel.coordinatorGUIVM.EditRoomViewModel;
 import booking.shared.objects.RoomType;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class EditRoom
 {
-    public TextField txtName;
-    public TextField txtMaxComfortCap;
-    public TextField txtMaxSafetyCap;
-    public TextField txtSize;
-    public TextArea txaComment;
-    public CheckBox cbIsDoubleRoom;
-    public TextField txtDoubleRoomName;
-    public ComboBox<RoomType> cbbRoomType;
-    public Button cancelButton;
-    public Button saveButton;
-    public ComboBox<String> cbbColor;
-    public TextArea txaPersonalComment;
-    public Button btnDelete;
+    @FXML private TextField txtName;
+    @FXML private TextField txtMaxComfortCap;
+    @FXML private TextField txtMaxSafetyCap;
+    @FXML private TextField txtSize;
+    @FXML private TextArea txtComment;
+    @FXML private CheckBox cbIsDoubleRoom;
+    @FXML private TextField txtDoubleRoomName;
+    @FXML private ComboBox<RoomType> cbbRoomType;
+    @FXML private Button cancelButton;
+    @FXML private Button saveButton;
+    @FXML private ComboBox<String> cbbColor;
+    @FXML private TextArea txtPersonalComment;
+    @FXML private Button btnDelete;
 
     EditRoomViewModel viewModel;
 
@@ -35,14 +36,14 @@ public class EditRoom
         txtMaxComfortCap.setText(String.valueOf(viewModel.getRoom().getComfortCapacity()));
         txtMaxSafetyCap.setText(String.valueOf(viewModel.getRoom().getFireCapacity()));
         txtSize.setText(String.valueOf(viewModel.getRoom().getSize()));
-        txaComment.setText(viewModel.getRoom().getComment());
+        txtComment.setText(viewModel.getRoom().getComment());
         cbbRoomType.setValue(viewModel.getRoom().getType());
         cbbColor.setValue(viewModel.getRoomColor());
     }
 
     public void saveButtonClick(MouseEvent mouseEvent)
     {
-        viewModel.updateRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()), txaComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText(), txaPersonalComment.getText(), cbbColor.getSelectionModel().getSelectedItem());
+        viewModel.updateRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()), txtComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText(), txtPersonalComment.getText(), cbbColor.getSelectionModel().getSelectedItem());
 
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
