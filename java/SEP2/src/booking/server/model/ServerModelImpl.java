@@ -287,9 +287,16 @@ public class ServerModelImpl implements ServerModel
     {
         try
         {
-            if (activeUser != null)
+            if (activeUser == null)
             {
-                return persistence.getBookingsForUser(user, from, to, activeUser);
+                if (activeUser != null)
+                {
+                    return persistence.getBookingsForUser(user, from, to, activeUser);
+                }
+                else
+                {
+                    throw new ServerModelException(ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+                }
             }
             else
             {

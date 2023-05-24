@@ -90,12 +90,13 @@ public class CoordinatorBookingMenuViewModel
         // TODO(rune): Hvad skal confirm gøre?
     }
     
-    public ObservableList getBookings()
+    public ObservableList<Booking> getBookings()
     {
         bookings = FXCollections.observableArrayList();
         bookings.addAll(model.getActiveBookings());
         return bookings;
     }
+
 
     public void refreshBookings(){
         bookings.clear();

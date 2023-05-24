@@ -11,7 +11,7 @@ import javafx.beans.property.StringProperty;
 
 public class LoginViewModel
 {
-    // TODO(rune): Lav om til viaid
+
     private final StringProperty username;
     private final StringProperty password;
     private final BooleanProperty loginDisabled;
@@ -46,8 +46,6 @@ public class LoginViewModel
 
     public void loginAction()
     {
-        // TODO(rune): Bedre login. Server skal tjekke password.
-        // Lige nu tjekker den kun brugernavnet.
 
         // TODO(rune): Input validering, eks. "abc" kan ikke parses som int
 

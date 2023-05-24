@@ -32,7 +32,7 @@ public class EditRoomViewModel
 
   public ObservableList<String> getColors(){
     ObservableList<String> colors = FXCollections.observableArrayList();
-    colors.addAll("Red","Blue","Yellow","Orange", "Green","Purple","Pink","Mint","Green","Gray");
+    colors.addAll("","Red","Blue","Yellow","Orange", "Green","Purple","Pink","Mint","Green","Gray");
     return colors;
   }
 
@@ -80,5 +80,15 @@ public class EditRoomViewModel
           case -2171170, default -> "Gray";
         };
 
+  }
+
+  public boolean deleteRoom()
+  {
+    if (viewHandler.showOkCancelDialog("Confirm delete","You're about to delete this room, are you sure?") == true){
+      model.deleteRoom(room);
+      return true;
+    }
+    else
+      return false;
   }
 }

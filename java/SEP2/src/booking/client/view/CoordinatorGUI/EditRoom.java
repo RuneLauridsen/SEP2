@@ -1,6 +1,7 @@
 package booking.client.view.CoordinatorGUI;
 
 import booking.shared.objects.RoomType;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -19,6 +20,7 @@ public class EditRoom
   public Button saveButton;
   public ComboBox<String> cbbColor;
   public TextArea txaPersonalComment;
+  public Button btnDelete;
 
   EditRoomViewModel viewModel;
 
@@ -49,5 +51,14 @@ public class EditRoom
   {
     Stage stage = (Stage) cancelButton.getScene().getWindow();
     stage.close();
+  }
+
+  public void deleteButtonClicked(ActionEvent actionEvent)
+  {
+    if (viewModel.deleteRoom() == true){
+      Stage stage = (Stage) btnDelete.getScene().getWindow();
+      stage.close();
+    }
+
   }
 }

@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="386.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.client.view.CoordinatorGUI.CoordinatorHomeScreen">
+<AnchorPane prefHeight="392.0" prefWidth="518.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.client.view.CoordinatorGUI.CoordinatorHomeScreen">
    <children>
       <VBox prefHeight="365.0" prefWidth="580.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -27,24 +27,18 @@
             </Line>
             <TableView fx:id="tvtRooms" onMouseClicked="#tableViewClicked" prefHeight="243.0" prefWidth="335.0">
               <columns>
-                <TableColumn fx:id="tcolName" prefWidth="88.0" text="Navn" />
-                <TableColumn fx:id="tcolType" prefWidth="151.99993896484375" text="Type" />
-                  <TableColumn fx:id="tcolStatus" prefWidth="120.800048828125" text="Status" />
-                  <TableColumn fx:id="tcolAlter" prefWidth="116.79998779296875" text="Alter" />
-                  <TableColumn fx:id="tcolDelete" prefWidth="107.20001220703125" text="Delete" />
+                <TableColumn fx:id="tcolName" prefWidth="119.99999713897705" text="Navn" />
+                <TableColumn fx:id="tcolType" prefWidth="132.80006408691406" text="Type" />
+                  <TableColumn fx:id="tcolStatus" prefWidth="169.60003662109375" text="Status" />
+                  <TableColumn fx:id="tcolAlter" prefWidth="75.20001220703125" text="Edit" />
               </columns>
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
             </TableView>
             <Button mnemonicParsing="false" onMouseClicked="#AddRoomClicked" text="Add Room" />
-            <HBox alignment="TOP_RIGHT" prefHeight="43.0" prefWidth="580.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="48.0" prefWidth="564.0">
                <children>
-                  <Button mnemonicParsing="false" onMouseClicked="#CoursesClicked" text="Courses">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Button>
                   <Button mnemonicParsing="false" onMouseClicked="#BookingsClicked" text="Bookings" />
                </children>
             </HBox>

@@ -36,6 +36,7 @@ public class CoordinatorBookRoomViewModel
     private final ObjectProperty<Character> selectedBuilding;
     private final ObjectProperty<Integer> selectedFloor;
     private final ObjectProperty<UserGroup> selectedCourse;
+    private final ObjectProperty<String> selectedCategory;
 
     private final ViewHandler viewHandler;
     private final ClientModel model;
@@ -82,6 +83,7 @@ public class CoordinatorBookRoomViewModel
         selectedBuilding = new SimpleObjectProperty<>();
         selectedFloor = new SimpleObjectProperty<>();
         selectedCourse = new SimpleObjectProperty<>();
+        selectedCategory = new SimpleObjectProperty<>();
 
         roomList = FXCollections.observableArrayList();
     }
@@ -146,6 +148,10 @@ public class CoordinatorBookRoomViewModel
         return selectedPreFixTime;
     }
 
+    public ObjectProperty<String> selectedCategoryProperty(){
+        return selectedCategory;
+    }
+
     public ObjectProperty<String> selectedDayProperty()
     {
         return selectedDay;
@@ -180,6 +186,7 @@ public class CoordinatorBookRoomViewModel
     {
         // Comments er fra UserBookRoomViewModel
         // TODO: Min/max cap
+        //TODO Category
 
         String startTimeString = selectedFromTime.get();
         String endTimeString = selectedToTime.get();
@@ -251,5 +258,11 @@ public class CoordinatorBookRoomViewModel
     public void ChangeToSearch(String roomName)
     {
         viewHandler.showRoomInfo(model.getRoom(roomName));
+    }
+
+    public ObservableList<String> getColors(){
+        ObservableList<String> colors = FXCollections.observableArrayList();
+        colors.addAll("","Red","Blue","Yellow","Orange", "Green","Purple","Pink","Mint","Green","Gray");
+        return colors;
     }
 }
