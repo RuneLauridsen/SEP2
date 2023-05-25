@@ -11,6 +11,7 @@ import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +31,8 @@ public class UserBookRoomViewModel
     private final ObjectProperty<String> selectedToTime;
     private final ObjectProperty<Character> selectedBuilding;
     private final ObjectProperty<Integer> selectedFloor;
+    private final ObjectProperty<String> selectedMaxCap;
+    private final ObjectProperty<String> selectedMinCap;
 
     private final ViewHandler viewHandler;
     private final ClientModelUserBooking bookingModel;
@@ -64,6 +67,8 @@ public class UserBookRoomViewModel
         selectedToTime = new SimpleObjectProperty<>();
         selectedBuilding = new SimpleObjectProperty<>();
         selectedFloor = new SimpleObjectProperty<>();
+        selectedMaxCap = new SimpleObjectProperty<>();
+        selectedMinCap = new SimpleObjectProperty<>();
 
         roomList = FXCollections.observableArrayList();
     }
@@ -130,22 +135,40 @@ public class UserBookRoomViewModel
             LocalTime startTime = parseLocalDateTime(startTimeString);
             LocalTime endTime = parseLocalDateTime(endTimeString);
 
-            // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
-            GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
-                date, startTime, endTime
-            );
+            if (startTime.isAfter(endTime)){
+                viewHandler.showErrorDialog("Start time of booking must be before end time of booking");
+            }
+            else {
+                GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
+                        date, startTime, endTime
+                );
 
-            parameters.setBuilding(building);
-            parameters.setFloor(floor);
+                parameters.setBuilding(building);
+                parameters.setFloor(floor);
+                if (selectedMinCap.get() != null)
+                    parameters.setMinCapacity(Integer.parseInt(selectedMinCap.get()));
+                if (selectedMaxCap.get() != null)
+                    parameters.setMaxCapacity(Integer.parseInt(selectedMaxCap.get()) );
 
-            List<Room> roomsFromDatabase = bookingModel.getAvailableRooms(parameters);
-            roomList.clear();
-            roomList.addAll(roomsFromDatabase);
+
+                List<Room> roomsFromDatabase = bookingModel.getAvailableRooms(parameters);
+                roomList.clear();
+                roomList.addAll(roomsFromDatabase);
+
+            }
+
 
         }
         catch (ClientModelException e)
         {
             viewHandler.showErrorDialog(e.getMessage());
+        }
+        catch (NumberFormatException e)
+        {
+            viewHandler.showErrorDialog("Max- and min capacity must be a number");
+        }
+        catch (NullPointerException e){
+            viewHandler.showErrorDialog("Date and time interval must not be empty");
         }
     }
 
@@ -190,4 +213,10 @@ public class UserBookRoomViewModel
         viewHandler.showRoomInfo(roomName);
     }
 
+    public Property<String> selectedMaxCap() {
+        return selectedMaxCap;
+    }
+    public Property<String> selectedMinCap() {
+        return selectedMinCap;
+    }
 }

@@ -40,6 +40,8 @@ public class UserBookRoom
         cbbToTime.valueProperty().bindBidirectional(viewModel.selectedToTimeProperty());
         cbbBuilding.valueProperty().bindBidirectional(viewModel.selectedBuildingProperty());
         cbbFloor.valueProperty().bindBidirectional(viewModel.selectedFloorProperty());
+        txtMaxCap.textProperty().bindBidirectional(viewModel.selectedMaxCap());
+        txtMinCap.textProperty().bindBidirectional(viewModel.selectedMinCap());
 
         lvRooms.setCellFactory(listView -> new RoomListCell("Book", viewModel::bookRoom));
         lvRooms.setItems(viewModel.getRoomList());

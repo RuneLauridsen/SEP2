@@ -5,10 +5,7 @@ import booking.client.model.ClientModel;
 import booking.client.model.ClientModelActiveBookings;
 import booking.client.model.ClientModelException;
 import booking.shared.objects.Booking;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
 public class UserHomeScreenViewModel
@@ -18,7 +15,8 @@ public class UserHomeScreenViewModel
     private final ViewHandler viewHandler;
     private final ClientModelActiveBookings activeBookingsModel;
     private final UserViewModelState sharedState;
-    private final ObjectProperty<String> selectedFromSearch;
+    private final SimpleStringProperty selectedFromSearch;
+    private  final BooleanProperty searchDisable;
 
     public UserHomeScreenViewModel(ViewHandler viewHandler, ClientModelActiveBookings activeBookingsModel, UserViewModelState sharedState)
     {
@@ -26,8 +24,11 @@ public class UserHomeScreenViewModel
         this.activeBookingsModel = activeBookingsModel;
         this.sharedState = sharedState;
 
+
         username = new SimpleStringProperty();
-        selectedFromSearch = new SimpleObjectProperty<>();
+        selectedFromSearch = new SimpleStringProperty();
+        searchDisable = new SimpleBooleanProperty();
+        searchDisable.bind(selectedFromSearch.isEmpty());
 
         username.set(sharedState.getUser().getName());
     }
@@ -42,7 +43,7 @@ public class UserHomeScreenViewModel
         return sharedState.getActiveBookings();
     }
 
-    public ObjectProperty<String> getSearchProperty()
+    public SimpleStringProperty getSearchProperty()
     {
         return selectedFromSearch;
     }
@@ -54,7 +55,14 @@ public class UserHomeScreenViewModel
 
     public void ChangeToSearch(String roomName)
     {
-        viewHandler.showRoomInfo(roomName);
+        try{
+            viewHandler.showRoomInfo(roomName);
+        }
+        catch (NullPointerException e){
+            viewHandler.showErrorDialog("No such Room");
+        }
+
+
     }
 
     public void cancelBooking(Booking booking)
@@ -68,5 +76,9 @@ public class UserHomeScreenViewModel
         {
             viewHandler.showErrorDialog(e.getMessage());
         }
+    }
+
+    public BooleanProperty searchDisable() {
+        return searchDisable;
     }
 }

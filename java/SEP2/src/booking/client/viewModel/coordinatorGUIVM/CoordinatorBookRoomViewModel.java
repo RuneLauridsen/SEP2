@@ -184,7 +184,6 @@ public class CoordinatorBookRoomViewModel
     public ObservableList<Room> showAvailableRooms()
     {
         // Comments er fra UserBookRoomViewModel
-        // TODO: Min/max cap
         //TODO Category
         try
         {
@@ -207,38 +206,45 @@ public class CoordinatorBookRoomViewModel
                 startTime = parseLocalDateTime(startTimeString);
                 endTime = parseLocalDateTime(endTimeString);
             }
+            if (startTime.isAfter(endTime)){
+                viewHandler.showErrorDialog("Start time of booking must be before end time of booking");
+            }
+            else {
+                // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
+                GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
+                        date, startTime, endTime
+                );
 
+                parameters.setBuilding(building);
+                parameters.setFloor(floor);
+                if (selectedMinCap.get() != null)
+                    parameters.setMinCapacity(Integer.parseInt(selectedMinCap.get()));
+                if (selectedMaxCap.get() != null)
+                    parameters.setMaxCapacity(Integer.parseInt(selectedMaxCap.get()) );
 
-            // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
-            GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
-                date, startTime, endTime
-            );
-
-            parameters.setBuilding(building);
-            parameters.setFloor(floor);
-            if (selectedMinCap.get() != null)
-                parameters.setMinCapacity(Integer.parseInt(selectedMinCap.get()));
-            if (selectedMaxCap.get() != null)
-                parameters.setMaxCapacity(Integer.parseInt(selectedMaxCap.get()) );
-
-            roomList.clear();
-            try
-            {
-                roomList.addAll(bookingModel.getAvailableRooms(parameters));
-
-                if (selectedCategory.get() != null)
+                roomList.clear();
+                try
                 {
-                    roomList.removeIf(room -> room.getUserColor() != selectedCategory.get().getArgb());
+                    roomList.addAll(bookingModel.getAvailableRooms(parameters));
+
+                    if (selectedCategory.get() != null)
+                    {
+                        roomList.removeIf(room -> room.getUserColor() != selectedCategory.get().getArgb());
+                    }
+                }
+                catch (ClientModelException e)
+                {
+                    viewHandler.showErrorDialog(e.getMessage());
                 }
             }
-            catch (ClientModelException e)
-            {
-                viewHandler.showErrorDialog(e.getMessage());
-            }
+
         }
         catch (NumberFormatException e)
         {
             viewHandler.showErrorDialog("Max- and min capacity must be a number");
+        }
+        catch (NullPointerException e){
+            viewHandler.showErrorDialog("Date and time interval must not be empty");
         }
         return roomList;
 
@@ -282,6 +288,7 @@ public class CoordinatorBookRoomViewModel
         {
             throw new RuntimeException(e);
         }
+
     }
 
     private static LocalTime parseLocalDateTime(String s)

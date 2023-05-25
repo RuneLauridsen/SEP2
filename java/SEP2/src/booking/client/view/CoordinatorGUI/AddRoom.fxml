@@ -57,12 +57,12 @@
                   </TextArea>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                      <children>
-                        <CheckBox fx:id="cbIsDoubleRoom" mnemonicParsing="false">
+                        <CheckBox fx:id="cbIsDoubleRoom" onMouseClicked="#doubleRoomCheckboxClicked" mnemonicParsing="false">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <TextField fx:id="txtDoubleRoomName" prefHeight="26.0" prefWidth="112.0" promptText="Room name" />
+                        <TextField fx:id="txtDoubleRoomName" visible="false" prefHeight="26.0" prefWidth="112.0" promptText="Room name" />
                      </children>
                   </HBox>
                   <ComboBox fx:id="cbbRoomType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />

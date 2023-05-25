@@ -66,4 +66,8 @@ public class EditRoom
         }
 
     }
+
+    public void doubleRoomCheckboxClicked(MouseEvent mouseEvent) {
+        txtDoubleRoomName.setVisible(cbIsDoubleRoom.isSelected());
+    }
 }

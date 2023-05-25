@@ -33,4 +33,8 @@ public class AddRoom
       stage.close();
     }
   }
+
+  public void doubleRoomCheckboxClicked(MouseEvent mouseEvent) {
+  txtDoubleRoomName.setVisible(cbIsDoubleRoom.isSelected());
+  }
 }
