@@ -16,3 +16,4 @@
 # build directory
 java/SEP2/out/*
 out/*
+java/SEP2/src/booking/server/persistene/DatabaseConnectionString.txt
