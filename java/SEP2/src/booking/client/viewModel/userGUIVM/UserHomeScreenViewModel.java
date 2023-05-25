@@ -18,7 +18,7 @@ public class UserHomeScreenViewModel
     private final ViewHandler viewHandler;
     private final ClientModelActiveBookings activeBookingsModel;
     private final UserViewModelState sharedState;
-    private final ObjectProperty<String> selctedFromSearch;
+    private final ObjectProperty<String> selectedFromSearch;
 
     public UserHomeScreenViewModel(ViewHandler viewHandler, ClientModelActiveBookings activeBookingsModel, UserViewModelState sharedState)
     {
@@ -27,7 +27,7 @@ public class UserHomeScreenViewModel
         this.sharedState = sharedState;
 
         username = new SimpleStringProperty();
-        selctedFromSearch = new SimpleObjectProperty<>();
+        selectedFromSearch = new SimpleObjectProperty<>();
 
         username.set(sharedState.getUser().getName());
     }
@@ -44,7 +44,7 @@ public class UserHomeScreenViewModel
 
     public ObjectProperty<String> getSearchProperty()
     {
-        return selctedFromSearch;
+        return selectedFromSearch;
     }
 
     public void ChangeToBooking()
