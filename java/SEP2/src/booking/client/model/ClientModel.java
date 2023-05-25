@@ -19,8 +19,7 @@ public interface ClientModel
     public void logout() throws ClientModelException;
     public void register(String username, String password, String initials, int viaid, UserType userType) throws ClientModelException;
 
-    // NOTE(rune): Returns null if user is not logged in.
-    public User getUser();
+    public User getUser(); // NOTE(rune): Returns null if user is not logged in.
 
     public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters) throws ClientModelException;
     public List<Booking> getActiveBookings() throws ClientModelException;

@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCore
 {
 
-    //TODO Database skal også testes og sættes ind (Sprøg)
     //TODO Skemalægger del. Hvis der skabes duplicate af unikke værdier skal der være fejl
 
     //Course og Room

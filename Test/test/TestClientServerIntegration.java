@@ -117,7 +117,7 @@ public class TestClientServerIntegration
     {
         model.login(VIAID_GITTE, "1234");
 
-        // NOTE(rune): Tjek om vi finder de rigtige lokaler
+        // NOTE(rune): Tjekker om vi finder de rigtige lokaler
         UserBookRoomViewModel viewModel = viewModelFactory.getUserBookRoomViewModel(viewHandler, model);
         viewModel.selectedDateProperty().set(LocalDate.of(2023, 5, 1));
         viewModel.selectedFromTimeProperty().set("11:00");
@@ -130,15 +130,13 @@ public class TestClientServerIntegration
         assertEquals(viewModel.getRoomList().get(1).getName(), "A02.02");
         assertEquals(viewModel.getRoomList().get(2).getName(), "A02.03");
 
-        // NOTE(rune): Tjek at booket lokale ikke længere bliver vist på listen
-        // TODO(rune): Burde available rooms listen opdatere sig automatisk, når man har klikket book?
+        // NOTE(rune): Tjekker at booket lokale ikke længere bliver vist på listen
         viewModel.bookRoom(viewModel.getRoomList().get(0));
-        viewModel.showAvailableRooms();
         assertEquals(viewModel.getRoomList().size(), 2);
         assertEquals(viewModel.getRoomList().get(0).getName(), "A02.02");
         assertEquals(viewModel.getRoomList().get(1).getName(), "A02.03");
 
-        // NOTE(rune): Tjek om booket lokale dukker på på listen igen.
+        // NOTE(rune): Tjekker om booket lokale dukker på på listen igen.
         viewModel.selectedFromTimeProperty().set("13:00");
         viewModel.selectedToTimeProperty().set("14:00");
         viewModel.showAvailableRooms();

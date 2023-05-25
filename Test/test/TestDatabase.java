@@ -239,7 +239,42 @@ public class TestDatabase
         assertEquals(bookingsAfter.get(1).getUserGroup(), null);
     }
 
-    // TODO(rune): testCreatBooking_withUserGroup
+    @Test void testCreateBooking_withUserGroup() throws PersistenceException
+    {
+        User user = database.getUser(VIAID_GITTE);
+        Room room = database.getRoom("B03.05", user);
+        UserGroup userGroup = database.getUserGroups().get(1);
+
+        List<Booking> bookingsBefore = database.getBookingsForRoom(
+            room,
+            LocalDate.MIN,
+            LocalDate.MAX,
+            null
+        );
+
+        BookingInterval interval = new BookingInterval(
+            LocalDate.of(2023, 5, 11),
+            LocalTime.of(14, 0),
+            LocalTime.of(15, 30)
+        );
+
+        database.createBooking(user, room, interval, userGroup);
+
+        List<Booking> bookingsAfter = database.getBookingsForRoom(
+            room,
+            LocalDate.MIN,
+            LocalDate.MAX,
+            null
+        );
+
+        assertEquals(bookingsBefore.size(), 0);
+        assertEquals(bookingsAfter.size(), 1);
+
+        assertEquals(bookingsAfter.get(0).getRoom().getName(), "B03.05");
+        assertEquals(bookingsAfter.get(0).getInterval(), interval);
+        assertEquals(bookingsAfter.get(0).getUser().getName(), "Gitte");
+        assertEquals(bookingsAfter.get(0).getUserGroup().getName(), "SDJ-2023");
+    }
 
     @Test void testDeleteBooking() throws PersistenceException
     {
@@ -253,9 +288,28 @@ public class TestDatabase
         assertEquals(bookingsAfter.size(), 1);
     }
 
-    @Test void testGetAvailableRooms()
+    @Test void testGetAvailableRooms() throws PersistenceException
     {
-        // TODO(rune): Test getAvailableRooms. Der er mange parametre!!!
+        // TODO(rune): Gør testGetAvailableRooms færdig. Der er mange parametre!!!
+
+        User user = database.getUser(VIAID_JULIE);
+
+        // NOTE(rune): Tester kun med dato tid
+        List<Room> rooms1 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 4, null, null, null);
+
+        // NOTE(rune): Tester med filtre, måde hver for sig og kombineret
+        List<Room> rooms2 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, 4, null, null);
+        List<Room> rooms3 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, 'B', null);
+        List<Room> rooms4 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, 3);
+        List<Room> rooms5 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, null);
+        List<Room> rooms6 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 5, 7, 'A', 2);
+
+        // NOTE(rune): Tester at 11:00-13:00 overlapped med 11:00-13:00
+        List<Room> rooms7 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(11, 0), LocalTime.of(13, 0)), null, null, 'A', 2);
+
+        // NOTE(rune): Tester at 11:00-13:00 ikke overlapper med 10:00-11:00 eller 13:00-14:00
+        List<Room> rooms8 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(11, 0)), null, null, 'A', 2);
+        List<Room> rooms9 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(13, 0), LocalTime.of(14, 0)), null, null, 'A', 2);
     }
 
     @Test void testCreateUser() throws PersistenceException
