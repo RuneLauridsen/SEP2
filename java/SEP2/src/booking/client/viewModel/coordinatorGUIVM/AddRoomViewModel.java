@@ -1,8 +1,8 @@
 package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelRoomMangement;
 import booking.shared.objects.RoomType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,13 +10,13 @@ import javafx.collections.ObservableList;
 public class AddRoomViewModel
 {
     private final ViewHandler viewHandler;
-    private final ClientModel model;
+    private final ClientModelRoomMangement roomManagementModel;
     private final CoordinatorViewModelState sharedState;
 
-    public AddRoomViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
+    public AddRoomViewModel(ViewHandler viewHandler, ClientModelRoomMangement roomMangementModel, CoordinatorViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
-        this.model = model;
+        this.roomManagementModel = roomMangementModel;
         this.sharedState = sharedState;
     }
 
@@ -24,7 +24,7 @@ public class AddRoomViewModel
     {
         try
         {
-            model.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
+            roomManagementModel.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
             sharedState.refreshAllRooms();
         }
         catch (ClientModelException e)
@@ -37,7 +37,7 @@ public class AddRoomViewModel
     {
         try
         {
-            return FXCollections.observableArrayList(model.getRoomTypes());
+            return FXCollections.observableArrayList(roomManagementModel.getRoomTypes());
         }
         catch (ClientModelException e)
         {

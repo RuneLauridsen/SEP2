@@ -1,8 +1,8 @@
 package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelRoomMangement;
 import booking.client.viewModel.sharedVM.PredefinedColor;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
@@ -12,14 +12,14 @@ import javafx.collections.ObservableList;
 public class EditRoomViewModel
 {
     private final ViewHandler viewHandler;
-    private final ClientModel model;
+    private final ClientModelRoomMangement roomManagementModel;
     private final CoordinatorViewModelState sharedState;
     private final Room room;
 
-    public EditRoomViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState, Room room)
+    public EditRoomViewModel(ViewHandler viewHandler, ClientModelRoomMangement model, CoordinatorViewModelState sharedState, Room room)
     {
         this.viewHandler = viewHandler;
-        this.model = model;
+        this.roomManagementModel = model;
         this.sharedState = sharedState;
         this.room = room;
     }
@@ -33,7 +33,7 @@ public class EditRoomViewModel
     {
         try
         {
-            return FXCollections.observableArrayList(model.getRoomTypes());
+            return FXCollections.observableArrayList(roomManagementModel.getRoomTypes());
         }
         catch (ClientModelException e)
         {
@@ -67,7 +67,7 @@ public class EditRoomViewModel
 
         try
         {
-            model.updateRoom(room);
+            roomManagementModel.updateRoom(room);
             sharedState.refreshAllRooms();
         }
         catch (ClientModelException e)
@@ -88,7 +88,7 @@ public class EditRoomViewModel
         {
             try
             {
-                model.deleteRoom(room);
+                roomManagementModel.deleteRoom(room);
                 sharedState.refreshAllRooms();
             }
             catch (ClientModelException e)

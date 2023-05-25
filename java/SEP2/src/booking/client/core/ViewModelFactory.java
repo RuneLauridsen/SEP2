@@ -15,8 +15,6 @@ import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
 import booking.client.viewModel.coordinatorGUIVM.CoordinatorHomeScreenViewModel;
 import booking.client.viewModel.loginVM.LoginViewModel;
 
-import javax.swing.text.View;
-
 public class ViewModelFactory
 {
     private LoginViewModel loginViewModel;
@@ -49,7 +47,7 @@ public class ViewModelFactory
     public UserViewModelState getUserViewModelState(ViewHandler viewHandler, ClientModel model)
     {
         if (userViewModelState == null)
-            userViewModelState = new UserViewModelState(viewHandler, model);
+            userViewModelState = new UserViewModelState(viewHandler, model, model);
         return userViewModelState;
     }
 
@@ -67,17 +65,17 @@ public class ViewModelFactory
         return userBookRoomViewModel;
     }
 
-    public RoomInfoViewModel getRoomInfoViewModel(ViewHandler viewHandler, ClientModel model, Room room)
+    public RoomInfoViewModel getRoomInfoViewModel(ViewHandler viewHandler, ClientModel model, String roomName)
     {
         if (roomInfoViewModel == null)
-            roomInfoViewModel = new RoomInfoViewModel(viewHandler, model, room);
+            roomInfoViewModel = new RoomInfoViewModel(viewHandler, model, roomName);
         return roomInfoViewModel;
     }
 
     public CoordinatorViewModelState getCoordinatorViewModelState(ViewHandler viewHandler, ClientModel model)
     {
         if (coordinatorViewModelState == null)
-            coordinatorViewModelState = new CoordinatorViewModelState(viewHandler, model);
+            coordinatorViewModelState = new CoordinatorViewModelState(viewHandler, model, model, model);
         return coordinatorViewModelState;
     }
 
@@ -98,7 +96,7 @@ public class ViewModelFactory
     public CoordinatorBookingMenuViewModel getCoordinatorBookingMenuViewModel(ViewHandler viewHandler, ClientModel model)
     {
         if (coordinatorBookingMenuViewModel == null)
-            coordinatorBookingMenuViewModel = new CoordinatorBookingMenuViewModel(viewHandler, model, getCoordinatorViewModelState(viewHandler, model));
+            coordinatorBookingMenuViewModel = new CoordinatorBookingMenuViewModel(viewHandler, model, model, getCoordinatorViewModelState(viewHandler, model));
 
         return coordinatorBookingMenuViewModel;
     }

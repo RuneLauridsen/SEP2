@@ -1,10 +1,12 @@
 package booking.client.viewModel.roomInfoVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelRoomInfo;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
+import booking.shared.objects.RoomType;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,18 +14,26 @@ import java.time.LocalDate;
 
 public class RoomInfoViewModel
 {
-    private final Room room;
-    private final ClientModel model;
+    private Room room;
+    private final ClientModelRoomInfo roomInfoModel;
     private final ViewHandler viewHandler;
-    private ObservableList<Booking> bookings;
+    private final ObservableList<Booking> bookings;
 
-    public RoomInfoViewModel(ViewHandler viewHandler, ClientModel model, Room room)
+    public RoomInfoViewModel(ViewHandler viewHandler, ClientModelRoomInfo roomInfoModel, String roomName)
     {
-        this.room = room;
-        this.model = model;
+        this.roomInfoModel = roomInfoModel;
         this.viewHandler = viewHandler;
         this.bookings = FXCollections.observableArrayList();
 
+        try
+        {
+            this.room = roomInfoModel.getRoom(roomName);
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+            this.room = new Room(0, "", 0, 0, 0, "", new RoomType(0, ""));
+        }
     }
 
     public Room getRoom()
@@ -37,7 +47,7 @@ public class RoomInfoViewModel
 
         try
         {
-            bookings.addAll(model.getBookingsForRoom(room.getName(), LocalDate.MIN, LocalDate.MAX));
+            bookings.addAll(roomInfoModel.getBookingsForRoom(room.getName(), LocalDate.MIN, LocalDate.MAX));
         }
         catch (ClientModelException e)
         {
@@ -51,7 +61,7 @@ public class RoomInfoViewModel
     {
         try
         {
-            if (model.isAvailable(room))
+            if (roomInfoModel.isAvailable(room))
             {
                 return "Available";
             }

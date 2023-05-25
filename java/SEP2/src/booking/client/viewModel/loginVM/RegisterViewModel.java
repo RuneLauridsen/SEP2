@@ -1,30 +1,30 @@
 package booking.client.viewModel.loginVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelRegister;
 import booking.shared.objects.UserType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class RegisterViewModel
 {
-    ClientModel model;
-    ViewHandler viewHandler;
+    private final ClientModelRegister registerModel;
+    private final ViewHandler viewHandler;
 
-    public RegisterViewModel(ViewHandler viewHandler, ClientModel model)
+    public RegisterViewModel(ViewHandler viewHandler, ClientModelRegister model)
     {
-        this.model = model;
+        this.registerModel = model;
         this.viewHandler = viewHandler;
     }
 
     public ObservableList<UserType> getUserTypes()
     {
         ObservableList<UserType> userTypes = FXCollections.observableArrayList();
-        
+
         try
         {
-            userTypes.addAll(model.getUserTypes());
+            userTypes.addAll(registerModel.getUserTypes());
         }
         catch (ClientModelException e)
         {
@@ -44,7 +44,7 @@ public class RegisterViewModel
         //TODO show some response if registered or failed
         try
         {
-            model.register(username, password, null, VIAID, userType);
+            registerModel.register(username, password, null, VIAID, userType);
         }
         catch (ClientModelException e)
         {

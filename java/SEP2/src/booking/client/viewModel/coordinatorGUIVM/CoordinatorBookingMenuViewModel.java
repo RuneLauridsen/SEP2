@@ -1,8 +1,9 @@
 package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
+import booking.client.model.ClientModelActiveBookings;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelImport;
 import booking.client.viewModel.sharedVM.ViewModelUtil;
 import booking.server.model.importFile.ImportFileResult;
 import javafx.stage.FileChooser;
@@ -10,19 +11,20 @@ import javafx.stage.FileChooser;
 import java.io.File;
 
 import booking.shared.objects.Booking;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class CoordinatorBookingMenuViewModel
 {
     private final ViewHandler viewHandler;
-    private final ClientModel model;
+    private final ClientModelImport importModel;
+    private final ClientModelActiveBookings activeBookingsModel;
     private final CoordinatorViewModelState sharedState;
 
-    public CoordinatorBookingMenuViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
+    public CoordinatorBookingMenuViewModel(ViewHandler viewHandler, ClientModelImport importModel, ClientModelActiveBookings activeBookingsModel, CoordinatorViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
-        this.model = model;
+        this.importModel = importModel;
+        this.activeBookingsModel = activeBookingsModel;
         this.sharedState = sharedState;
     }
 
@@ -44,7 +46,7 @@ public class CoordinatorBookingMenuViewModel
 
             if (file != null)
             {
-                ImportFileResult result = model.importFile(file.getAbsolutePath());
+                ImportFileResult result = importModel.importFile(file.getAbsolutePath());
                 if (result.isOk())
                 {
                     viewHandler.showInfoDialog("Bookings imported.");
@@ -84,7 +86,7 @@ public class CoordinatorBookingMenuViewModel
     {
         try
         {
-            model.deleteBooking(booking);
+            activeBookingsModel.deleteBooking(booking);
             sharedState.refreshActiveBookings();
         }
         catch (ClientModelException e)
@@ -95,13 +97,6 @@ public class CoordinatorBookingMenuViewModel
 
     public void ChangeToSearch(String name)
     {
-        try
-        {
-            viewHandler.showRoomInfo(model.getRoom(name));
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
+        viewHandler.showRoomInfo(name);
     }
 }

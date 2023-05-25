@@ -55,11 +55,12 @@ public class ClientModelImpl implements ClientModel
         return user;
     }
 
-    @Override public void login(int viaid, String password) throws ClientModelException
+    @Override public User login(int viaid, String password) throws ClientModelException
     {
         try
         {
             user = networkLayer.login(viaid, password);
+            return user;
         }
         catch (ClientNetworkResponseException e)
         {
@@ -69,11 +70,6 @@ public class ClientModelImpl implements ClientModel
         {
             throw wrapNetwork(e);
         }
-    }
-
-    @Override public void logout() throws ClientModelException
-    {
-        // TODO(rune): Logout
     }
 
     @Override public void register(String username, String password, String initials, int viaid, UserType userType) throws ClientModelException
@@ -242,43 +238,11 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public List<Booking> getBookingsForUser(User user, LocalDate start, LocalDate end) throws ClientModelException
-    {
-        try
-        {
-            return networkLayer.getBookingsForUser(user, start, end);
-        }
-        catch (ClientNetworkResponseException e)
-        {
-            throw wrapNetworkResponse(e);
-        }
-        catch (ClientNetworkException e)
-        {
-            throw wrapNetwork(e);
-        }
-    }
-
     @Override public List<UserGroup> getUserGroups() throws ClientModelException
     {
         try
         {
             return networkLayer.getUserGroups();
-        }
-        catch (ClientNetworkResponseException e)
-        {
-            throw wrapNetworkResponse(e);
-        }
-        catch (ClientNetworkException e)
-        {
-            throw wrapNetwork(e);
-        }
-    }
-
-    @Override public List<User> getUserGroupUsers(UserGroup userGroup) throws ClientModelException
-    {
-        try
-        {
-            return networkLayer.getUserGroupUsers(userGroup);
         }
         catch (ClientNetworkResponseException e)
         {
@@ -297,22 +261,6 @@ public class ClientModelImpl implements ClientModel
             // TODO(rune): Slå sammen til en request?
             networkLayer.updateRoom(room);
             networkLayer.updateUserRoomData(room, room.getName(), room.getUserColor());
-        }
-        catch (ClientNetworkResponseException e)
-        {
-            throw wrapNetworkResponse(e);
-        }
-        catch (ClientNetworkException e)
-        {
-            throw wrapNetwork(e);
-        }
-    }
-
-    @Override public void updateUserRoomData(Room room, String comment, Integer color) throws ClientModelException
-    {
-        try
-        {
-            networkLayer.updateUserRoomData(room, comment, color);
         }
         catch (ClientNetworkResponseException e)
         {

@@ -1,27 +1,28 @@
 package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
+import booking.client.model.ClientModelActiveUser;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelRoomInfo;
 import booking.shared.objects.Room;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class CoordinatorHomeScreenViewModel
 {
     private final StringProperty username;
     private final ViewHandler viewHandler;
-    private final ClientModel model;
+    private final ClientModelRoomInfo roomInfoModel;
     private final CoordinatorViewModelState sharedState;
 
-    public CoordinatorHomeScreenViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
+    public CoordinatorHomeScreenViewModel(ViewHandler viewHandler, ClientModelRoomInfo roomInfoModel, CoordinatorViewModelState sharedState)
     {
+
         username = new SimpleStringProperty();
-        username.set(model.getUser().getName());
+        username.set(sharedState.getUser().getName());
         this.viewHandler = viewHandler;
-        this.model = model;
+        this.roomInfoModel = roomInfoModel;
         this.sharedState = sharedState;
     }
 
@@ -44,7 +45,7 @@ public class CoordinatorHomeScreenViewModel
     {
         try
         {
-            if (model.isAvailable(room))
+            if (roomInfoModel.isAvailable(room))
             {
                 return "Available";
             }
@@ -62,14 +63,7 @@ public class CoordinatorHomeScreenViewModel
 
     public void changeToSearch(String name)
     {
-        try
-        {
-            viewHandler.showRoomInfo(model.getRoom(name));
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
+        viewHandler.showRoomInfo(name);
     }
 
     public void changeToEditRoom(Room room)

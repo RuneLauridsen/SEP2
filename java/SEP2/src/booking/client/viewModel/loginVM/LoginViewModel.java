@@ -2,7 +2,9 @@ package booking.client.viewModel.loginVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelActiveUser;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelLogin;
 import booking.shared.objects.User;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,12 +18,12 @@ public class LoginViewModel
     private final StringProperty password;
     private final BooleanProperty loginDisabled;
     private final ViewHandler viewHandler;
-    private final ClientModel model;
+    private final ClientModelLogin loginModel;
 
-    public LoginViewModel(ViewHandler viewHandler, ClientModel model)
+    public LoginViewModel(ViewHandler viewHandler, ClientModelLogin loginModel)
     {
         this.viewHandler = viewHandler;
-        this.model = model;
+        this.loginModel = loginModel;
 
         username = new SimpleStringProperty();
         password = new SimpleStringProperty();
@@ -46,15 +48,12 @@ public class LoginViewModel
 
     public void loginAction()
     {
-
         // TODO(rune): Input validering, eks. "abc" kan ikke parses som int
 
         try
         {
-            model.login(Integer.parseInt(username.get()), password.get());
+            User user = loginModel.login(Integer.parseInt(username.get()), password.get());
 
-            User user = model.getUser();
-            
             if (user.getType().getId() == 1)
             {
                 viewHandler.showCoordinatorHomeScreen(user);
