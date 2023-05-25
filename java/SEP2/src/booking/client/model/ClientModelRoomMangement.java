@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ClientModelRoomMangement
 {
+    public Room getRoom(String room) throws ClientModelException;
+
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ClientModelException;
 
     public void updateRoom(Room room) throws ClientModelException;

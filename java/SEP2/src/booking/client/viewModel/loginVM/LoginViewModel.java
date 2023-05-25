@@ -52,7 +52,7 @@ public class LoginViewModel
 
         try
         {
-            model.login(Integer.parseInt(VIAID.get()), password.get());
+            User user = loginModel.login(Integer.parseInt(VIAID.get()), password.get());
 
             if (user.getType().getId() == 1)
             {

@@ -27,8 +27,8 @@ public class AddRoomViewModel
         else {
             try
             {
-                if (model.getRoom(name) == null){
-                    model.createRoom(name, type, Integer.parseInt(maxComf), Integer.parseInt(maxSafety), Integer.parseInt(size), comment, isDouble, doubleName);
+                if (roomManagementModel.getRoom(name) == null){
+                    roomManagementModel.createRoom(name, type, Integer.parseInt(maxComf), Integer.parseInt(maxSafety), Integer.parseInt(size), comment, isDouble, doubleName);
                     sharedState.refreshAllRooms();
                     return true;
                 }

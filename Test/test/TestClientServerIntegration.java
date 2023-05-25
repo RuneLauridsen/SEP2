@@ -88,7 +88,7 @@ public class TestClientServerIntegration
     @Test void testLogin()
     {
         LoginViewModel loginViewModel = viewModelFactory.getLoginViewModel(viewHandler, model);
-        loginViewModel.usernameProperty().set(Integer.toString(VIAID_RUNE));
+        loginViewModel.VIAIDProperty().set(Integer.toString(VIAID_RUNE));
         loginViewModel.passwordProperty().set("abc");
         loginViewModel.loginAction();
 
@@ -101,7 +101,7 @@ public class TestClientServerIntegration
     @Test void testLogin_invalidCredentials()
     {
         LoginViewModel loginViewModel = viewModelFactory.getLoginViewModel(viewHandler, model);
-        loginViewModel.usernameProperty().set(Integer.toString(VIAID_RUNE));
+        loginViewModel.VIAIDProperty().set(Integer.toString(VIAID_RUNE));
         loginViewModel.passwordProperty().set("forkert password");
         loginViewModel.loginAction();
 

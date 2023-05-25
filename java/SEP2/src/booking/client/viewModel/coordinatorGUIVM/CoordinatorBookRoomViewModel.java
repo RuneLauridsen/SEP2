@@ -191,7 +191,6 @@ public class CoordinatorBookRoomViewModel
             Character building = selectedBuilding.get();
             Integer floor = selectedFloor.get();
             LocalDate date = selectedStartDate.get();
-            roomList.addAll(bookingModel.getAvailableRooms(parameters));
 
             // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
             // så vi slipper for at parse her.
@@ -225,7 +224,7 @@ public class CoordinatorBookRoomViewModel
             roomList.clear();
             try
             {
-                roomList.addAll(model.getAvailableRooms(parameters));
+                roomList.addAll(bookingModel.getAvailableRooms(parameters));
 
                 if (selectedCategory.get() != null)
                 {

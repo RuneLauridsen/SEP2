@@ -60,7 +60,7 @@ public class RegisterViewModel
 
         try
         {
-            model.register(usernameProperty.get(), passwordProperty.get(), null, Integer.parseInt(viaIDProperty.get()) , userTypeProperty.get());
+            registerModel.register(usernameProperty.get(), passwordProperty.get(), null, Integer.parseInt(viaIDProperty.get()) , userTypeProperty.get());
             viewHandler.showLogin();
         }
         catch (ClientModelException e)

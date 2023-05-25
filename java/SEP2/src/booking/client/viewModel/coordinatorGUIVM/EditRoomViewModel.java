@@ -57,7 +57,7 @@ public class EditRoomViewModel
         else {
             try
             {
-                if (room.getName().equals(name) || model.getRoom(name) == null)
+                if (room.getName().equals(name) || roomManagementModel.getRoom(name) == null)
                 {
                     room.setName(name);
                     room.setType(type);
@@ -72,7 +72,7 @@ public class EditRoomViewModel
                         room.setUserColor(color.getArgb());
                     }
 
-                    model.updateRoom(room);
+                    roomManagementModel.updateRoom(room);
                     sharedState.refreshAllRooms();
                     return true;
                 }
