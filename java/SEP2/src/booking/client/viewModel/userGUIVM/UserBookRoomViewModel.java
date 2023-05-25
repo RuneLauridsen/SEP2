@@ -2,12 +2,14 @@ package booking.client.viewModel.userGUIVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelActiveUser;
 import booking.client.model.ClientModelException;
-import booking.client.model.ClientModelOverlapException;
+import booking.client.model.ClientModelUserBooking;
 import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
+import booking.shared.objects.User;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -30,15 +32,15 @@ public class UserBookRoomViewModel
     private final ObjectProperty<Integer> selectedFloor;
 
     private final ViewHandler viewHandler;
-    private final ClientModel model;
+    private final ClientModelUserBooking bookingModel;
     private final UserViewModelState sharedState;
 
     private final ObservableList<Room> roomList;
 
-    public UserBookRoomViewModel(ViewHandler viewHandler, ClientModel model, UserViewModelState sharedState)
+    public UserBookRoomViewModel(ViewHandler viewHandler, ClientModelUserBooking bookingModel, UserViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
-        this.model = model;
+        this.bookingModel = bookingModel;
         this.sharedState = sharedState;
 
         timeIntervals = FXCollections.observableArrayList(
@@ -50,7 +52,9 @@ public class UserBookRoomViewModel
 
         buildings = FXCollections.observableArrayList(null, 'A', 'B', 'C');
 
-        if (model.getUser().getType().getId() == 1 || model.getUser().getType().getId() == 4)
+        User user = sharedState.getUser();
+
+        if (user.getType().getId() == 1 || user.getType().getId() == 4)
             floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5, 6);
         else
             floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5);
@@ -134,7 +138,7 @@ public class UserBookRoomViewModel
             parameters.setBuilding(building);
             parameters.setFloor(floor);
 
-            List<Room> roomsFromDatabase = model.getAvailableRooms(parameters);
+            List<Room> roomsFromDatabase = bookingModel.getAvailableRooms(parameters);
             roomList.clear();
             roomList.addAll(roomsFromDatabase);
 
@@ -157,7 +161,7 @@ public class UserBookRoomViewModel
             null);   // ikke til hold/klassen
         try
         {
-            model.createBooking(parameters);
+            bookingModel.createBooking(parameters);
             viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
             sharedState.refreshActiveBookings();
 
@@ -183,14 +187,7 @@ public class UserBookRoomViewModel
 
     public void ChangeToSearch(String roomName)
     {
-        try
-        {
-            viewHandler.showRoomInfo(model.getRoom(roomName));
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
+        viewHandler.showRoomInfo(roomName);
     }
 
 }

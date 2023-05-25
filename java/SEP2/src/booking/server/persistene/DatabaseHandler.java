@@ -26,10 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-// TODO(rune): Måske noget connection pooling?
-// TODO(rune): Er der en bedre måde at skrive lange SQL queries ind i java? Det kan
-// godt være lidt svært at finde rundt i, når de bare står som String literals.
-// TODO(rune): Dette er en stor klasse, skal den deles op i mindre dele?
 public class DatabaseHandler implements Persistence
 {
     private final DatabaseConnectionPool connectionPool;
@@ -290,7 +286,7 @@ public class DatabaseHandler implements Persistence
     public Map<Integer, UserType> getUserTypes() throws PersistenceException
     {
         Map<Integer, RoomType> roomTypes = getRoomTypes();
-        
+
         Connection connection = connectionPool.acquireConnection();
         Statement statement = null;
         ResultSet resultSet = null;
@@ -658,7 +654,7 @@ public class DatabaseHandler implements Persistence
             AND
                 r.room_id NOT IN
                 (
-                     -- find all optagede lokaler
+                     -- find alle optagede lokaler
                     SELECT
                         r.room_id
                     FROM

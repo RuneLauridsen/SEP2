@@ -48,7 +48,7 @@ public class FakeViewHandler implements ViewHandler
 
     }
 
-    public void showRoomInfo(Room room)
+    public void showRoomInfo(String roomName)
     {
 
     }

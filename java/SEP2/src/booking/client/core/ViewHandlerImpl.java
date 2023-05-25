@@ -228,7 +228,7 @@ public class ViewHandlerImpl implements ViewHandler
         }
     }
 
-    public void showRoomInfo(Room room)
+    public void showRoomInfo(String roomName)
     {
         try
         {
@@ -241,7 +241,7 @@ public class ViewHandlerImpl implements ViewHandler
 
             //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
             //RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence, room);
-            RoomInfoViewModel viewModel = new RoomInfoViewModel(this, model, room);
+            RoomInfoViewModel viewModel = new RoomInfoViewModel(this, model, roomName);
 
             RoomInfo view = loader.getController();
             view.init(viewModel);

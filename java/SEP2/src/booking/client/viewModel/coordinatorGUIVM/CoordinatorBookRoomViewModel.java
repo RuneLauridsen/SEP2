@@ -2,6 +2,8 @@ package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
+import booking.client.model.ClientModelActiveUser;
+import booking.client.model.ClientModelCoordinatorBooking;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelOverlapException;
 import booking.client.viewModel.sharedVM.PredefinedColor;
@@ -39,13 +41,13 @@ public class CoordinatorBookRoomViewModel
     private final ObjectProperty<PredefinedColor> selectedCategory;
 
     private final ViewHandler viewHandler;
-    private final ClientModel model;
+    private final ClientModelCoordinatorBooking bookingModel;
     private final CoordinatorViewModelState sharedState;
 
-    public CoordinatorBookRoomViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
+    public CoordinatorBookRoomViewModel(ViewHandler viewHandler, ClientModelCoordinatorBooking bookingModel, CoordinatorViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
-        this.model = model;
+        this.bookingModel = bookingModel;
         this.sharedState = sharedState;
 
         timeIntervals = FXCollections.observableArrayList(
@@ -61,7 +63,7 @@ public class CoordinatorBookRoomViewModel
             null, 'A', 'B', 'C'
         );
 
-        if (model.getUser().getType().getId() == 1 || model.getUser().getType().getId() == 4)
+        if (sharedState.getUser().getType().getId() == 1 || sharedState.getUser().getType().getId() == 4)
             floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5, 6);
         else
             floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5);
@@ -84,8 +86,8 @@ public class CoordinatorBookRoomViewModel
 
         try
         {
-            preFixTimes.addAll(model.getTimeSlots());
-            courses.addAll(model.getUserGroups());
+            preFixTimes.addAll(bookingModel.getTimeSlots());
+            courses.addAll(bookingModel.getUserGroups());
         }
         catch (ClientModelException e)
         {
@@ -112,7 +114,6 @@ public class CoordinatorBookRoomViewModel
     {
         return preFixTimes;
     }
-
 
     public ObservableList<UserGroup> getCourses()
     {
@@ -190,6 +191,7 @@ public class CoordinatorBookRoomViewModel
             Character building = selectedBuilding.get();
             Integer floor = selectedFloor.get();
             LocalDate date = selectedStartDate.get();
+            roomList.addAll(bookingModel.getAvailableRooms(parameters));
 
             // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
             // så vi slipper for at parse her.
@@ -262,7 +264,7 @@ public class CoordinatorBookRoomViewModel
 
         try
         {
-            model.createBooking(parameters);
+            bookingModel.createBooking(parameters);
             viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
             sharedState.refreshActiveBookings();
 
@@ -296,14 +298,7 @@ public class CoordinatorBookRoomViewModel
 
     public void changeToSearch(String roomName)
     {
-        try
-        {
-            viewHandler.showRoomInfo(model.getRoom(roomName));
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
+        viewHandler.showRoomInfo(roomName);
     }
 
     public ObservableList<PredefinedColor> getColors()

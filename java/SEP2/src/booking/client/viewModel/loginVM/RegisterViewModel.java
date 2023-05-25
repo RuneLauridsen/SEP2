@@ -1,9 +1,9 @@
 package booking.client.viewModel.loginVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
 import booking.shared.objects.User;
+import booking.client.model.ClientModelRegister;
 import booking.shared.objects.UserType;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -13,17 +13,19 @@ import javafx.collections.ObservableList;
 
 public class RegisterViewModel
 {
-    ClientModel model;
-    ViewHandler viewHandler;
+    private final ClientModelRegister registerModel;
+    private final ViewHandler viewHandler;
+
 
     private final ObjectProperty<String> usernameProperty;
     private final ObjectProperty<UserType> userTypeProperty;
     private final ObjectProperty<String> passwordProperty;
     private final ObjectProperty<String> viaIDProperty;
 
-    public RegisterViewModel(ViewHandler viewHandler, ClientModel model)
+    public RegisterViewModel(ViewHandler viewHandler, ClientModelRegister model)
+
     {
-        this.model = model;
+        this.registerModel = model;
         this.viewHandler = viewHandler;
 
         usernameProperty = new SimpleObjectProperty<>();
@@ -35,10 +37,10 @@ public class RegisterViewModel
     public ObservableList<UserType> getUserTypes()
     {
         ObservableList<UserType> userTypes = FXCollections.observableArrayList();
-        
+
         try
         {
-            userTypes.addAll(model.getUserTypes());
+            userTypes.addAll(registerModel.getUserTypes());
         }
         catch (ClientModelException e)
         {

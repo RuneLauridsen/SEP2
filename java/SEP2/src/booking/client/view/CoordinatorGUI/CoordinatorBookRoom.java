@@ -52,7 +52,6 @@ public class CoordinatorBookRoom
 
     private CoordinatorBookRoomViewModel viewModel;
 
-    //TODO Farve filtrering
     public void init(CoordinatorBookRoomViewModel viewModel)
     {
         refresh();
