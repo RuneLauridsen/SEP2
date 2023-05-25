@@ -41,12 +41,18 @@ public class ViewModelUtil
     public static String getOverlapsDisplayText(List<Overlap> overlaps)
     {
         StringBuilder message = new StringBuilder();
-        message.append("Overlap with existing booking(s):");
-        message.append("\n");
+        message.append("Overlap with existing bookings:");
+        message.append("\n\n");
 
         for (Overlap overlap : overlaps)
         {
             message.append(overlap);
+
+            if (overlap.getUsers().size() > 0)
+            {
+                message.append(" Overlapped users: ");
+            }
+
             message.append("\n");
 
             for (User user : overlap.getUsers())

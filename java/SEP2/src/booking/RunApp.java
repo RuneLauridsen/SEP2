@@ -1,6 +1,8 @@
 package booking;
 
 import booking.server.persistene.DatabaseHandler;
+import booking.server.persistene.Persistence;
+import booking.server.persistene.PersistenceCacheProxy;
 import booking.shared.NowProvider;
 import booking.shared.ReadTimeNowProvider;
 import booking.server.model.ServerModel;
@@ -18,10 +20,11 @@ public class RunApp
             try
             {
                 DatabaseHandler db = new DatabaseHandler();
-                db.open();
+                db.open(10);
 
                 NowProvider nowProvider = new ReadTimeNowProvider();
-                ServerModel serverModel = new ServerModelImpl(db, nowProvider);
+                Persistence persistence = new PersistenceCacheProxy(db, 10_000, nowProvider);
+                ServerModel serverModel = new ServerModelImpl(persistence, nowProvider);
                 ServerNetworkSocket socketServer = new ServerNetworkSocket(serverModel);
                 socketServer.run();
             }

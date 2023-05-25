@@ -48,11 +48,11 @@ public class Booking implements Serializable
     {
         if (userGroup == null)
         {
-            return user + " " + room + " " + interval;
+            return room + " " + interval + " (" + user + ")";
         }
         else
         {
-            return user + " " + room + " " + interval + " " + userGroup;
+            return room + " " + interval + " " + userGroup + " (by " + user + ")";
         }
     }
 

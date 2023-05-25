@@ -11,11 +11,13 @@ public class AddRoomViewModel
 {
     private final ViewHandler viewHandler;
     private final ClientModel model;
+    private final CoordinatorViewModelState sharedState;
 
-    public AddRoomViewModel(ViewHandler viewHandler, ClientModel model)
+    public AddRoomViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
         this.model = model;
+        this.sharedState = sharedState;
     }
 
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
@@ -23,6 +25,7 @@ public class AddRoomViewModel
         try
         {
             model.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
+            sharedState.refreshAllRooms();
         }
         catch (ClientModelException e)
         {

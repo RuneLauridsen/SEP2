@@ -220,7 +220,7 @@ VALUES
 INSERT INTO user_room_data
     (user_id, room_id, color, comment)
 VALUES
-    /* Gitte, A02.01 */ (5, 1, 99, 'jeg hedder gitte');
+    /* Gitte, A02.01 */ (5, 1, -2715924, 'jeg hedder gitte');
 
 INSERT INTO course
     (course_name, course_time_slot_count)

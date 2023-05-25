@@ -19,9 +19,6 @@ public class App extends Application
 {
     @Override public void start(Stage primaryStage) throws Exception
     {
-        DatabaseHandler database = new DatabaseHandler();
-        database.open();
-
         FileIO fileIO = new FileIOImpl();
         NowProvider nowProvider = new ReadTimeNowProvider();
         ClientNetwork network = new ClientNetworkSocket();

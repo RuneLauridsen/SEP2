@@ -1,7 +1,7 @@
 package booking.server.model;
 
 import booking.client.model.HashingEncrypter;
-import booking.server.log.Log;
+import booking.server.logger.Logger;
 import booking.server.model.importFile.ImportFile;
 import booking.server.model.importFile.ImportFileResult;
 import booking.server.model.overlapCheck.OverlapChecker;
@@ -11,7 +11,6 @@ import booking.shared.NowProvider;
 import booking.shared.objects.*;
 import booking.server.persistene.Persistence;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.socketMessages.ErrorResponseReason;
 
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
@@ -46,7 +45,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -67,7 +66,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException | NoSuchAlgorithmException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR);
         }
     }
@@ -83,7 +82,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -99,7 +98,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -112,7 +111,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -125,7 +124,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -197,7 +196,8 @@ public class ServerModelImpl implements ServerModel
                     // eller at en af medlemmerne i en bookings user group er optaget. Planlæggere skal
                     // have mulighed for at overlappe bookinger alligevel, så vi ignorerer overlap hvis
                     // klient eksplicit siger at den nye booking godt må overlappe.
-                    if (overlaps.size() == 0 || isOverlapAllowed) {
+                    if (overlaps.size() == 0 || isOverlapAllowed)
+                    {
                         persistence.createBooking(
                             activeUser,
                             parameters.getRoom(),
@@ -217,7 +217,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -246,7 +246,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -274,7 +274,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -294,7 +294,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -322,7 +322,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -336,7 +336,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -350,7 +350,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -378,7 +378,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -398,7 +398,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new RuntimeException(e);
         }
     }
@@ -411,7 +411,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new RuntimeException(e);
         }
     }
@@ -438,7 +438,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new RuntimeException(e);
         }
     }
@@ -464,7 +464,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (NoSuchAlgorithmException | PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -487,7 +487,7 @@ public class ServerModelImpl implements ServerModel
         }
         catch (PersistenceException e)
         {
-            Log.log(e);
+            Logger.log(e);
             throw new ServerModelException(ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR, e);
         }
     }

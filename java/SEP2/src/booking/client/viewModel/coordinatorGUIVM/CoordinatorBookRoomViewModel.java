@@ -4,6 +4,7 @@ import booking.client.core.ViewHandler;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelOverlapException;
+import booking.client.viewModel.sharedVM.PredefinedColor;
 import booking.client.viewModel.sharedVM.ViewModelUtil;
 import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
@@ -37,15 +38,17 @@ public class CoordinatorBookRoomViewModel
     private final ObjectProperty<Character> selectedBuilding;
     private final ObjectProperty<Integer> selectedFloor;
     private final ObjectProperty<UserGroup> selectedCourse;
-    private final ObjectProperty<String> selectedCategory;
+    private final ObjectProperty<PredefinedColor> selectedCategory;
 
     private final ViewHandler viewHandler;
     private final ClientModel model;
+    private final CoordinatorViewModelState sharedState;
 
-    public CoordinatorBookRoomViewModel(ViewHandler viewHandler, ClientModel model)
+    public CoordinatorBookRoomViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
         this.model = model;
+        this.sharedState = sharedState;
 
         timeIntervals = FXCollections.observableArrayList(
             "7:00", "7:15", "7:30", "7:45", "8:00", "8:15", "8:30", "8:45",
@@ -156,7 +159,7 @@ public class CoordinatorBookRoomViewModel
         return selectedPreFixTime;
     }
 
-    public ObjectProperty<String> selectedCategoryProperty()
+    public ObjectProperty<PredefinedColor> selectedCategoryProperty()
     {
         return selectedCategory;
     }
@@ -223,6 +226,11 @@ public class CoordinatorBookRoomViewModel
         try
         {
             roomList.addAll(model.getAvailableRooms(parameters));
+
+            if (selectedCategory.get() != null)
+            {
+                roomList.removeIf(room -> room.getUserColor() != selectedCategory.get().getArgb());
+            }
         }
         catch (ClientModelException e)
         {
@@ -253,6 +261,10 @@ public class CoordinatorBookRoomViewModel
         {
             model.createBooking(parameters);
             viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
+            sharedState.refreshActiveBookings();
+
+            // NOTE(rune): Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
+            showAvailableRooms();
         }
         catch (ClientModelOverlapException e)
         {
@@ -291,10 +303,12 @@ public class CoordinatorBookRoomViewModel
         }
     }
 
-    public ObservableList<String> getColors()
+    public ObservableList<PredefinedColor> getColors()
     {
-        ObservableList<String> colors = FXCollections.observableArrayList();
-        colors.addAll("", "Red", "Blue", "Yellow", "Orange", "Green", "Purple", "Pink", "Mint", "Green", "Gray");
+        ObservableList<PredefinedColor> colors = FXCollections.observableArrayList();
+        colors.add(null);
+        colors.addAll(PredefinedColor.getPredefinedColors());
+
         return colors;
     }
 }

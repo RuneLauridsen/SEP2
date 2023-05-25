@@ -32,20 +32,21 @@ import java.util.Objects;
 // TODO(rune): Dette er en stor klasse, skal den deles op i mindre dele?
 public class DatabaseHandler implements Persistence
 {
-    private Connection connection;
+    private final DatabaseConnectionPool connectionPool;
 
     public DatabaseHandler()
     {
+        this.connectionPool = new DatabaseConnectionPool();
     }
 
-    public void open() throws SQLException
+    public void open(int concurrentConnectionCount) throws SQLException
     {
-        connection = openConnection();
+        connectionPool.addConnections(concurrentConnectionCount);
     }
 
     public void close()
     {
-        closeConnection(connection);
+        connectionPool.close();
     }
 
     public User getUser(int viaid) throws PersistenceException
@@ -57,6 +58,7 @@ public class DatabaseHandler implements Persistence
     {
         Map<Integer, UserType> userTypes = getUserTypes();
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
@@ -106,6 +108,7 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -117,6 +120,7 @@ public class DatabaseHandler implements Persistence
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
@@ -174,11 +178,13 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
     public Map<Integer, RoomType> getRoomTypes() throws PersistenceException
     {
+        Connection connection = connectionPool.acquireConnection();
         Statement statement = null;
         ResultSet resultSet = null;
 
@@ -211,6 +217,7 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -220,6 +227,7 @@ public class DatabaseHandler implements Persistence
 
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
@@ -275,17 +283,20 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
     public Map<Integer, UserType> getUserTypes() throws PersistenceException
     {
+        Map<Integer, RoomType> roomTypes = getRoomTypes();
+        
+        Connection connection = connectionPool.acquireConnection();
         Statement statement = null;
         ResultSet resultSet = null;
 
         try
         {
-            Map<Integer, RoomType> roomTypes = getRoomTypes();
 
             String query = """
                 SELECT
@@ -344,6 +355,7 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -352,6 +364,7 @@ public class DatabaseHandler implements Persistence
         Map<Integer, UserType> userTypes = getUserTypes();
         Map<Integer, RoomType> roomTypes = getRoomTypes();
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
@@ -493,6 +506,7 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -512,7 +526,8 @@ public class DatabaseHandler implements Persistence
     }
 
     @Override public void createBooking(User activeUser, Room room, BookingInterval bookingInterval, UserGroup userGroup)
-        throws PersistenceException {
+        throws PersistenceException
+    {
         Objects.requireNonNull(activeUser);
         Objects.requireNonNull(room);
         Objects.requireNonNull(bookingInterval);
@@ -521,7 +536,10 @@ public class DatabaseHandler implements Persistence
             INSERT INTO sep2.booking
                 (booking_date, booking_start_time, booking_end_time, room_id, user_id, user_group_id) 
             VALUES (?, ?, ?, ?, ?, ?);""";
+
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
+
         try
         {
             statement = connection.prepareStatement(query);
@@ -549,6 +567,7 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -556,6 +575,7 @@ public class DatabaseHandler implements Persistence
     {
         Objects.requireNonNull(booking);
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
 
         try
@@ -575,6 +595,7 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -655,6 +676,7 @@ public class DatabaseHandler implements Persistence
                 r.room_name;
             """;
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
@@ -705,6 +727,8 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -721,6 +745,7 @@ public class DatabaseHandler implements Persistence
             return false;
         }
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
 
         try
@@ -750,11 +775,13 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
     @Override public List<UserGroup> getUserGroups() throws PersistenceException
     {
+        Connection connection = connectionPool.acquireConnection();
         Statement statement = null;
         ResultSet resultSet = null;
 
@@ -804,6 +831,7 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -813,6 +841,7 @@ public class DatabaseHandler implements Persistence
 
         Map<Integer, UserType> userTypes = getUserTypes();
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
@@ -864,6 +893,7 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -871,6 +901,7 @@ public class DatabaseHandler implements Persistence
     {
         Objects.requireNonNull(room);
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
 
         try
@@ -906,6 +937,7 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -915,6 +947,7 @@ public class DatabaseHandler implements Persistence
         Objects.requireNonNull(room);
         Objects.requireNonNull(comment);
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
 
         try
@@ -951,11 +984,13 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
     @Override public List<TimeSlot> getTimeSlots() throws PersistenceException
     {
+        Connection connection = connectionPool.acquireConnection();
         Statement statement = null;
         ResultSet resultSet = null;
 
@@ -984,6 +1019,7 @@ public class DatabaseHandler implements Persistence
         {
             closeResultSet(resultSet);
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
     }
 
@@ -999,6 +1035,7 @@ public class DatabaseHandler implements Persistence
             + "VALUES "
             + " (?, ?, ?, ?, ?,?);";
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
 
         try
@@ -1019,22 +1056,25 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeStatement(statement);
+            connectionPool.releaseConnection(connection);
         }
-
     }
 
     @Override public void deleteRoom(Room room) throws PersistenceException
     {
         Objects.requireNonNull(room);
 
+        Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
 
         try
         {
             String sql = """
+                BEGIN TRANSACTION;
                 DELETE FROM sep2.booking WHERE room_id = ?;
                 DELETE FROM sep2.user_room_data WHERE room_id = ?;
                 DELETE FROM sep2.room WHERE room_id = ?;
+                COMMIT TRANSACTION;
                 """;
 
             statement = connection.prepareStatement(sql);
@@ -1050,41 +1090,7 @@ public class DatabaseHandler implements Persistence
         finally
         {
             closeStatement(statement);
-        }
-
-    }
-
-    public static Connection openConnection() throws SQLException
-    {
-        switch (System.getProperty("user.name"))
-        {
-            case "runel":
-                // TODO(rune): Forbinde til rigtig database, ikke bare localhost. Måske er måde at konfigurere
-                // hvilken connection string der skal bruges, f.eks. debug database eller prod database.
-                return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "asdasd");
-            case "jbram":
-                // TODO(rune): Forbinde til rigtig database, ikke bare localhost. Måske er måde at konfigurere
-                // hvilken connection string der skal bruges, f.eks. debug database eller prod database.
-                return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "1346");
-
-            default:
-                throw new RuntimeException("Unknown user");
-        }
-    }
-
-    private static void closeConnection(Connection connection)
-    {
-        if (connection != null)
-        {
-            try
-            {
-                connection.close();
-            }
-            catch (SQLException e)
-            {
-                // TODO(rune): Hvad gør vi hvis connection ikke kan lukkes?
-                throw new RuntimeException(e);
-            }
+            connectionPool.releaseConnection(connection);
         }
     }
 

@@ -1,8 +1,6 @@
-package booking.server.log;
+package booking.server.logger;
 
-import java.util.Arrays;
-
-public class Log
+public class Logger
 {
     public static void log(String message)
     {
@@ -11,6 +9,6 @@ public class Log
 
     public static void log(Exception e)
     {
-        System.out.print(Arrays.toString(e.getStackTrace()));
+        e.printStackTrace();
     }
 }

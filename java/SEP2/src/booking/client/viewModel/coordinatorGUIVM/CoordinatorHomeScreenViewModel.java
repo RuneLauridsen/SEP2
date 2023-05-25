@@ -11,98 +11,74 @@ import javafx.collections.ObservableList;
 
 public class CoordinatorHomeScreenViewModel
 {
-  private final StringProperty username;
-  ObservableList<Room> rooms = FXCollections.observableArrayList();
-  ViewHandler viewHandler;
-  ClientModel model;
+    private final StringProperty username;
+    private final ViewHandler viewHandler;
+    private final ClientModel model;
+    private final CoordinatorViewModelState sharedState;
 
-  public CoordinatorHomeScreenViewModel(ViewHandler viewHandler, ClientModel model)
-  {
-    username = new SimpleStringProperty();
-    username.set(model.getUser().getName());
-    this.viewHandler = viewHandler;
-    this.model = model;
-  }
-
-  public StringProperty usernameProperty()
-  {
-    return username;
-  }
-
-  public ObservableList<Room> getAllRooms()
-  {
-    try
+    public CoordinatorHomeScreenViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
     {
-      rooms.addAll(model.getRooms());
-    }
-    catch (ClientModelException e)
-    {
-      viewHandler.showErrorDialog(e.getMessage());
+        username = new SimpleStringProperty();
+        username.set(model.getUser().getName());
+        this.viewHandler = viewHandler;
+        this.model = model;
+        this.sharedState = sharedState;
     }
 
-    return rooms;
-  }
-
-  public void changeToAddRoom()
-  {
-    viewHandler.showAddRoom();
-  }
-
-  public String isAvailable(Room room)
-  {
-    try
+    public StringProperty usernameProperty()
     {
-      if (model.isAvailable(room))
-      {
-        return "Available";
-      }
-      else
-      {
-        return "Cccupied";
-      }
+        return username;
     }
-    catch (ClientModelException e)
+
+    public ObservableList<Room> getAllRooms()
     {
-      viewHandler.showErrorDialog(e.getMessage());
-      return "";
+        return sharedState.getAllRooms();
     }
-  }
 
-  public void changeToSearch(String name)
-  {
-    try
+    public void changeToAddRoom()
     {
-      viewHandler.showRoomInfo(model.getRoom(name));
+        viewHandler.showAddRoom();
     }
-    catch (ClientModelException e)
+
+    public String isAvailable(Room room)
     {
-      viewHandler.showErrorDialog(e.getMessage());
+        try
+        {
+            if (model.isAvailable(room))
+            {
+                return "Available";
+            }
+            else
+            {
+                return "Occupied";
+            }
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+            return "";
+        }
     }
-  }
 
-  public void refreshRooms()
-  {
-    // TODO(rune): Hvorfor både refreshRooms og getAllRooms?
-
-    rooms.clear();
-
-    try
+    public void changeToSearch(String name)
     {
-      rooms.addAll(model.getRooms());
+        try
+        {
+            viewHandler.showRoomInfo(model.getRoom(name));
+        }
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
     }
-    catch (ClientModelException e)
+
+    public void changeToEditRoom(Room room)
     {
-      viewHandler.showErrorDialog(e.getMessage());
+        viewHandler.showEditRoom(room);
     }
-  }
 
-  public void changeToEditRoom(Room room)
-  {
-    viewHandler.showEditRoom(room);
-  }
-
-  public void changeToBooking()
-  {
-    viewHandler.showCoordinatorBookingMenu();
-  }
+    public void changeToBooking()
+    {
+        viewHandler.showCoordinatorBookingMenu();
+    }
 }

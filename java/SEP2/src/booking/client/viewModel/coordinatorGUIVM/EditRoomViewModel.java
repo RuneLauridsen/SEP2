@@ -1,9 +1,9 @@
 package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ArgbIntConverter;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
+import booking.client.viewModel.sharedVM.PredefinedColor;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
 import javafx.collections.FXCollections;
@@ -13,12 +13,14 @@ public class EditRoomViewModel
 {
     private final ViewHandler viewHandler;
     private final ClientModel model;
+    private final CoordinatorViewModelState sharedState;
     private final Room room;
 
-    public EditRoomViewModel(ViewHandler viewHandler, ClientModel model, Room room)
+    public EditRoomViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState, Room room)
     {
         this.viewHandler = viewHandler;
         this.model = model;
+        this.sharedState = sharedState;
         this.room = room;
     }
 
@@ -40,14 +42,15 @@ public class EditRoomViewModel
         }
     }
 
-    public ObservableList<String> getColors()
+    public ObservableList<PredefinedColor> getColors()
     {
-        ObservableList<String> colors = FXCollections.observableArrayList();
-        colors.addAll("", "Red", "Blue", "Yellow", "Orange", "Green", "Purple", "Pink", "Mint", "Green", "Gray");
+        ObservableList<PredefinedColor> colors = FXCollections.observableArrayList();
+        colors.add(null);
+        colors.addAll(PredefinedColor.getPredefinedColors());
         return colors;
     }
 
-    public void updateRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName, String personalComment, String color)
+    public void updateRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName, String personalComment, PredefinedColor color)
     {
         room.setName(name);
         room.setType(type);
@@ -57,26 +60,15 @@ public class EditRoomViewModel
         room.setComment(comment);
         room.setUserComment(personalComment);
 
-        if (color != null && !color.isEmpty())
+        if (color != null)
         {
-            int colorInt = switch (color)
-                {
-                    case "Red" -> ArgbIntConverter.argbToInt(243, 131, 131);
-                    case "Blue" -> ArgbIntConverter.argbToInt(130, 137, 243);
-                    case "Yellow" -> ArgbIntConverter.argbToInt(250, 250, 100);
-                    case "Orange" -> ArgbIntConverter.argbToInt(255, 178, 61);
-                    case "Green" -> ArgbIntConverter.argbToInt(141, 238, 127);
-                    case "Purple" -> ArgbIntConverter.argbToInt(214, 142, 236);
-                    case "Pink" -> ArgbIntConverter.argbToInt(255, 134, 211);
-                    case "Mint" -> ArgbIntConverter.argbToInt(162, 255, 255);
-                    case "Gray", default -> ArgbIntConverter.argbToInt(222, 222, 222);
-                };
-            room.setUserColor(colorInt);
+            room.setUserColor(color.getArgb());
         }
 
         try
         {
             model.updateRoom(room);
+            sharedState.refreshAllRooms();
         }
         catch (ClientModelException e)
         {
@@ -85,21 +77,9 @@ public class EditRoomViewModel
     }
 
     //Kunne være gjort smartere hvis vi brugte de preset farver i Color klassen
-    public String getRoomColor()
+    public PredefinedColor getRoomColor()
     {
-        return switch (room.getUserColor())
-            {
-                case -818301 -> "Red";
-                case -8222221 -> "Blue";
-                case -329116 -> "Yellow";
-                case -19907 -> "Orange";
-                case -7475585 -> "Green";
-                case -2715924 -> "Purple";
-                case -31021 -> "Pink";
-                case -6094849 -> "Mint";
-                case -2171170, default -> "Gray";
-            };
-
+        return PredefinedColor.getPredefinedColorByArgb(room.getUserColor());
     }
 
     public boolean deleteRoom()
@@ -109,6 +89,7 @@ public class EditRoomViewModel
             try
             {
                 model.deleteRoom(room);
+                sharedState.refreshAllRooms();
             }
             catch (ClientModelException e)
             {

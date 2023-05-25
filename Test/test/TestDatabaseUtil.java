@@ -1,5 +1,6 @@
 package test;
 
+import booking.server.persistene.DatabaseConnectionPool;
 import booking.server.persistene.DatabaseHandler;
 
 import java.net.URL;
@@ -14,18 +15,22 @@ public class TestDatabaseUtil
     {
         try
         {
-            Connection connection = DatabaseHandler.openConnection();
-            Statement statement = connection.createStatement();
+            DatabaseConnectionPool tempConnectionPool = new DatabaseConnectionPool();
+            tempConnectionPool.addConnections(1);
 
             URL sqlSetupUlr = TestDatabaseUtil.class.getResource("setup.sql");
             String sqlSetup = Files.readString(Path.of(sqlSetupUlr.toURI()));
 
+            Connection tempConnection = tempConnectionPool.acquireConnection();
+            Statement statement = tempConnection.createStatement();
+
             statement.execute(sqlSetup);
             statement.close();
-            connection.close();
+            tempConnectionPool.releaseConnection(tempConnection);
+            tempConnectionPool.close();
 
             DatabaseHandler database = new DatabaseHandler();
-            database.open();
+            database.open(1);
             return database;
         }
         catch (Exception e)

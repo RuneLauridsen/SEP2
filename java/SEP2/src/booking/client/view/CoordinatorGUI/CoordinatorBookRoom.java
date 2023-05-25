@@ -1,7 +1,9 @@
 package booking.client.view.CoordinatorGUI;
 
+import booking.client.view.shared.ColoredRoomListCell;
 import booking.client.view.shared.RoomListCell;
 import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookRoomViewModel;
+import booking.client.viewModel.sharedVM.PredefinedColor;
 import booking.shared.objects.Room;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.UserGroup;
@@ -13,7 +15,7 @@ import javafx.scene.layout.VBox;
 public class CoordinatorBookRoom
 {
     @FXML
-    private ComboBox<String> cbbCategory;
+    private ComboBox<PredefinedColor> cbbCategory;
     @FXML
     private DatePicker dpStartDate;
     @FXML
@@ -75,7 +77,7 @@ public class CoordinatorBookRoom
         cbbCourse.valueProperty().bindBidirectional(viewModel.selectedCourseProperty());
         cbbCategory.valueProperty().bindBidirectional(viewModel.selectedCategoryProperty());
 
-        lvRooms.setCellFactory(listView -> new RoomListCell("Book", viewModel::bookRoom));
+        lvRooms.setCellFactory(listView -> new ColoredRoomListCell("Book", viewModel::bookRoom));
         lvRooms.setItems(viewModel.getRoomList());
     }
 

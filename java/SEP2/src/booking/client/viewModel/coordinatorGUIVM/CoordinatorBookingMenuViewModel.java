@@ -15,15 +15,15 @@ import javafx.collections.ObservableList;
 
 public class CoordinatorBookingMenuViewModel
 {
-    private ViewHandler viewHandler;
-    private ObservableList<Booking> bookings;
-    private ClientModel model;
+    private final ViewHandler viewHandler;
+    private final ClientModel model;
+    private final CoordinatorViewModelState sharedState;
 
-    public CoordinatorBookingMenuViewModel(ViewHandler viewHandler, ClientModel model)
+    public CoordinatorBookingMenuViewModel(ViewHandler viewHandler, ClientModel model, CoordinatorViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
         this.model = model;
-        bookings = FXCollections.observableArrayList();
+        this.sharedState = sharedState;
     }
 
     public void bookRoomAction()
@@ -48,6 +48,7 @@ public class CoordinatorBookingMenuViewModel
                 if (result.isOk())
                 {
                     viewHandler.showInfoDialog("Bookings imported.");
+                    sharedState.refreshActiveBookings();
                 }
                 else
                 {
@@ -76,34 +77,7 @@ public class CoordinatorBookingMenuViewModel
 
     public ObservableList<Booking> getBookings()
     {
-        bookings = FXCollections.observableArrayList();
-
-        try
-        {
-            bookings.addAll(model.getActiveBookings());
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
-
-        return bookings;
-    }
-
-    public void refreshBookings()
-    {
-        // TODO(rune): Fælles ViewModelState
-
-        bookings.clear();
-
-        try
-        {
-            bookings.addAll(model.getActiveBookings());
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
+        return sharedState.getActiveBookings();
     }
 
     public void cancelBooking(Booking booking)
@@ -111,6 +85,7 @@ public class CoordinatorBookingMenuViewModel
         try
         {
             model.deleteBooking(booking);
+            sharedState.refreshActiveBookings();
         }
         catch (ClientModelException e)
         {

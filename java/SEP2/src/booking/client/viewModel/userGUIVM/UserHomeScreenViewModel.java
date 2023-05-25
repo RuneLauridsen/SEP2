@@ -15,38 +15,21 @@ public class UserHomeScreenViewModel
 {
     private final StringProperty username;
 
-    // TODO(rune): MVVM -> Må view godt kende til Booking klassen?
-    // Det synes jeg godt, men måske er Micheal ikke enig.
-    private final ObservableList<Booking> activeBookings;
-
     private final ViewHandler viewHandler;
     private final ClientModel model;
+    private final UserViewModelState sharedState;
     private final ObjectProperty<String> selctedFromSearch;
 
-    public UserHomeScreenViewModel(ViewHandler viewHandler, ClientModel model)
+    public UserHomeScreenViewModel(ViewHandler viewHandler, ClientModel model, UserViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
         this.model = model;
+        this.sharedState = sharedState;
 
         username = new SimpleStringProperty();
         selctedFromSearch = new SimpleObjectProperty<>();
-        activeBookings = FXCollections.observableArrayList();
-    }
 
-    public void refreshActiveBookings()
-    {
         username.set(model.getUser().getName());
-
-        activeBookings.clear();
-
-        try
-        {
-            activeBookings.addAll(model.getActiveBookings());
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
     }
 
     public StringProperty usernameProperty()
@@ -56,7 +39,7 @@ public class UserHomeScreenViewModel
 
     public ObservableList<Booking> getActiveBookings()
     {
-        return activeBookings;
+        return sharedState.getActiveBookings();
     }
 
     public ObjectProperty<String> getSearchProperty()
@@ -86,7 +69,7 @@ public class UserHomeScreenViewModel
         try
         {
             model.deleteBooking(booking);
-            refreshActiveBookings();
+            sharedState.refreshActiveBookings();
         }
         catch (ClientModelException e)
         {

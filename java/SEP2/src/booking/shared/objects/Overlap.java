@@ -26,6 +26,6 @@ public class Overlap implements Serializable
 
     @Override public String toString()
     {
-        return "Overlap " + booking + " ( " + users.size() + " users)";
+        return booking.toString();
     }
 }

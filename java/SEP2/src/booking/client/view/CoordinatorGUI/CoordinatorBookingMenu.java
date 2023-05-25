@@ -56,27 +56,7 @@ public class CoordinatorBookingMenu
     public void init(CoordinatorBookingMenuViewModel viewModel)
     {
         this.viewModel = viewModel;
-        tvBookings.setRowFactory(tv -> {
-            return new TableRow<Booking>()
-            {
-                @Override
-                protected void updateItem(Booking booking, boolean empty)
-                {
-                    super.updateItem(booking, empty);
-                    if (booking != null)
-                    {
-                        if (booking.getRoom().getUserColor() != 0)
-                        {
-                            Color color = ArgbIntConverter.intToColor(booking.getRoom().getUserColor());
-                            setBackground(new Background(new BackgroundFill(color,
-                                                                            CornerRadii.EMPTY, Insets.EMPTY)));
-                            //setStyle("-fx-background-color: rgb("+color.getRed()+","+color.getGreen()+","+color.getBlue()+");");
-                        }
-                    }
-
-                }
-            };
-        });
+        tvBookings.setRowFactory(tv -> new TableRow<>());
 
         tvBookings.setItems(viewModel.getBookings());
 

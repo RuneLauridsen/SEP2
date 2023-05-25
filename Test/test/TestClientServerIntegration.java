@@ -12,6 +12,8 @@ import booking.client.networking.ClientNetworkSocket;
 import booking.client.viewModel.loginVM.LoginViewModel;
 import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
 import booking.server.persistene.DatabaseHandler;
+import booking.server.persistene.Persistence;
+import booking.server.persistene.PersistenceCacheProxy;
 import booking.shared.NowProvider;
 import booking.server.model.ServerModel;
 import booking.server.model.ServerModelImpl;
@@ -49,7 +51,8 @@ public class TestClientServerIntegration
 
         FileIO fileIO = new FakeFileIO();
         NowProvider nowProvider = new FakeNowProvider();
-        ServerModel serverModel = new ServerModelImpl(database, nowProvider);
+        Persistence persistence = new PersistenceCacheProxy(database, 100_000, nowProvider);
+        ServerModel serverModel = new ServerModelImpl(persistence, nowProvider);
         ServerNetwork serverNetwork = new ServerNetworkSocket(serverModel);
 
         ClientNetwork clientNetwork = new ClientNetworkSocket();

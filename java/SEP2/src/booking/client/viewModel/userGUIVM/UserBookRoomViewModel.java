@@ -31,13 +31,15 @@ public class UserBookRoomViewModel
 
     private final ViewHandler viewHandler;
     private final ClientModel model;
+    private final UserViewModelState sharedState;
 
     private final ObservableList<Room> roomList;
 
-    public UserBookRoomViewModel(ViewHandler viewHandler, ClientModel model)
+    public UserBookRoomViewModel(ViewHandler viewHandler, ClientModel model, UserViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
         this.model = model;
+        this.sharedState = sharedState;
 
         timeIntervals = FXCollections.observableArrayList(
             "7:00", "7:15", "7:30", "7:45", "8:00", "8:15", "8:30", "8:45",
@@ -143,23 +145,28 @@ public class UserBookRoomViewModel
         }
     }
 
-    public void bookRoom(Room room) { //TODO billede i rapport skal opdateres hvis metoden ændres
+    public void bookRoom(Room room)
+    { //TODO billede i rapport skal opdateres hvis metoden ændres
         LocalTime startTime = parseLocalDateTime(selectedFromTime.get());
         LocalTime endTime = parseLocalDateTime(selectedToTime.get());
         BookingInterval requestedInterval = new BookingInterval(selectedDate.get(), startTime, endTime);
         CreateBookingParameters parameters = new CreateBookingParameters(
             room,
             requestedInterval,
-            true,  // overlap tilladt,
-            null);    // ikke til hold/klassen
-        try{
+            true,    // overlap tilladt,
+            null);   // ikke til hold/klassen
+        try
+        {
             model.createBooking(parameters);
             viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
+            sharedState.refreshActiveBookings();
+
+            // NOTE(rune): Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
+            showAvailableRooms();
         }
         catch (ClientModelException e)
         {
             viewHandler.showErrorDialog(e.getMessage());
-            throw new RuntimeException(e);
         }
     }
 

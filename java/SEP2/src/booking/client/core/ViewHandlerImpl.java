@@ -103,6 +103,7 @@ public class ViewHandlerImpl implements ViewHandler
             root = loader.load();
 
             CoordinatorHomeScreenViewModel viewModel = viewModelFactory.getCoordinatorHomeScreenViewModel(this, model);
+            viewModelFactory.getCoordinatorViewModelState(this, model).refreshAllRooms();
 
             CoordinatorHomeScreen view = loader.getController();
             view.init(viewModel);
@@ -156,6 +157,7 @@ public class ViewHandlerImpl implements ViewHandler
             root = loader.load();
 
             CoordinatorBookingMenuViewModel viewModel = viewModelFactory.getCoordinatorBookingMenuViewModel(this, model);
+            viewModelFactory.getCoordinatorViewModelState(this, model).refreshActiveBookings();
 
             CoordinatorBookingMenu view = loader.getController();
             view.init(viewModel);
@@ -183,7 +185,7 @@ public class ViewHandlerImpl implements ViewHandler
             root = loader.load();
 
             UserHomeScreenViewModel viewModel = viewModelFactory.getUserHomeScreenViewModel(this, model);
-            viewModel.refreshActiveBookings();
+            viewModelFactory.getUserViewModelState(this, model).refreshActiveBookings();
 
             UserHomeScreen view = loader.getController();
             view.init(viewModel);
@@ -210,7 +212,7 @@ public class ViewHandlerImpl implements ViewHandler
             root = loader.load();
 
             //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
-            AddRoomViewModel viewModel = new AddRoomViewModel(this, model);
+            AddRoomViewModel viewModel = viewModelFactory.getAddRoomViewModel(this, model);
 
             AddRoom view = loader.getController();
             view.init(viewModel);
@@ -319,7 +321,7 @@ public class ViewHandlerImpl implements ViewHandler
             root = loader.load();
 
             //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
-            EditRoomViewModel viewModel = new EditRoomViewModel(this, model, room);
+            EditRoomViewModel viewModel = viewModelFactory.getEditRoomViewModel(this, model, room);
 
             EditRoom view = loader.getController();
             view.init(viewModel);

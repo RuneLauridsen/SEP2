@@ -1,6 +1,7 @@
 package booking.client.view.CoordinatorGUI;
 
 import booking.client.viewModel.coordinatorGUIVM.EditRoomViewModel;
+import booking.client.viewModel.sharedVM.PredefinedColor;
 import booking.shared.objects.RoomType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +21,7 @@ public class EditRoom
     @FXML private ComboBox<RoomType> cbbRoomType;
     @FXML private Button cancelButton;
     @FXML private Button saveButton;
-    @FXML private ComboBox<String> cbbColor;
+    @FXML private ComboBox<PredefinedColor> cbbColor;
     @FXML private TextArea txtPersonalComment;
     @FXML private Button btnDelete;
 

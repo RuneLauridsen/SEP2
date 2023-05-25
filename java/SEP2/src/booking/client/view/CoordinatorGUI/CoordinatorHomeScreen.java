@@ -1,6 +1,7 @@
 package booking.client.view.CoordinatorGUI;
 
 import booking.client.view.shared.ButtonTableCell;
+import booking.client.view.shared.ColoredRoomTableRow;
 import booking.client.viewModel.coordinatorGUIVM.CoordinatorHomeScreenViewModel;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
@@ -37,24 +38,7 @@ public class CoordinatorHomeScreen
 
         lblName.textProperty().bind(Bindings.concat("Hello ").concat(viewModel.usernameProperty()));
 
-        tvtRooms.setRowFactory(tv -> {
-            return new TableRow<Room>()
-            {
-                @Override
-                protected void updateItem(Room room, boolean empty)
-                {
-                    super.updateItem(room, empty);
-
-                    if (room != null && room.getUserColor() != 0)
-                    {
-                        Color color = ArgbIntConverter.intToColor(room.getUserColor());
-                        setBackground(new Background(new BackgroundFill(color,
-                                                                        CornerRadii.EMPTY, Insets.EMPTY)));
-                        //setStyle("-fx-background-color: rgb("+color.getRed()+","+color.getGreen()+","+color.getBlue()+");");
-                    }
-                }
-            };
-        });
+        tvtRooms.setRowFactory(tv -> new ColoredRoomTableRow());
 
         tvtRooms.setItems(viewModel.getAllRooms());
         tcolName.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getName()));

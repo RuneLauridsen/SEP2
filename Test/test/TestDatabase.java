@@ -147,7 +147,7 @@ public class TestDatabase
         assertEquals(roomsGitte.get(0).getComment(), "global kommentar");
         assertEquals(roomsGitte.get(0).getType().getName(), "Grupperum");
         assertEquals(roomsGitte.get(0).getUserComment(), "jeg hedder gitte");
-        assertEquals(roomsGitte.get(0).getUserColor(), 99);
+        assertEquals(roomsGitte.get(0).getUserColor(), -2715924);
 
         assertEquals(roomsSimon.get(0).getUserComment(), "");
         assertEquals(roomsSimon.get(0).getUserColor(), -1);
@@ -341,7 +341,7 @@ public class TestDatabase
         Room roomAfter = database.getRoom("A02.01", user);
 
         assertEquals(roomBefore.getUserComment(), "jeg hedder gitte");
-        assertEquals(roomBefore.getUserColor(), 99);
+        assertEquals(roomBefore.getUserColor(), -2715924);
         assertEquals(roomAfter.getUserComment(), "jeg hedder gitte 2");
         assertEquals(roomAfter.getUserColor(), 0x00ff00ff);
     }
