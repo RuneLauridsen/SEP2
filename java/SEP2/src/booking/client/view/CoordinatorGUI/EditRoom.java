@@ -44,10 +44,11 @@ public class EditRoom
 
     public void saveButtonClick(MouseEvent mouseEvent)
     {
-        viewModel.updateRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()), txtComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText(), txtPersonalComment.getText(), cbbColor.getSelectionModel().getSelectedItem());
+        if(viewModel.updateRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), txtMaxComfortCap.getText(), txtMaxSafetyCap.getText(), txtSize.getText(), txtComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText(), txtPersonalComment.getText(), cbbColor.getSelectionModel().getSelectedItem())){
+            Stage stage = (Stage) saveButton.getScene().getWindow();
+            stage.close();
+        }
 
-        Stage stage = (Stage) saveButton.getScene().getWindow();
-        stage.close();
     }
 
     public void cancelButtonClick(MouseEvent mouseEvent)

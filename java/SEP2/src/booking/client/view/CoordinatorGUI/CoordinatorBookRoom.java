@@ -66,6 +66,7 @@ public class CoordinatorBookRoom
         cbbCourse.setItems(viewModel.getCourses());
         cbbCategory.setItems(viewModel.getColors());
 
+
         dpStartDate.valueProperty().bindBidirectional(viewModel.selectedStartDateProperty());
         cbbFromTime.valueProperty().bindBidirectional(viewModel.selectedFromTimeProperty());
         cbbToTime.valueProperty().bindBidirectional(viewModel.selectedToTimeProperty());
@@ -74,6 +75,9 @@ public class CoordinatorBookRoom
         cbbFloor.valueProperty().bindBidirectional(viewModel.selectedFloorProperty());
         cbbCourse.valueProperty().bindBidirectional(viewModel.selectedCourseProperty());
         cbbCategory.valueProperty().bindBidirectional(viewModel.selectedCategoryProperty());
+        cbPrefix.selectedProperty().bindBidirectional(viewModel.prefixCheckBoxProperty());
+        txtMaxCap.textProperty().bindBidirectional(viewModel.selectedMaxCapProperty());
+        txtMinCap.textProperty().bindBidirectional(viewModel.selectedMinCapProperty());
 
         lvRooms.setCellFactory(listView -> new ColoredRoomListCell("Book", viewModel::bookRoom));
         lvRooms.setItems(viewModel.getRoomList());

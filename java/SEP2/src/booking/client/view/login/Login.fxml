@@ -24,7 +24,7 @@
                     </children>
                 </HBox>
                 <Label text="VIA ID"/>
-                <TextField fx:id="txtUsername"/>
+                <TextField fx:id="txtVIAID"/>
                 <Label text="Password">
                     <VBox.margin>
                         <Insets top="20.0"/>

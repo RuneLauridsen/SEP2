@@ -50,31 +50,49 @@ public class EditRoomViewModel
         return colors;
     }
 
-    public void updateRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName, String personalComment, PredefinedColor color)
+    public boolean updateRoom(String name, RoomType type, String maxComf, String maxSafety, String size, String comment, boolean isDouble, String doubleName, String personalComment, PredefinedColor color)
     {
-        room.setName(name);
-        room.setType(type);
-        room.setSize(size);
-        room.setComfortCapacity(maxComf);
-        room.setFireCapacity(maxSafety);
-        room.setComment(comment);
-        room.setUserComment(personalComment);
+        if (name.isEmpty() || maxComf.isEmpty() || maxSafety.isEmpty() ||size.isEmpty() || type == null)
+            viewHandler.showErrorDialog("Name, room type, max comfort, max safety or size must not be empty");
+        else {
+            try
+            {
+                if (room.getName().equals(name) || model.getRoom(name) == null)
+                {
+                    room.setName(name);
+                    room.setType(type);
+                    room.setSize(Integer.parseInt(size));
+                    room.setComfortCapacity(Integer.parseInt(maxComf));
+                    room.setFireCapacity(Integer.parseInt(maxSafety));
+                    room.setComment(comment);
+                    room.setUserComment(personalComment);
 
-        if (color != null)
-        {
-            room.setUserColor(color.getArgb());
-        }
+                    if (color != null)
+                    {
+                        room.setUserColor(color.getArgb());
+                    }
 
-        try
-        {
-            model.updateRoom(room);
-            sharedState.refreshAllRooms();
+                    model.updateRoom(room);
+                    sharedState.refreshAllRooms();
+                    return true;
+                }
+                else
+                    viewHandler.showErrorDialog("Room name already in use");
+            }
+
+            catch(ClientModelException e)
+            {
+                viewHandler.showErrorDialog(e.getMessage());
+            }
+            catch(NumberFormatException e){
+                    viewHandler.showErrorDialog( "Max capacity and size must be numbers");
+            }
         }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
+        return false;
     }
+
+
+
 
     //Kunne være gjort smartere hvis vi brugte de preset farver i Color klassen
     public PredefinedColor getRoomColor()

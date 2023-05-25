@@ -9,8 +9,7 @@ import booking.client.viewModel.sharedVM.ViewModelUtil;
 import booking.shared.CreateBookingParameters;
 import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.*;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -30,8 +29,10 @@ public class CoordinatorBookRoomViewModel
     private final ObjectProperty<String> selectedFromTime;
     private final ObjectProperty<String> selectedToTime;
     private final ObjectProperty<TimeSlot> selectedPreFixTime;
-    private final ObjectProperty<Integer> selectedMinCap;
-    private final ObjectProperty<Integer> selectedMaxCap;
+
+    private final BooleanProperty prefixCheckBox;
+    private final ObjectProperty<String> selectedMinCap;
+    private final ObjectProperty<String> selectedMaxCap;
     private final ObjectProperty<Character> selectedBuilding;
     private final ObjectProperty<Integer> selectedFloor;
     private final ObjectProperty<UserGroup> selectedCourse;
@@ -77,6 +78,7 @@ public class CoordinatorBookRoomViewModel
         selectedFloor = new SimpleObjectProperty<>();
         selectedCourse = new SimpleObjectProperty<>();
         selectedCategory = new SimpleObjectProperty<>();
+        prefixCheckBox = new SimpleBooleanProperty();
 
         roomList = FXCollections.observableArrayList();
 
@@ -148,12 +150,12 @@ public class CoordinatorBookRoomViewModel
     }
 
 
-    public ObjectProperty<Integer> selectedMinCapProperty()
+    public ObjectProperty<String> selectedMinCapProperty()
     {
         return selectedMinCap;
     }
 
-    public ObjectProperty<Integer> selectedMaxCapProperty()
+    public ObjectProperty<String> selectedMaxCapProperty()
     {
         return selectedMaxCap;
     }
@@ -161,6 +163,11 @@ public class CoordinatorBookRoomViewModel
     public ObjectProperty<Character> selectedBuildingProperty()
     {
         return selectedBuilding;
+    }
+
+    public Property<Boolean> prefixCheckBoxProperty()
+    {
+        return prefixCheckBox;
     }
 
     public ObjectProperty<Integer> selectedFloorProperty()
@@ -178,45 +185,62 @@ public class CoordinatorBookRoomViewModel
         // Comments er fra UserBookRoomViewModel
         // TODO: Min/max cap
         //TODO Category
-
-        String startTimeString = selectedFromTime.get();
-        String endTimeString = selectedToTime.get();
-        Character building = selectedBuilding.get();
-        Integer floor = selectedFloor.get();
-        LocalDate date = selectedStartDate.get();
-
-        // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
-        // så vi slipper for at parse her.
-        LocalTime startTime = parseLocalDateTime(startTimeString);
-        LocalTime endTime = parseLocalDateTime(endTimeString);
-        BookingInterval requestedInterval = new BookingInterval(date, startTime, endTime);
-
-        // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
-        GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
-            date, startTime, endTime
-        );
-
-        parameters.setBuilding(building);
-        parameters.setFloor(floor);
-        parameters.setMinCapacity(selectedMinCap.get());
-        parameters.setMaxCapacity(selectedMaxCap.get());
-
-        roomList.clear();
         try
         {
-            roomList.addAll(model.getAvailableRooms(parameters));
+            Character building = selectedBuilding.get();
+            Integer floor = selectedFloor.get();
+            LocalDate date = selectedStartDate.get();
 
-            if (selectedCategory.get() != null)
+            // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
+            // så vi slipper for at parse her.
+
+            LocalTime startTime = null;
+            LocalTime endTime= null;
+
+            if (prefixCheckBox.get()){
+                //TODO lav sådan at prefix time virker.
+            }
+            else{
+                String startTimeString = selectedFromTime.get();
+                String endTimeString = selectedToTime.get();
+                startTime = parseLocalDateTime(startTimeString);
+                endTime = parseLocalDateTime(endTimeString);
+            }
+
+
+            // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
+            GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
+                date, startTime, endTime
+            );
+
+            parameters.setBuilding(building);
+            parameters.setFloor(floor);
+            if (selectedMinCap.get() != null)
+                parameters.setMinCapacity(Integer.parseInt(selectedMinCap.get()));
+            if (selectedMaxCap.get() != null)
+                parameters.setMaxCapacity(Integer.parseInt(selectedMaxCap.get()) );
+
+            roomList.clear();
+            try
             {
-                roomList.removeIf(room -> room.getUserColor() != selectedCategory.get().getArgb());
+                roomList.addAll(model.getAvailableRooms(parameters));
+
+                if (selectedCategory.get() != null)
+                {
+                    roomList.removeIf(room -> room.getUserColor() != selectedCategory.get().getArgb());
+                }
+            }
+            catch (ClientModelException e)
+            {
+                viewHandler.showErrorDialog(e.getMessage());
             }
         }
-        catch (ClientModelException e)
+        catch (NumberFormatException e)
         {
-            viewHandler.showErrorDialog(e.getMessage());
+            viewHandler.showErrorDialog("Max- and min capacity must be a number");
         }
-
         return roomList;
+
 
     }
 
@@ -290,4 +314,6 @@ public class CoordinatorBookRoomViewModel
 
         return colors;
     }
+
+
 }

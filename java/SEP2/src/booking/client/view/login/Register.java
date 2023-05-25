@@ -20,6 +20,13 @@ public class Register
   {
     this.viewModel = viewModel;
     cbbUserType.setItems(viewModel.getUserTypes());
+
+
+    txtVIAID.textProperty().bindBidirectional(viewModel.viaIDProperty());
+    txtUsername.textProperty().bindBidirectional(viewModel.usernameProperty());
+    txtPassword.textProperty().bindBidirectional(viewModel.passwordProperty());
+    cbbUserType.valueProperty().bindBidirectional(viewModel.userTypeProperty());
+
   }
 
   public void onBackClicked(ActionEvent actionEvent)
@@ -29,6 +36,6 @@ public class Register
 
   public void onRegisterClick(ActionEvent actionEvent)
   {
-    viewModel.register(Integer.parseInt(txtVIAID.getText()), txtUsername.getText(), cbbUserType.getSelectionModel().getSelectedItem(), txtPassword.getText());
+    viewModel.register();
   }
 }

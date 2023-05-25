@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
 public class LoginViewModel
 {
 
-    private final StringProperty username;
+    private final StringProperty VIAID;
     private final StringProperty password;
     private final BooleanProperty loginDisabled;
     private final ViewHandler viewHandler;
@@ -23,15 +23,15 @@ public class LoginViewModel
         this.viewHandler = viewHandler;
         this.model = model;
 
-        username = new SimpleStringProperty();
+        VIAID = new SimpleStringProperty();
         password = new SimpleStringProperty();
         loginDisabled = new SimpleBooleanProperty();
-        loginDisabled.bind(username.isEmpty().or(password.isEmpty()));
+        loginDisabled.bind(VIAID.isEmpty().or(password.isEmpty()));
     }
 
-    public StringProperty usernameProperty()
+    public StringProperty VIAIDProperty()
     {
-        return username;
+        return VIAID;
     }
 
     public StringProperty passwordProperty()
@@ -51,7 +51,7 @@ public class LoginViewModel
 
         try
         {
-            model.login(Integer.parseInt(username.get()), password.get());
+            model.login(Integer.parseInt(VIAID.get()), password.get());
 
             User user = model.getUser();
             
@@ -67,6 +67,9 @@ public class LoginViewModel
         catch (ClientModelException e)
         {
             viewHandler.showErrorDialog(e.getMessage());
+        }
+        catch (NumberFormatException e){
+            viewHandler.showErrorDialog("VIA ID must be a number");
         }
     }
 

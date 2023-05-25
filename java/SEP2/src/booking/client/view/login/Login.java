@@ -11,7 +11,7 @@ public class Login
 {
     @FXML private Button btnLogIn;
     @FXML private Button btnRegister;
-    @FXML private TextField txtUsername;
+    @FXML private TextField txtVIAID;
     @FXML private PasswordField txtPassword;
 
     private LoginViewModel viewModel;
@@ -20,7 +20,7 @@ public class Login
     {
         this.viewModel = viewModel;
 
-        txtUsername.textProperty().bindBidirectional(viewModel.usernameProperty());
+        txtVIAID.textProperty().bindBidirectional(viewModel.VIAIDProperty());
         txtPassword.textProperty().bindBidirectional(viewModel.passwordProperty());
         btnLogIn.disableProperty().bind(viewModel.loginDisabledProperty());
     }

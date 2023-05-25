@@ -3,14 +3,13 @@ package booking.client.view.CoordinatorGUI;
 import booking.client.viewModel.coordinatorGUIVM.AddRoomViewModel;
 import booking.shared.objects.RoomType;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class AddRoom
 {
+  public Button saveButton;
   @FXML private TextField txtName;
   @FXML private TextField txtMaxComfortCap;
   @FXML private TextField txtMaxSafetyCap;
@@ -29,6 +28,9 @@ public class AddRoom
   }
   public void saveButtonClick(MouseEvent mouseEvent)
   {
-    viewModel.createRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), Integer.parseInt(txtMaxComfortCap.getText()), Integer.parseInt(txtMaxSafetyCap.getText()), Integer.parseInt(txtSize.getText()), txtComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText());
+    if(viewModel.createRoom(txtName.getText(), cbbRoomType.getSelectionModel().getSelectedItem(), txtMaxComfortCap.getText(), txtMaxSafetyCap.getText(), txtSize.getText(), txtComment.getText(), cbIsDoubleRoom.isSelected(), txtDoubleRoomName.getText())){
+      Stage stage = (Stage) saveButton.getScene().getWindow();
+      stage.close();
+    }
   }
 }

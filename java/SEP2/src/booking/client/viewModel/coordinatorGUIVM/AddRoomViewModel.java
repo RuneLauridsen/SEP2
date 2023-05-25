@@ -20,17 +20,32 @@ public class AddRoomViewModel
         this.sharedState = sharedState;
     }
 
-    public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
+    public boolean createRoom(String name, RoomType type, String maxComf, String maxSafety, String size, String comment, boolean isDouble, String doubleName)
     {
-        try
-        {
-            model.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
-            sharedState.refreshAllRooms();
+        if (name.isEmpty() || maxComf.isEmpty() || maxSafety.isEmpty() ||size.isEmpty() || type == null)
+            viewHandler.showErrorDialog("Name, room type, max comfort, max safety or size must not be empty");
+        else {
+            try
+            {
+                if (model.getRoom(name) == null){
+                    model.createRoom(name, type, Integer.parseInt(maxComf), Integer.parseInt(maxSafety), Integer.parseInt(size), comment, isDouble, doubleName);
+                    sharedState.refreshAllRooms();
+                    return true;
+                }
+                else
+                    viewHandler.showErrorDialog("Room with this name is already taken");
+            }
+
+            catch (ClientModelException e)
+            {
+                viewHandler.showErrorDialog(e.getMessage());
+            }
+            catch (NumberFormatException e){
+                viewHandler.showErrorDialog("Max capacity and size must be numbers");
+            }
         }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-        }
+        return false;
+
     }
 
     public ObservableList<RoomType> getRoomTypes()

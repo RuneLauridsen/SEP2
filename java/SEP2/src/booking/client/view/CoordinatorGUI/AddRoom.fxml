@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="308.0" prefWidth="290.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.client.view.CoordinatorGUI.AddRoom">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
@@ -69,7 +68,7 @@
                   <ComboBox fx:id="cbbRoomType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
-            <Button mnemonicParsing="false" onMouseClicked="#saveButtonClick" text="Save">
+            <Button fx:id="saveButton" mnemonicParsing="false" onMouseClicked="#saveButtonClick" text="Save">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
