@@ -23,16 +23,13 @@ public class CoordinatorBookRoomViewModel
     private final ObservableList<Character> buildings;
     private final ObservableList<Integer> floors;
     private final ObservableList<TimeSlot> preFixTimes;
-    private final ObservableList<String> days;
     private final ObservableList<UserGroup> courses;
     private final ObservableList<Room> roomList;
 
     private final ObjectProperty<LocalDate> selectedStartDate;
-    private final ObjectProperty<LocalDate> selectedEndDate;
     private final ObjectProperty<String> selectedFromTime;
     private final ObjectProperty<String> selectedToTime;
     private final ObjectProperty<TimeSlot> selectedPreFixTime;
-    private final ObjectProperty<String> selectedDay;
     private final ObjectProperty<Integer> selectedMinCap;
     private final ObjectProperty<Integer> selectedMaxCap;
     private final ObjectProperty<Character> selectedBuilding;
@@ -59,26 +56,21 @@ public class CoordinatorBookRoomViewModel
 
         preFixTimes = FXCollections.observableArrayList();
 
-        days = FXCollections.observableArrayList(
-            null, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
-        );
-
         buildings = FXCollections.observableArrayList(
             null, 'A', 'B', 'C'
         );
 
-        floors = FXCollections.observableArrayList(
-            null, 1, 2, 3, 4, 5, 6
-        );
+        if (model.getUser().getType().getId() == 1 || model.getUser().getType().getId() == 4)
+            floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5, 6);
+        else
+            floors = FXCollections.observableArrayList(null, 1, 2, 3, 4, 5);
 
         courses = FXCollections.observableArrayList();
 
         selectedStartDate = new SimpleObjectProperty<>();
-        selectedEndDate = new SimpleObjectProperty<>();
         selectedFromTime = new SimpleObjectProperty<>();
         selectedToTime = new SimpleObjectProperty<>();
         selectedPreFixTime = new SimpleObjectProperty<>();
-        selectedDay = new SimpleObjectProperty<>();
         selectedMinCap = new SimpleObjectProperty<>();
         selectedMaxCap = new SimpleObjectProperty<>();
         selectedBuilding = new SimpleObjectProperty<>();
@@ -119,10 +111,6 @@ public class CoordinatorBookRoomViewModel
         return preFixTimes;
     }
 
-    public ObservableList<String> getDays()
-    {
-        return days;
-    }
 
     public ObservableList<UserGroup> getCourses()
     {
@@ -137,11 +125,6 @@ public class CoordinatorBookRoomViewModel
     public ObjectProperty<LocalDate> selectedStartDateProperty()
     {
         return selectedStartDate;
-    }
-
-    public ObjectProperty<LocalDate> selectedEndDateProperty()
-    {
-        return selectedEndDate;
     }
 
     public ObjectProperty<String> selectedFromTimeProperty()
@@ -164,10 +147,6 @@ public class CoordinatorBookRoomViewModel
         return selectedCategory;
     }
 
-    public ObjectProperty<String> selectedDayProperty()
-    {
-        return selectedDay;
-    }
 
     public ObjectProperty<Integer> selectedMinCapProperty()
     {
@@ -260,7 +239,7 @@ public class CoordinatorBookRoomViewModel
         try
         {
             model.createBooking(parameters);
-            viewHandler.showInfoDialog("Lokale " + room + " er booking til " + requestedInterval);
+            viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
             sharedState.refreshActiveBookings();
 
             // NOTE(rune): Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
