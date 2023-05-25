@@ -7,27 +7,28 @@ import booking.client.viewModel.sharedVM.PredefinedColor;
 import booking.shared.objects.Room;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.UserGroup;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class CoordinatorBookRoom
 {
+    public CheckBox cbPrefix;
+    public HBox hbPrefix;
+    public VBox vbTime;
     @FXML
     private ComboBox<PredefinedColor> cbbCategory;
     @FXML
     private DatePicker dpStartDate;
-    @FXML
-    private DatePicker dpEndDate;
     @FXML
     private ComboBox<String> cbbFromTime;
     @FXML
     private ComboBox<String> cbbToTime;
     @FXML
     private ComboBox<TimeSlot> cbbPrefixTime;
-    @FXML
-    private ComboBox<String> cbbDayTime;
     @FXML
     private TextField txtMinCap;
     @FXML
@@ -61,16 +62,13 @@ public class CoordinatorBookRoom
         cbbFloor.setItems(viewModel.getFloors());
         cbbBuilding.setItems(viewModel.getBuildings());
         cbbPrefixTime.setItems(viewModel.getPreFixTimes());
-        cbbDayTime.setItems(viewModel.getDays());
         cbbCourse.setItems(viewModel.getCourses());
         cbbCategory.setItems(viewModel.getColors());
 
         dpStartDate.valueProperty().bindBidirectional(viewModel.selectedStartDateProperty());
-        dpEndDate.valueProperty().bindBidirectional(viewModel.selectedEndDateProperty());
         cbbFromTime.valueProperty().bindBidirectional(viewModel.selectedFromTimeProperty());
         cbbToTime.valueProperty().bindBidirectional(viewModel.selectedToTimeProperty());
         cbbPrefixTime.valueProperty().bindBidirectional(viewModel.selectedPreFixTimeProperty());
-        cbbDayTime.valueProperty().bindBidirectional(viewModel.selectedDayProperty());
         cbbBuilding.valueProperty().bindBidirectional(viewModel.selectedBuildingProperty());
         cbbFloor.valueProperty().bindBidirectional(viewModel.selectedFloorProperty());
         cbbCourse.valueProperty().bindBidirectional(viewModel.selectedCourseProperty());
@@ -101,11 +99,9 @@ public class CoordinatorBookRoom
     public void refresh()
     {
         dpStartDate.setValue(null);
-        dpEndDate.setValue(null);
         cbbFromTime.setValue(null);
         cbbToTime.setValue(null);
         cbbPrefixTime.setValue(null);
-        cbbDayTime.setValue(null);
         txtMinCap.clear();
         txtMaxCap.clear();
         cbbBuilding.setValue(null);
@@ -119,4 +115,9 @@ public class CoordinatorBookRoom
         viewModel.changeToSearch(lvRooms.getSelectionModel().getSelectedItem().getName());
     }
 
+    public void checkboxClicked(ActionEvent actionEvent)
+    {
+        vbTime.setDisable(cbPrefix.isSelected());
+        hbPrefix.setVisible(cbPrefix.isSelected());
+    }
 }
