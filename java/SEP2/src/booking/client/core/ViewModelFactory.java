@@ -65,12 +65,6 @@ public class ViewModelFactory
         return userBookRoomViewModel;
     }
 
-    public RoomInfoViewModel getRoomInfoViewModel(ViewHandler viewHandler, ClientModel model, String roomName)
-    {
-        if (roomInfoViewModel == null)
-            roomInfoViewModel = new RoomInfoViewModel(viewHandler, model, roomName);
-        return roomInfoViewModel;
-    }
 
     public CoordinatorViewModelState getCoordinatorViewModelState(ViewHandler viewHandler, ClientModel model)
     {
@@ -111,6 +105,11 @@ public class ViewModelFactory
     {
         // NOTE(rune): Skal altid åbnes i nyt vindue
         return new EditRoomViewModel(viewHandler, model, getCoordinatorViewModelState(viewHandler, model), room);
+    }
+    public RoomInfoViewModel getRoomInfoViewModel(ViewHandler viewHandler, ClientModel model, String roomName)
+    {
+        // NOTE: Skal altid åbnes i nyt vindue
+        return new RoomInfoViewModel(viewHandler, model, roomName);
     }
 
     public RegisterViewModel getRegisterViewModel(ViewHandler viewHandler, ClientModel model)
