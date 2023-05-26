@@ -27,7 +27,7 @@ public class UserBookRoom
 
     public void init(UserBookRoomViewModel viewModel)
     {
-        refresh();
+
         this.viewModel = viewModel;
 
         cbbFromTime.setItems(viewModel.getTimeIntervals());
@@ -45,6 +45,8 @@ public class UserBookRoom
 
         lvRooms.setCellFactory(listView -> new RoomListCell("Book", viewModel::bookRoom));
         lvRooms.setItems(viewModel.getRoomList());
+
+        refresh();
     }
 
     public void btnSearchClicked(MouseEvent e)

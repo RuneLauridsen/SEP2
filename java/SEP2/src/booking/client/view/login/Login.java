@@ -23,6 +23,12 @@ public class Login
         txtVIAID.textProperty().bindBidirectional(viewModel.VIAIDProperty());
         txtPassword.textProperty().bindBidirectional(viewModel.passwordProperty());
         btnLogIn.disableProperty().bind(viewModel.loginDisabledProperty());
+        refresh();
+    }
+
+    private void refresh(){
+        txtPassword.clear();
+        txtVIAID.clear();
     }
 
     @FXML private void btnLoginClicked(ActionEvent actionEvent)

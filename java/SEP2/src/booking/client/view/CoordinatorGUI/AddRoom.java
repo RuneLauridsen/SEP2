@@ -25,6 +25,19 @@ public class AddRoom
 
     this.viewModel = viewModel;
     cbbRoomType.setItems(viewModel.getRoomTypes());
+    refresh();
+  }
+
+  private void refresh(){
+    txtSize.clear();
+    txtName.clear();
+    txtDoubleRoomName.clear();
+    txtDoubleRoomName.setVisible(false);
+    txtComment.clear();
+    txtMaxSafetyCap.clear();
+    txtMaxComfortCap.clear();
+    cbbRoomType.setValue(null);
+    cbIsDoubleRoom.setSelected(false);
   }
   public void saveButtonClick(MouseEvent mouseEvent)
   {

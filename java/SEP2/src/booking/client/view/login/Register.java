@@ -27,6 +27,14 @@ public class Register
     txtPassword.textProperty().bindBidirectional(viewModel.passwordProperty());
     cbbUserType.valueProperty().bindBidirectional(viewModel.userTypeProperty());
 
+    refresh();
+  }
+
+  private void refresh(){
+    txtPassword.clear();
+    txtUsername.clear();
+    txtVIAID.clear();
+    cbbUserType.setValue(null);
   }
 
   public void onBackClicked(ActionEvent actionEvent)

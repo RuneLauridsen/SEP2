@@ -19,6 +19,8 @@ public class ViewModelFactory
 {
     private LoginViewModel loginViewModel;
     private RegisterViewModel registerViewModel;
+    private AddRoomViewModel addRoomViewModel;
+
 
     private UserBookRoomViewModel userBookRoomViewModel;
     private UserHomeScreenViewModel userHomeScreenViewModel;
@@ -97,8 +99,9 @@ public class ViewModelFactory
 
     public AddRoomViewModel getAddRoomViewModel(ViewHandler viewHandler, ClientModel model)
     {
-        // NOTE(rune): Skal altid åbnes i nyt vindue
-        return new AddRoomViewModel(viewHandler, model, getCoordinatorViewModelState(viewHandler, model));
+        if (addRoomViewModel == null)
+            addRoomViewModel = new AddRoomViewModel(viewHandler, model, getCoordinatorViewModelState(viewHandler, model));
+        return addRoomViewModel;
     }
 
     public EditRoomViewModel getEditRoomViewModel(ViewHandler viewHandler, ClientModel model, Room room)
