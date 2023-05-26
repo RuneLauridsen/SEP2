@@ -11,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,13 +25,11 @@ public class UserHomeScreen
     @FXML private TableColumn<Booking, LocalTime> colTo;
     @FXML private TableColumn<Booking, Booking> colCancel;
     @FXML private TableView<Booking> tblActiveBookings;
-    @FXML private VBox mainVBox;
     @FXML private Label lblNoBookings;
     @FXML private Label lblName;
 
     private UserHomeScreenViewModel viewModel;
 
-    //TODO gør sådan at listen bliver opdateret
     public void init(UserHomeScreenViewModel viewModel)
     {
         this.viewModel = viewModel;

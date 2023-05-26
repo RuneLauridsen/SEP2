@@ -1,30 +1,11 @@
 package booking.server.persistene;
 
-import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Course;
-import booking.shared.objects.Room;
-import booking.shared.objects.RoomType;
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
-import booking.shared.objects.UserGroup;
-import booking.shared.objects.UserType;
+import booking.shared.objects.*;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Types;
+import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class DatabaseHandler implements Persistence
 {
@@ -298,7 +279,7 @@ public class DatabaseHandler implements Persistence
                 SELECT
                     ut.user_type_id,
                     ut.user_type_name,
-                    ut.can_edit_rooms, 
+                    ut.can_edit_rooms,  
                     ut.can_edit_users, 
                     ut.can_edit_bookings, 
                     ut.can_overlap_bookings, 

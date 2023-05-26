@@ -1,11 +1,13 @@
 package booking.client.viewModel.userGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
 import booking.client.model.ClientModelActiveBookings;
 import booking.client.model.ClientModelException;
 import booking.shared.objects.Booking;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 public class UserHomeScreenViewModel

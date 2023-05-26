@@ -2,27 +2,19 @@ package test;
 
 import booking.server.persistene.DatabaseHandler;
 import booking.server.persistene.PersistenceException;
-import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Room;
-import booking.shared.objects.RoomType;
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
-
-import booking.shared.objects.UserGroup;
-import booking.shared.objects.UserType;
+import booking.shared.objects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static test.TestConstants.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static test.TestConstants.*;
 
 // TODO(rune): Tjek at alle database funktioner er testet
 // (kig i Persistence interfacet)

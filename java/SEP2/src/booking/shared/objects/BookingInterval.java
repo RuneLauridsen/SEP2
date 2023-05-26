@@ -50,12 +50,6 @@ public class BookingInterval implements Serializable
 
     public boolean isOverlapWith(BookingInterval other)
     {
-        /*
-                       ⬇ start1 10            ⬇ end1 16
-            ------------------------------------------------------
-                   ⬆ start2 09                     ⬆ end2 19
-        */
-
         if (!date.equals(other.date))
         {
             return false;

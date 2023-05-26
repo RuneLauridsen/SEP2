@@ -11,7 +11,6 @@ import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkSocket;
 import booking.shared.NowProvider;
 import booking.shared.ReadTimeNowProvider;
-import booking.server.persistene.DatabaseHandler;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

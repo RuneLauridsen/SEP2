@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ClientModelUserBooking
 {
-    public List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters) throws ClientModelException;
-    public void createBooking(CreateBookingParameters parameters) throws ClientModelOverlapException, ClientModelException;
+     List<Room> getAvailableRooms(GetAvailableRoomsParameters parameters) throws ClientModelException;
+     void createBooking(CreateBookingParameters parameters) throws ClientModelOverlapException, ClientModelException;
 }

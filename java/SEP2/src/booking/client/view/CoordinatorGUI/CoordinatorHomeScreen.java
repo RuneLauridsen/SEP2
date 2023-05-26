@@ -9,17 +9,10 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import booking.client.model.ArgbIntConverter;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 
 public class CoordinatorHomeScreen
 {
@@ -52,10 +45,6 @@ public class CoordinatorHomeScreen
     public void AddRoomClicked(MouseEvent mouseEvent)
     {
         viewModel.changeToAddRoom();
-    }
-
-    public void CoursesClicked(MouseEvent mouseEvent)
-    {
     }
 
     public void BookingsClicked(MouseEvent mouseEvent)

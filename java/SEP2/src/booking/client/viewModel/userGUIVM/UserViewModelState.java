@@ -1,14 +1,11 @@
 package booking.client.viewModel.userGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
 import booking.client.model.ClientModelActiveBookings;
 import booking.client.model.ClientModelActiveUser;
 import booking.client.model.ClientModelException;
 import booking.shared.objects.Booking;
 import booking.shared.objects.User;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

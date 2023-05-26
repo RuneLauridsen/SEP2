@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface ClientModelRoomMangement
 {
-    public Room getRoom(String room) throws ClientModelException;
+     Room getRoom(String room) throws ClientModelException;
 
-    public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ClientModelException;
+     void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws ClientModelException;
 
-    public void updateRoom(Room room) throws ClientModelException;
+     void updateRoom(Room room) throws ClientModelException;
 
-    public void deleteRoom(Room room) throws ClientModelException;
+     void deleteRoom(Room room) throws ClientModelException;
 
-    public List<RoomType> getRoomTypes() throws ClientModelException;
+     List<RoomType> getRoomTypes() throws ClientModelException;
 }

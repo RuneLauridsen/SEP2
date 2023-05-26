@@ -1,19 +1,18 @@
 package booking.server.networking;
 
+import booking.server.model.ServerModel;
 import booking.server.model.ServerModelException;
 import booking.server.model.importFile.ImportFileResult;
 import booking.shared.objects.*;
-import booking.server.model.ServerModel;
 import booking.shared.socketMessages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.time.LocalDate;
 import java.util.List;
 
-import static booking.shared.socketMessages.ErrorResponseReason.*;
+import static booking.shared.socketMessages.ErrorResponseReason.ERROR_RESPONSE_REASON_INVALID_REQUEST_TYPE;
 
 public class ServerNetworkSocketHandler implements Runnable
 {
@@ -246,18 +245,6 @@ public class ServerNetworkSocketHandler implements Runnable
             return new UpdateRoomResponse();
         }
 
-        //
-        // Update user room data
-        //
-        if (request instanceof UpdateUserRoomDataRequest updateUserRoomDataRequest)
-        {
-            model.updateUserRoomData(activeUser,
-                                     updateUserRoomDataRequest.getRoom(),
-                                     updateUserRoomDataRequest.getComment(),
-                                     updateUserRoomDataRequest.getColor());
-
-            return new UpdateUserRoomDataResponse();
-        }
 
         //
         // Update user room data

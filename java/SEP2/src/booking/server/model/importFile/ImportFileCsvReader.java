@@ -2,21 +2,13 @@ package booking.server.model.importFile;
 
 import booking.server.persistene.Persistence;
 import booking.server.persistene.PersistenceException;
-import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Room;
-import booking.shared.objects.User;
-import booking.shared.objects.UserGroup;
+import booking.shared.objects.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class ImportFileCsvReader
 {

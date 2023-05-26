@@ -17,8 +17,6 @@ public class UserBookRoom
     @FXML private TextField txtMaxCap;
     @FXML private ComboBox<Character> cbbBuilding;
     @FXML private ComboBox<Integer> cbbFloor;
-    @FXML private Label lblError;
-    @FXML private Button btnSearch;
     @FXML private VBox vbAvailableRooms;
     @FXML private Label lblNoRooms;
     @FXML private ListView<Room> lvRooms;

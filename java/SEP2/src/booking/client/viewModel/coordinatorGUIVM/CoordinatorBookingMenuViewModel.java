@@ -6,12 +6,11 @@ import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelImport;
 import booking.client.viewModel.sharedVM.ViewModelUtil;
 import booking.server.model.importFile.ImportFileResult;
+import booking.shared.objects.Booking;
+import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-
-import booking.shared.objects.Booking;
-import javafx.collections.ObservableList;
 
 public class CoordinatorBookingMenuViewModel
 {
@@ -65,16 +64,6 @@ public class CoordinatorBookingMenuViewModel
         {
             viewHandler.showErrorDialog(e.getMessage());
         }
-    }
-
-    public void cancelAction()
-    {
-        // TODO(rune): Hvad skal cancel gøre?
-    }
-
-    public void confirmAction()
-    {
-        // TODO(rune): Hvad skal confirm gøre?
     }
 
     public ObservableList<Booking> getBookings()

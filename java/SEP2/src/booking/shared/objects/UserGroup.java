@@ -1,7 +1,6 @@
 package booking.shared.objects;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class UserGroup implements Serializable
 {

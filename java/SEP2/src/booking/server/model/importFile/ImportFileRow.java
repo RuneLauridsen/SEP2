@@ -1,6 +1,5 @@
 package booking.server.model.importFile;
 
-import booking.shared.CreateBookingParameters;
 import booking.shared.objects.Booking;
 
 public class ImportFileRow

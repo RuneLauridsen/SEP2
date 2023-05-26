@@ -8,7 +8,7 @@ import java.time.LocalTime;
 // på testens resultat.
 public interface NowProvider
 {
-    public LocalDate nowDate();
-    public LocalTime nowTime();
-    public LocalDateTime nowDateTime();
+     LocalDate nowDate();
+     LocalTime nowTime();
+     LocalDateTime nowDateTime();
 }

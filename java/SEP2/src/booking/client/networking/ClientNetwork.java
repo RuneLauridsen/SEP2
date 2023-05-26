@@ -1,14 +1,8 @@
 package booking.client.networking;
 
-import booking.client.model.ClientModelException;
 import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
 import booking.shared.GetAvailableRoomsParameters;
-import booking.shared.objects.Booking;
-import booking.shared.objects.Room;
-import booking.shared.objects.UserGroup;
 import booking.shared.objects.*;
 
 import java.time.LocalDate;

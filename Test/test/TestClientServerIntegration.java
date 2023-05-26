@@ -5,33 +5,31 @@ import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelImpl;
 import booking.client.model.FileIO;
-import booking.client.networking.ClientNetworkException;
-import booking.server.model.importFile.ImportFileResult;
 import booking.client.networking.ClientNetwork;
+import booking.client.networking.ClientNetworkException;
 import booking.client.networking.ClientNetworkSocket;
 import booking.client.viewModel.loginVM.LoginViewModel;
 import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
+import booking.server.model.ServerModel;
+import booking.server.model.ServerModelImpl;
+import booking.server.model.importFile.ImportFileResult;
+import booking.server.networking.ServerNetwork;
+import booking.server.networking.ServerNetworkSocket;
 import booking.server.persistene.DatabaseHandler;
 import booking.server.persistene.Persistence;
 import booking.server.persistene.PersistenceCacheProxy;
 import booking.shared.NowProvider;
-import booking.server.model.ServerModel;
-import booking.server.model.ServerModelImpl;
-import booking.server.networking.ServerNetwork;
-import booking.server.networking.ServerNetworkSocket;
 import booking.shared.objects.Booking;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertLinesMatch;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static test.TestConstants.*;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static test.TestConstants.VIAID_GITTE;
+import static test.TestConstants.VIAID_RUNE;
 
 // NOTE(rune): Tester hele vejen i gennem for både Client og server.
 // TODO(rune): Test all use cases

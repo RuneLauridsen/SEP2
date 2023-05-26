@@ -2,8 +2,8 @@ package booking.server.model;
 
 import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
-import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.objects.*;
 
 import java.time.LocalDate;
 import java.util.List;

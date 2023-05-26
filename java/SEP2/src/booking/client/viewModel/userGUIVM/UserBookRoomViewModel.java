@@ -1,8 +1,6 @@
 package booking.client.viewModel.userGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
-import booking.client.model.ClientModelActiveUser;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelUserBooking;
 import booking.shared.CreateBookingParameters;
@@ -199,7 +197,6 @@ public class UserBookRoomViewModel
 
     private static LocalTime parseLocalDateTime(String s)
     {
-        // TODO(rune): Argument validation
 
         String[] parts = s.split(":");
         int minute = Integer.parseInt(parts[1]);

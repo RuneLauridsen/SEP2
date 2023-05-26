@@ -1,9 +1,6 @@
 package booking.shared.socketMessages;
 
 import booking.shared.CreateBookingParameters;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Room;
-import booking.shared.objects.UserGroup;
 
 public class CreateBookingRequest extends Request
 {

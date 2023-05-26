@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 public class Login
 {
     @FXML private Button btnLogIn;
-    @FXML private Button btnRegister;
     @FXML private TextField txtVIAID;
     @FXML private PasswordField txtPassword;
 

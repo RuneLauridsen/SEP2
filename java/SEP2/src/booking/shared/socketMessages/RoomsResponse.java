@@ -1,7 +1,6 @@
 package booking.shared.socketMessages;
 
 import booking.shared.objects.Room;
-import booking.shared.objects.TimeSlot;
 
 import java.util.List;
 

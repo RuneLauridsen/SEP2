@@ -2,7 +2,6 @@ package booking.client.viewModel.loginVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModelException;
-import booking.shared.objects.User;
 import booking.client.model.ClientModelRegister;
 import booking.shared.objects.UserType;
 import javafx.beans.property.ObjectProperty;

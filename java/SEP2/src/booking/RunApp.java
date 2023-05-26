@@ -1,13 +1,13 @@
 package booking;
 
+import booking.server.model.ServerModel;
+import booking.server.model.ServerModelImpl;
+import booking.server.networking.ServerNetworkSocket;
 import booking.server.persistene.DatabaseHandler;
 import booking.server.persistene.Persistence;
 import booking.server.persistene.PersistenceCacheProxy;
 import booking.shared.NowProvider;
 import booking.shared.ReadTimeNowProvider;
-import booking.server.model.ServerModel;
-import booking.server.model.ServerModelImpl;
-import booking.server.networking.ServerNetworkSocket;
 import javafx.application.Application;
 
 import java.sql.SQLException;

@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ClientModelRoomInfo
 {
-    public Room getRoom(String room) throws ClientModelException;
-    public List<Room> getRooms() throws ClientModelException;
-    public List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end) throws ClientModelException;
-    public boolean isAvailable(Room room) throws ClientModelException;
+     Room getRoom(String room) throws ClientModelException;
+     List<Room> getRooms() throws ClientModelException;
+     List<Booking> getBookingsForRoom(String roomName, LocalDate start, LocalDate end) throws ClientModelException;
+     boolean isAvailable(Room room) throws ClientModelException;
 }

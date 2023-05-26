@@ -5,19 +5,19 @@ import booking.server.logger.Logger;
 import booking.server.model.importFile.ImportFile;
 import booking.server.model.importFile.ImportFileResult;
 import booking.server.model.overlapCheck.OverlapChecker;
+import booking.server.persistene.Persistence;
 import booking.server.persistene.PersistenceException;
 import booking.shared.CreateBookingParameters;
+import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.NowProvider;
 import booking.shared.objects.*;
-import booking.server.persistene.Persistence;
-import booking.shared.GetAvailableRoomsParameters;
-
-import static booking.shared.socketMessages.ErrorResponseReason.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static booking.shared.socketMessages.ErrorResponseReason.*;
 
 public class ServerModelImpl implements ServerModel
 {
@@ -331,8 +331,7 @@ public class ServerModelImpl implements ServerModel
     {
         try
         {
-            List<UserGroup> userGroups = persistence.getUserGroups();
-            return userGroups;
+            return persistence.getUserGroups();
         }
         catch (PersistenceException e)
         {
@@ -345,8 +344,7 @@ public class ServerModelImpl implements ServerModel
     {
         try
         {
-            List<User> users = persistence.getUserGroupUsers(userGroup);
-            return users;
+            return persistence.getUserGroupUsers(userGroup);
         }
         catch (PersistenceException e)
         {

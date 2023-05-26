@@ -2,8 +2,8 @@ package booking.client.networking;
 
 import booking.server.model.importFile.ImportFileResult;
 import booking.shared.CreateBookingParameters;
-import booking.shared.objects.*;
 import booking.shared.GetAvailableRoomsParameters;
+import booking.shared.objects.*;
 import booking.shared.socketMessages.*;
 
 import java.io.IOException;
@@ -15,7 +15,6 @@ import java.util.List;
 
 public class ClientNetworkSocket implements ClientNetwork
 {
-    private Socket socket;
     private ObjectOutputStream outToServer;
     private ObjectInputStream inFromServer;
 

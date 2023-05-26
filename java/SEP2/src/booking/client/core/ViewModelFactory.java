@@ -1,19 +1,14 @@
 package booking.client.core;
 
 import booking.client.model.ClientModel;
-import booking.client.viewModel.coordinatorGUIVM.AddRoomViewModel;
-import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookRoomViewModel;
-import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookingMenuViewModel;
-import booking.client.viewModel.coordinatorGUIVM.CoordinatorViewModelState;
-import booking.client.viewModel.coordinatorGUIVM.EditRoomViewModel;
+import booking.client.viewModel.coordinatorGUIVM.*;
+import booking.client.viewModel.loginVM.LoginViewModel;
 import booking.client.viewModel.loginVM.RegisterViewModel;
+import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
 import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
 import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.client.viewModel.userGUIVM.UserViewModelState;
 import booking.shared.objects.Room;
-import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
-import booking.client.viewModel.coordinatorGUIVM.CoordinatorHomeScreenViewModel;
-import booking.client.viewModel.loginVM.LoginViewModel;
 
 public class ViewModelFactory
 {
@@ -31,7 +26,6 @@ public class ViewModelFactory
     private CoordinatorBookingMenuViewModel coordinatorBookingMenuViewModel;
     private CoordinatorViewModelState coordinatorViewModelState;
 
-    private RoomInfoViewModel roomInfoViewModel;
 
     public ViewModelFactory()
     {

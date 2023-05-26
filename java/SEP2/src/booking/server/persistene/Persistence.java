@@ -1,13 +1,6 @@
 package booking.server.persistene;
 
-import booking.shared.objects.Booking;
-import booking.shared.objects.BookingInterval;
-import booking.shared.objects.Room;
-import booking.shared.objects.RoomType;
-import booking.shared.objects.TimeSlot;
-import booking.shared.objects.User;
-import booking.shared.objects.UserGroup;
-import booking.shared.objects.UserType;
+import booking.shared.objects.*;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,8 +1,6 @@
 package booking.client.viewModel.loginVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModel;
-import booking.client.model.ClientModelActiveUser;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelLogin;
 import booking.shared.objects.User;

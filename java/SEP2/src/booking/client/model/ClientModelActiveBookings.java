@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ClientModelActiveBookings
 {
-    public List<Booking> getActiveBookings() throws ClientModelException;
+     List<Booking> getActiveBookings() throws ClientModelException;
 
-    public void deleteBooking(Booking booking) throws ClientModelException;
+     void deleteBooking(Booking booking) throws ClientModelException;
 }

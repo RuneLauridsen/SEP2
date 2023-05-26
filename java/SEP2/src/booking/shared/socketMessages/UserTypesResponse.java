@@ -1,7 +1,8 @@
 package booking.shared.socketMessages;
 
-import java.util.List;
 import booking.shared.objects.UserType;
+
+import java.util.List;
 
 public class UserTypesResponse extends Response
 {

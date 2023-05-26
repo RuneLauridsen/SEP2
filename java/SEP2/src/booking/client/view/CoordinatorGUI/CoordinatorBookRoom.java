@@ -1,7 +1,6 @@
 package booking.client.view.CoordinatorGUI;
 
 import booking.client.view.shared.ColoredRoomListCell;
-import booking.client.view.shared.RoomListCell;
 import booking.client.viewModel.coordinatorGUIVM.CoordinatorBookRoomViewModel;
 import booking.client.viewModel.sharedVM.PredefinedColor;
 import booking.shared.objects.Room;
@@ -39,10 +38,6 @@ public class CoordinatorBookRoom
     private ComboBox<Integer> cbbFloor;
     @FXML
     private ComboBox<UserGroup> cbbCourse;
-    @FXML
-    private Label lblError;
-    @FXML
-    private Button btnSearch;
     @FXML
     private VBox vbAvailableRooms;
     @FXML

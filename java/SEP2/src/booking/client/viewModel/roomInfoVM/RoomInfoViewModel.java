@@ -6,7 +6,6 @@ import booking.client.model.ClientModelRoomInfo;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
 import booking.shared.objects.RoomType;
-import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

@@ -1,26 +1,25 @@
 package test;
 
 import booking.client.model.FileIO;
-import booking.server.persistene.DatabaseHandler;
 import booking.server.model.ServerModel;
 import booking.server.model.ServerModelException;
 import booking.server.model.ServerModelImpl;
+import booking.server.persistene.DatabaseHandler;
 import booking.server.persistene.PersistenceException;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static test.TestConstants.*;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static test.TestConstants.VIAID_GITTE;
+import static test.TestConstants.VIAID_HENRIK;
 
 public class TestServerModel
 {

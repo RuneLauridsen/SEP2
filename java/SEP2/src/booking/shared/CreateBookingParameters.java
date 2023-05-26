@@ -5,7 +5,6 @@ import booking.shared.objects.Room;
 import booking.shared.objects.UserGroup;
 
 import java.io.Serializable;
-import java.rmi.server.RemoteObjectInvocationHandler;
 import java.util.Objects;
 
 public class CreateBookingParameters implements Serializable

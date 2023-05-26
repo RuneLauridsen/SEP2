@@ -1,7 +1,6 @@
 package booking.client.viewModel.coordinatorGUIVM;
 
 import booking.client.core.ViewHandler;
-import booking.client.model.ClientModelActiveUser;
 import booking.client.model.ClientModelException;
 import booking.client.model.ClientModelRoomInfo;
 import booking.shared.objects.Room;

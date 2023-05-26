@@ -1,1 +1,1 @@
-jdbc:postgresql://localhost:5432/postgres?user=postgres&password=asdasd
+jdbc:postgresql://localhost:5432/postgres?user=postgres&password=1346
