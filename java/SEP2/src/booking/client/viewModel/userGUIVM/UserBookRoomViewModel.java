@@ -143,9 +143,9 @@ public class UserBookRoomViewModel
 
                 parameters.setBuilding(building);
                 parameters.setFloor(floor);
-                if (selectedMinCap.get() != null)
+                if (!selectedMinCap.get().isEmpty())
                     parameters.setMinCapacity(Integer.parseInt(selectedMinCap.get()));
-                if (selectedMaxCap.get() != null)
+                if (!selectedMaxCap.get().isEmpty())
                     parameters.setMaxCapacity(Integer.parseInt(selectedMaxCap.get()) );
 
 

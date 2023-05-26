@@ -510,15 +510,12 @@ public class DatabaseHandler implements Persistence
         Objects.requireNonNull(bookingInterval);
 
         String query = """
-            INSERT INTO sep2.booking
-                (booking_date, booking_start_time, booking_end_time, room_id, user_id, user_group_id) 
-            VALUES (?, ?, ?, ?, ?, ?);""";
+            INSERT INTO sep2.booking (booking_date, booking_start_time, booking_end_time, room_id, user_id, user_group_id) 
+                VALUES (?, ?, ?, ?, ?, ?);""";
 
         Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
-
-        try
-        {
+        try {
             statement = connection.prepareStatement(query);
             statement.setDate(1, Date.valueOf(bookingInterval.getDate()));
             statement.setTime(2, Time.valueOf(bookingInterval.getStart()));
@@ -527,14 +524,9 @@ public class DatabaseHandler implements Persistence
             statement.setInt(5, activeUser.getId());
 
             if (userGroup == null)
-            {
                 statement.setNull(6, Types.INTEGER);
-            }
             else
-            {
                 statement.setInt(6, userGroup.getId());
-            }
-
             statement.execute();
         }
         catch (SQLException e)
