@@ -1,5 +1,5 @@
 -- Ryder alt og starter på en frisk
-DROP SCHEMA IF EXISTS sep2 CASCADE ;
+DROP SCHEMA IF EXISTS sep2 CASCADE;
 CREATE SCHEMA sep2;
 SET SEARCH_PATH = "sep2";
 
@@ -177,10 +177,12 @@ VALUES
 
 
 INSERT INTO room
-    (room_name, room_size, room_comfort_capacity, room_fire_capacity, room_comment, room_type_id, multi_room_id)
+    (room_name, room_size, room_comfort_capacity,
+     room_fire_capacity, room_comment, room_type_id, multi_room_id)
 VALUES
     /* id = 1 */ ('A02.01', 1, 11, 111, 'global kommentar', 1, NULL),
     /* id = 2 */ ('A02.02', 2, 22, 222, '', 1, NULL),
+    /* ...    */
     /* id = 3 */ ('A02.03', 3, 33, 333, '', 1, NULL),
     /* id = 4 */ ('B02.04', 4, 44, 444, '', 1, NULL),
     /* id = 5 */ ('B02.05', 5, 55, 555, '', 1, NULL),
