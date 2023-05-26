@@ -29,10 +29,6 @@ public class CoordinatorBookingMenu
     @FXML private TableColumn<Booking, UserGroup> colCourse;
     @FXML private TableColumn<Booking, Booking> colDelete;
 
-
-
-    @FXML private VBox VBoxFile;
-
     private CoordinatorBookingMenuViewModel viewModel;
 
     public void init(CoordinatorBookingMenuViewModel viewModel)
@@ -62,10 +58,8 @@ public class CoordinatorBookingMenu
     @FXML
     public void btnInsertFileClicked(ActionEvent actionEvent)
     {
-        VBoxFile.setVisible(true);
         viewModel.insertFileAction();
     }
-
 
     public void tableviewClicked(MouseEvent mouseEvent)
     {

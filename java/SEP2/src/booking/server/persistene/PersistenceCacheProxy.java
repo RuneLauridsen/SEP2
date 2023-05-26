@@ -57,11 +57,13 @@ public class PersistenceCacheProxy implements Persistence
 
     @Override public Map<Integer, UserType> getUserTypes() throws PersistenceException
     {
-        invalidateCachesIfExpired();
-
-        if (cachedUserTypes == null)
+        synchronized (this)
         {
-            cachedUserTypes = subject.getUserTypes();
+            invalidateCachesIfExpired();
+            if (cachedUserTypes == null)
+            {
+                cachedUserTypes = subject.getUserTypes();
+            }
         }
 
         return cachedUserTypes;
@@ -69,11 +71,13 @@ public class PersistenceCacheProxy implements Persistence
 
     @Override public Map<Integer, RoomType> getRoomTypes() throws PersistenceException
     {
-        invalidateCachesIfExpired();
-
-        if (cachedRoomTypes == null)
+        synchronized (this)
         {
-            cachedRoomTypes = subject.getRoomTypes();
+            invalidateCachesIfExpired();
+            if (cachedRoomTypes == null)
+            {
+                cachedRoomTypes = subject.getRoomTypes();
+            }
         }
 
         return cachedRoomTypes;
@@ -81,23 +85,26 @@ public class PersistenceCacheProxy implements Persistence
 
     @Override public List<UserGroup> getUserGroups() throws PersistenceException
     {
-        invalidateCachesIfExpired();
-
-        if (cachedUserGroups == null)
+        synchronized (this)
         {
-            cachedUserGroups = subject.getUserGroups();
+            invalidateCachesIfExpired();
+            if (cachedUserGroups == null)
+            {
+                cachedUserGroups = subject.getUserGroups();
+            }
         }
-
         return cachedUserGroups;
     }
 
     @Override public List<User> getUserGroupUsers(UserGroup userGroup) throws PersistenceException
     {
-        invalidateCachesIfExpired();
-
-        if (!cachedUserGroupUsers.containsKey(userGroup))
+        synchronized (this)
         {
-            cachedUserGroupUsers.put(userGroup, subject.getUserGroupUsers(userGroup));
+            invalidateCachesIfExpired();
+            if (!cachedUserGroupUsers.containsKey(userGroup))
+            {
+                cachedUserGroupUsers.put(userGroup, subject.getUserGroupUsers(userGroup));
+            }
         }
 
         return cachedUserGroupUsers.get(userGroup);
