@@ -54,7 +54,6 @@ public class CoordinatorBookRoom
 
     public void init(CoordinatorBookRoomViewModel viewModel)
     {
-        refresh();
         this.viewModel = viewModel;
 
         cbbFromTime.setItems(viewModel.getTimeIntervals());
@@ -80,6 +79,8 @@ public class CoordinatorBookRoom
 
         lvRooms.setCellFactory(listView -> new ColoredRoomListCell("Book", viewModel::bookRoom));
         lvRooms.setItems(viewModel.getRoomList());
+
+        refresh();
     }
 
     public void btnSearchClicked(MouseEvent event)
@@ -102,6 +103,10 @@ public class CoordinatorBookRoom
 
     public void refresh()
     {
+        cbPrefix.setSelected(false);
+        vbTime.setDisable(cbPrefix.isSelected());
+        hbPrefix.setVisible(cbPrefix.isSelected());
+
         dpStartDate.setValue(null);
         cbbFromTime.setValue(null);
         cbbToTime.setValue(null);

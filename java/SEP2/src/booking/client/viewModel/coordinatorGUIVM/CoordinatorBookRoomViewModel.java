@@ -33,8 +33,8 @@ public class CoordinatorBookRoomViewModel
     private final ObjectProperty<TimeSlot> selectedPreFixTime;
 
     private final BooleanProperty prefixCheckBox;
-    private final ObjectProperty<String> selectedMinCap;
-    private final ObjectProperty<String> selectedMaxCap;
+    private final SimpleStringProperty selectedMinCap;
+    private final SimpleStringProperty selectedMaxCap;
     private final ObjectProperty<Character> selectedBuilding;
     private final ObjectProperty<Integer> selectedFloor;
     private final ObjectProperty<UserGroup> selectedCourse;
@@ -74,8 +74,8 @@ public class CoordinatorBookRoomViewModel
         selectedFromTime = new SimpleObjectProperty<>();
         selectedToTime = new SimpleObjectProperty<>();
         selectedPreFixTime = new SimpleObjectProperty<>();
-        selectedMinCap = new SimpleObjectProperty<>();
-        selectedMaxCap = new SimpleObjectProperty<>();
+        selectedMinCap = new SimpleStringProperty();
+        selectedMaxCap = new SimpleStringProperty();
         selectedBuilding = new SimpleObjectProperty<>();
         selectedFloor = new SimpleObjectProperty<>();
         selectedCourse = new SimpleObjectProperty<>();
@@ -151,12 +151,12 @@ public class CoordinatorBookRoomViewModel
     }
 
 
-    public ObjectProperty<String> selectedMinCapProperty()
+    public SimpleStringProperty selectedMinCapProperty()
     {
         return selectedMinCap;
     }
 
-    public ObjectProperty<String> selectedMaxCapProperty()
+    public SimpleStringProperty selectedMaxCapProperty()
     {
         return selectedMaxCap;
     }
@@ -219,9 +219,9 @@ public class CoordinatorBookRoomViewModel
 
                 parameters.setBuilding(building);
                 parameters.setFloor(floor);
-                if (selectedMinCap.get() != null)
+                if (!selectedMinCap.get().isEmpty())
                     parameters.setMinCapacity(Integer.parseInt(selectedMinCap.get()));
-                if (selectedMaxCap.get() != null)
+                if (!selectedMaxCap.get().isEmpty())
                     parameters.setMaxCapacity(Integer.parseInt(selectedMaxCap.get()) );
 
                 roomList.clear();
