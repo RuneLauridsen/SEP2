@@ -198,8 +198,10 @@ public class CoordinatorBookRoomViewModel
             LocalTime endTime= null;
 
             if (prefixCheckBox.get()){
-                //TODO lav sådan at prefix time virker.
+                startTime = selectedPreFixTime.get().getStart();
+                endTime = selectedPreFixTime.get().getEnd();
             }
+
             else{
                 String startTimeString = selectedFromTime.get();
                 String endTimeString = selectedToTime.get();
@@ -293,14 +295,13 @@ public class CoordinatorBookRoomViewModel
 
     private static LocalTime parseLocalDateTime(String s)
     {
-        // TODO(rune): Argument validation
-
         String[] parts = s.split(":");
         int minute = Integer.parseInt(parts[1]);
         int hour = Integer.parseInt(parts[0]);
 
         return LocalTime.of(hour, minute);
     }
+
 
     public void changeToSearch(String roomName)
     {

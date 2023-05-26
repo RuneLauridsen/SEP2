@@ -55,7 +55,7 @@
                                 <Insets right="10.0" />
                             </HBox.margin>
                         </VBox>
-                        <VBox prefHeight="94.0" prefWidth="370.0" visible="false">
+                        <VBox fx:id="VBoxFile" prefHeight="94.0" prefWidth="370.0" visible="false">
                             <children>
                                 <Label text="Inserted File:" underline="true" />
                                 <Label text="[File]" />
