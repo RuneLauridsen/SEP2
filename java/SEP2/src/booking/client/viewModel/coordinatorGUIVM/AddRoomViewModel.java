@@ -13,10 +13,10 @@ public class AddRoomViewModel
     private final ClientModelRoomMangement roomManagementModel;
     private final CoordinatorViewModelState sharedState;
 
-    public AddRoomViewModel(ViewHandler viewHandler, ClientModelRoomMangement roomMangementModel, CoordinatorViewModelState sharedState)
+    public AddRoomViewModel(ViewHandler viewHandler, ClientModelRoomMangement roomManagementModel, CoordinatorViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
-        this.roomManagementModel = roomMangementModel;
+        this.roomManagementModel = roomManagementModel;
         this.sharedState = sharedState;
     }
 
