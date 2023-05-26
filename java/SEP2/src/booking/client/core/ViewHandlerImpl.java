@@ -211,7 +211,6 @@ public class ViewHandlerImpl implements ViewHandler
             loader.setLocation(getClass().getResource("../view/CoordinatorGUI/AddRoom.fxml"));
             root = loader.load();
 
-            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
             AddRoomViewModel viewModel = viewModelFactory.getAddRoomViewModel(this, model);
 
             AddRoom view = loader.getController();
@@ -238,10 +237,8 @@ public class ViewHandlerImpl implements ViewHandler
 
             loader.setLocation(getClass().getResource("../view/roomInfo/RoomInfo.fxml"));
             root = loader.load();
-
-            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
-            //RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, persistence, room);
-            RoomInfoViewModel viewModel = new RoomInfoViewModel(this, model, roomName);
+            
+            RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, model, roomName);
 
             RoomInfo view = loader.getController();
             view.init(viewModel);
@@ -320,7 +317,6 @@ public class ViewHandlerImpl implements ViewHandler
             loader.setLocation(getClass().getResource("../view/CoordinatorGUI/EditRoom.fxml"));
             root = loader.load();
 
-            //TODO Bruger ikke viewModelFactory da der skal åbnes en ny side... Måske er der en anden løsning
             EditRoomViewModel viewModel = viewModelFactory.getEditRoomViewModel(this, model, room);
 
             EditRoom view = loader.getController();
