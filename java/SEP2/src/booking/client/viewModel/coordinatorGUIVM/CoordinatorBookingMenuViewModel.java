@@ -45,18 +45,21 @@ public class CoordinatorBookingMenuViewModel
 
             if (file != null)
             {
-                ImportFileResult result = importModel.importFile(file.getAbsolutePath());
-                if (result.isOk())
+                if (viewHandler.showOkCancelDialog("Import", "Vil du importere " + file.getName()))
                 {
-                    viewHandler.showInfoDialog("Bookings imported.");
-                    sharedState.refreshActiveBookings();
-                }
-                else
-                {
-                    // TODO(rune): ImportFileResult burde have et view for sig, da det
-                    // bliver uoverskueligt, hvis der er mange fejl og/eller overlap.
-                    String message = ViewModelUtil.getImportFileResultDisplayText(result);
-                    viewHandler.showWarningDialog(message);
+                    ImportFileResult result = importModel.importFile(file.getAbsolutePath());
+                    if (result.isOk())
+                    {
+                        viewHandler.showInfoDialog("Bookings imported.");
+                        sharedState.refreshActiveBookings();
+                    }
+                    else
+                    {
+                        // TODO(rune): ImportFileResult burde have et view for sig, da det
+                        // bliver uoverskueligt, hvis der er mange fejl og/eller overlap.
+                        String message = ViewModelUtil.getImportFileResultDisplayText(result);
+                        viewHandler.showWarningDialog(message);
+                    }
                 }
             }
         }
