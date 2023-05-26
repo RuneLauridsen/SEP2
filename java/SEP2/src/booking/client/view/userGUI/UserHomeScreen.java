@@ -4,6 +4,7 @@ import booking.client.view.shared.ButtonTableCell;
 import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.shared.objects.Booking;
 import booking.shared.objects.Room;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -36,16 +37,8 @@ public class UserHomeScreen
     {
         this.viewModel = viewModel;
 
-        if (viewModel.getActiveBookings().size() > 0)
-        {
-            tblActiveBookings.setManaged(true);
-            lblNoBookings.setManaged(false);
-        }
-        else
-        {
-            tblActiveBookings.setManaged(false);
-            lblNoBookings.setManaged(true);
-        }
+        viewModel.getActiveBookings().addListener(this::onActiveBookingsChanged);
+        onActiveBookingsChanged(null);
 
         lblName.textProperty().bind(Bindings.concat("Hello ").concat(viewModel.usernameProperty()));
         tblActiveBookings.setItems(viewModel.getActiveBookings());
@@ -60,6 +53,24 @@ public class UserHomeScreen
 
         txtSearch.textProperty().bindBidirectional(viewModel.getSearchProperty());
         btnSearch.disableProperty().bindBidirectional(viewModel.searchDisable());
+    }
+
+    private void onActiveBookingsChanged(Observable observable)
+    {
+        if (viewModel.getActiveBookings().size() > 0)
+        {
+            tblActiveBookings.setVisible(true);
+            tblActiveBookings.setManaged(true);
+            lblNoBookings.setVisible(false);
+            lblNoBookings.setManaged(false);
+        }
+        else
+        {
+            tblActiveBookings.setVisible(false);
+            tblActiveBookings.setManaged(false);
+            lblNoBookings.setVisible(true);
+            lblNoBookings.setManaged(true);
+        }
     }
 
     public void findAvailableRoomClick(ActionEvent actionEvent)
