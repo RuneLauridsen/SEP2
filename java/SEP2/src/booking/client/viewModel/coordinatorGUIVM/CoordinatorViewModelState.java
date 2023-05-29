@@ -31,6 +31,9 @@ public class CoordinatorViewModelState
         this.activeBookings = FXCollections.observableArrayList();
         this.allRooms = FXCollections.observableArrayList();
         this.activeUser = activeUserModel.getUser();
+
+        refreshActiveBookings();
+        refreshAllRooms();
     }
 
     public ObservableList<Booking> getActiveBookings()

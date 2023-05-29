@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static test.TestConstants.*;
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
-// TODO(rune): Tjek af vi tester all fejlkoder
+// TODO(rune): Tjek at vi tester all fejlkoder
 
 public class TestServerModel
 {
@@ -34,7 +34,7 @@ public class TestServerModel
 
     @BeforeEach void setup()
     {
-        database = TestDatabaseUtil.setup();
+        database = TestUtil.setupDatabase();
         model = new ServerModelImpl(database, new FakeNowProvider());
         modelBadPersistence = new ServerModelImpl(new FakePersistenceBad(), new FakeNowProvider());
         fileIO = new FakeFileIO();
@@ -42,7 +42,7 @@ public class TestServerModel
 
     @AfterEach void setdown()
     {
-        TestDatabaseUtil.setdown(database);
+        TestUtil.setdownDatabase(database);
     }
 
     @Test void testUpdateRoom() throws ServerModelException
@@ -166,7 +166,7 @@ public class TestServerModel
         assertEquals(userWithoutPassword.getType(), userTypes.get(2));
     }
 
-    @Test void assertErrorReason(Executable executable, ErrorResponseReason reason)
+    void assertErrorReason(Executable executable, ErrorResponseReason reason)
     {
         assertThrows(ServerModelException.class, executable, reason.getMessage());
     }

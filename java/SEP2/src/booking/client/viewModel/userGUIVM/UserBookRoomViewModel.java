@@ -65,8 +65,8 @@ public class UserBookRoomViewModel
         selectedToTime = new SimpleObjectProperty<>();
         selectedBuilding = new SimpleObjectProperty<>();
         selectedFloor = new SimpleObjectProperty<>();
-        selectedMaxCap = new SimpleObjectProperty<>();
-        selectedMinCap = new SimpleObjectProperty<>();
+        selectedMaxCap = new SimpleObjectProperty<>("");
+        selectedMinCap = new SimpleObjectProperty<>("");
 
         roomList = FXCollections.observableArrayList();
     }
@@ -166,6 +166,7 @@ public class UserBookRoomViewModel
             viewHandler.showErrorDialog("Max- and min capacity must be a number");
         }
         catch (NullPointerException e){
+            // TODO(rune): NullPointerException kan skyldes mange ting. Ville være mere sikkert og eksplicit med f.eks. if (startTimeString == null) { ... }
             viewHandler.showErrorDialog("Date and time interval must not be empty");
         }
     }
@@ -180,18 +181,22 @@ public class UserBookRoomViewModel
             requestedInterval,
             true,    // overlap tilladt,
             null);   // ikke til hold/klassen
-        try
-        {
-            bookingModel.createBooking(parameters);
-            viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
-            sharedState.refreshActiveBookings();
 
-            // NOTE(rune): Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
-            showAvailableRooms();
-        }
-        catch (ClientModelException e)
+        if(viewHandler.showOkCancelDialog("Book lokale " + room + " til " + requestedInterval + "?", "Bekræft booking"))
         {
-            viewHandler.showErrorDialog(e.getMessage());
+            try
+            {
+                bookingModel.createBooking(parameters);
+                viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
+                sharedState.refreshActiveBookings();
+
+                // NOTE(rune): Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
+                showAvailableRooms();
+            }
+            catch (ClientModelException e)
+            {
+                viewHandler.showErrorDialog(e.getMessage());
+            }
         }
     }
 
@@ -205,6 +210,7 @@ public class UserBookRoomViewModel
         return LocalTime.of(hour, minute);
     }
 
+    // TODO(rune): Hvorfor hedder den ChangeToSearch, hvad søger man på?
     public void ChangeToSearch(String roomName)
     {
         viewHandler.showRoomInfo(roomName);

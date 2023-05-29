@@ -25,6 +25,8 @@ public class UserViewModelState
         this.activeUserModel = activeUserModel;
         this.activeBookings = FXCollections.observableArrayList();
         this.activeUser = activeUserModel.getUser();
+
+        refreshActiveBookings();
     }
 
     public ObservableList<Booking> getActiveBookings()

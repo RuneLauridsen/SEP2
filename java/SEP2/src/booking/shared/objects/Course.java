@@ -6,13 +6,11 @@ public class Course implements Serializable
 {
     private final int id;
     private final String name;
-    private final int timeSlotCount;
 
-    public Course(int id, String name, int timeSlotCount)
+    public Course(int id, String name)
     {
         this.id = id;
         this.name = name;
-        this.timeSlotCount = timeSlotCount;
     }
 
     public int getId()
@@ -23,11 +21,6 @@ public class Course implements Serializable
     public String getName()
     {
         return name;
-    }
-
-    public int getTimeSlotCount()
-    {
-        return timeSlotCount;
     }
 
     @Override public boolean equals(Object obj)

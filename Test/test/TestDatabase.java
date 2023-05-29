@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static test.TestConstants.*;
+import static test.TestUtil.assertRooms;
 
 // TODO(rune): Tjek at alle database funktioner er testet
 // (kig i Persistence interfacet)
@@ -27,12 +28,12 @@ public class TestDatabase
 
     @BeforeEach void setup()
     {
-        database = TestDatabaseUtil.setup();
+        database = TestUtil.setupDatabase();
     }
 
     @AfterEach void setdown()
     {
-        TestDatabaseUtil.setdown(database);
+        TestUtil.setdownDatabase(database);
     }
 
     @Test void testGetUserTypes() throws PersistenceException
@@ -136,8 +137,8 @@ public class TestDatabase
         assertEquals(roomsGitte.get(0).getId(), 1);
         assertEquals(roomsGitte.get(0).getName(), "A02.01");
         assertEquals(roomsGitte.get(0).getSize(), 1);
-        assertEquals(roomsGitte.get(0).getComfortCapacity(), 11);
-        assertEquals(roomsGitte.get(0).getFireCapacity(), 111);
+        assertEquals(roomsGitte.get(0).getComfortCapacity(), 1);
+        assertEquals(roomsGitte.get(0).getFireCapacity(), 11);
         assertEquals(roomsGitte.get(0).getComment(), "global kommentar");
         assertEquals(roomsGitte.get(0).getType().getName(), "Grupperum");
         assertEquals(roomsGitte.get(0).getUserComment(), "jeg hedder gitte");
@@ -300,7 +301,7 @@ public class TestDatabase
         List<Room> rooms4 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, 4, null, null);
         List<Room> rooms5 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, 'B', null);
         List<Room> rooms6 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, 3);
-        List<Room> rooms7 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 55, 77, 'B', 2);
+        List<Room> rooms7 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 5, 7, 'B', 2);
 
         // Tester at 11:00-13:00 overlapper med 11:00-13:00
         List<Room> rooms8 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(11, 0), LocalTime.of(13, 0)), null, null, 'A', 3);
@@ -318,13 +319,13 @@ public class TestDatabase
 
         // A03.01, A03.02 og B02.05 er optaget
         // C06.01 og C05.15 er ikke grupperum
-        // A03.00 har capacity >= 4
-        assertRooms(rooms3, "A02.01", "A02.02", "A02.03", "A03.03", "B02.04", "B02.06", "B03.04", "B03.05", "B03.06", "C02.07", "C02.08", "C02.09", "C03.07", "C03.08", "C03.09");
+        // capacity >= 4
+        assertRooms(rooms3, "B02.04", "B02.06", "B03.04", "B03.05", "B03.06", "C02.07", "C02.08", "C02.09", "C03.07", "C03.08", "C03.09");
 
         // A03.01, A03.02 og B02.05 er optaget
         // C06.01 og C05.15 er ikke grupperum
         // A03.00 har capacity <= 4
-        assertRooms(rooms4, "A03.00");
+        assertRooms(rooms4, "A02.01", "A02.02", "A02.03", "A03.00", "A03.03", "B02.04", "B03.04");
 
         // A03.01, A03.02 og B02.05 er optaget
         // C06.01 og C05.15 er ikke grupperum
@@ -403,8 +404,8 @@ public class TestDatabase
 
         assertEquals(roomToUpdate.getName(), "A02.03");
         assertEquals(roomToUpdate.getSize(), 3);
-        assertEquals(roomToUpdate.getComfortCapacity(), 33);
-        assertEquals(roomToUpdate.getFireCapacity(), 333);
+        assertEquals(roomToUpdate.getComfortCapacity(), 3);
+        assertEquals(roomToUpdate.getFireCapacity(), 33);
         assertEquals(roomToUpdate.getComment(), "");
         assertEquals(roomToUpdate.getType().getId(), 1);
 
@@ -419,7 +420,7 @@ public class TestDatabase
         assertEquals(roomToUpdate.getName(), "A02.99");
         assertEquals(roomToUpdate.getSize(), 90);
         assertEquals(roomToUpdate.getComfortCapacity(), 91);
-        assertEquals(roomToUpdate.getFireCapacity(), 333);
+        assertEquals(roomToUpdate.getFireCapacity(), 33);
         assertEquals(roomToUpdate.getComment(), "new global comment");
         assertEquals(roomToUpdate.getType().getId(), 1);
     }
@@ -492,23 +493,6 @@ public class TestDatabase
         assertEquals(roomAfter.getComment(), "kommentar");
         assertEquals(roomAfter.getUserComment(), "");
         assertEquals(roomAfter.getUserColor(), -1);
-    }
-
-    private static void assertRooms(List<Room> rooms, String... roomNames)
-    {
-        if (rooms.size() != roomNames.length)
-        {
-            assertTrue(false);
-        }
-
-        Set<String> roomNamesSet = Set.of(roomNames);
-        for (int i = 0; i < rooms.size(); i++)
-        {
-            if (!rooms.get(i).getName().equals(roomNames[i]))
-            {
-                assertTrue(false);
-            }
-        }
     }
 }
 

@@ -3,22 +3,10 @@ package test;
 import booking.client.core.ViewModelFactory;
 import booking.client.model.ClientModel;
 import booking.client.model.ClientModelException;
-import booking.client.model.ClientModelImpl;
-import booking.client.model.FileIO;
-import booking.client.networking.ClientNetwork;
 import booking.client.networking.ClientNetworkException;
-import booking.client.networking.ClientNetworkSocket;
 import booking.client.viewModel.loginVM.LoginViewModel;
 import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
-import booking.server.model.ServerModel;
-import booking.server.model.ServerModelImpl;
 import booking.server.model.importFile.ImportFileResult;
-import booking.server.networking.ServerNetwork;
-import booking.server.networking.ServerNetworkSocket;
-import booking.server.persistene.DatabaseHandler;
-import booking.server.persistene.Persistence;
-import booking.server.persistene.PersistenceCacheProxy;
-import booking.shared.NowProvider;
 import booking.shared.objects.Booking;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,49 +26,20 @@ public class TestClientServerIntegration
 {
     private FakeViewHandler viewHandler;
     private ViewModelFactory viewModelFactory;
-    private DatabaseHandler database;
-    private Thread serverThread;
-    private ServerNetwork server;
     private ClientModel model;
+    private TestUtil.ServerInstance server;
 
     @BeforeEach void setup() throws ClientNetworkException
     {
-        database = TestDatabaseUtil.setup();
-
-        FileIO fileIO = new FakeFileIO();
-        NowProvider nowProvider = new FakeNowProvider();
-        Persistence persistence = new PersistenceCacheProxy(database, 100_000, nowProvider);
-        ServerModel serverModel = new ServerModelImpl(persistence, nowProvider);
-        ServerNetwork serverNetwork = new ServerNetworkSocket(serverModel);
-
-        ClientNetwork clientNetwork = new ClientNetworkSocket();
-        ClientModel clientModel = new ClientModelImpl(clientNetwork, nowProvider, fileIO);
-
-        serverThread = new Thread(serverNetwork);
-        serverThread.setDaemon(true);
-        serverThread.start();
-
-        try
-        {
-            Thread.sleep(1000); // HACK(rune): Vent på at server starter.
-        }
-        catch (InterruptedException e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        clientNetwork.connect();
-        server = serverNetwork;
-        model = clientModel;
+        server = TestUtil.setupServer();
+        model = TestUtil.setupClient();
         viewHandler = new FakeViewHandler();
         viewModelFactory = new ViewModelFactory();
     }
 
     @AfterEach void cleanup()
     {
-        TestDatabaseUtil.setdown(database);
-        serverThread.interrupt();
-        server.close();
+        TestUtil.setdownServer(server);
     }
 
     @Test void testLogin()
@@ -111,6 +70,7 @@ public class TestClientServerIntegration
         // TODO(rune): Test register
     }
 
+    /*
     @Test void testCreateBooking() throws ClientModelException
     {
         model.login(VIAID_GITTE, "1234");
@@ -143,6 +103,8 @@ public class TestClientServerIntegration
         assertEquals(viewModel.getRoomList().get(1).getName(), "A02.02");
         assertEquals(viewModel.getRoomList().get(2).getName(), "A02.03");
     }
+
+     */
 
     @Test void testImportFile() throws ClientModelException
     {

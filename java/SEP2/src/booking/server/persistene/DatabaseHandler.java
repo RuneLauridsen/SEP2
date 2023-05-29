@@ -43,17 +43,19 @@ public class DatabaseHandler implements Persistence
         {
             String query = """
                 SELECT
-                    u.user_id, 
-                    u.user_type_id, 
-                    u.user_name, 
-                    u.user_initials, 
-                    u.user_viaid 
-                FROM 
-                    sep2."user" u 
-                WHERE 
+                    u.user_id,
+                    u.user_type_id,
+                    u.user_name,
+                    u.user_initials,
+                    u.user_viaid
+                FROM
+                    sep2."user" u
+                WHERE
                     u.user_viaid = ?
                 AND
                     u.user_password_hash = COALESCE(?, u.user_password_hash)
+                ORDER BY
+                    u.user_id
                 """;
 
             statement = connection.prepareStatement(query);

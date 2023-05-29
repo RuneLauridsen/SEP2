@@ -1,66 +1,88 @@
 package test;
 
 import booking.client.core.ViewHandler;
+import booking.client.view.CoordinatorGUI.CoordinatorBookRoom;
+import booking.client.view.CoordinatorGUI.CoordinatorBookingMenu;
+import booking.client.view.CoordinatorGUI.CoordinatorHomeScreen;
+import booking.client.viewModel.coordinatorGUIVM.AddRoomViewModel;
+import booking.client.viewModel.coordinatorGUIVM.EditRoomViewModel;
+import booking.client.viewModel.loginVM.LoginViewModel;
+import booking.client.viewModel.loginVM.RegisterViewModel;
+import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
+import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
+import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
 
 public class FakeViewHandler implements ViewHandler
 {
     private String latestDialog;
+    private Class latestView;
+    private boolean okCancelChoice;
 
     public String getLatestDialog()
     {
         return latestDialog;
     }
 
+    public Class getLatestView()
+    {
+        return latestView;
+    }
+
+    public void setOkCancelChoice(boolean okCancelChoice)
+    {
+        this.okCancelChoice = okCancelChoice;
+    }
+
     public void showLogin()
     {
-
+       latestView = LoginViewModel.class;
     }
 
     public void showUserBookRoom()
     {
-
+        latestView = UserBookRoomViewModel.class;
     }
 
     public void showCoordinatorHomeScreen(User user)
     {
-
+        latestView = CoordinatorHomeScreen.class;
     }
 
     public void showCoordinatorBookRoom()
     {
-
+        latestView = CoordinatorBookRoom.class;
     }
 
     public void showCoordinatorBookingMenu()
     {
-
+        latestView = CoordinatorBookingMenu.class;
     }
 
     public void showUserHomeScreen(User user)
     {
-
+        latestView = UserHomeScreenViewModel.class;
     }
 
     public void showAddRoom()
     {
-
+        latestView = AddRoomViewModel.class;
     }
 
     public void showRoomInfo(String roomName)
     {
-
+        latestView = RoomInfoViewModel.class;
     }
 
     public void showRegister()
     {
-
+        latestView = RegisterViewModel.class;
     }
 
     public void showEditRoom(Room room)
     {
-
+        latestView = EditRoomViewModel.class;
     }
 
     public void showInfoDialog(String text)
@@ -96,7 +118,7 @@ public class FakeViewHandler implements ViewHandler
     @Override public boolean showOkCancelDialog(String header, String prompt)
     {
         latestDialog = prompt;
-        return true; // TODO(rune): Unit test cancel
+        return okCancelChoice;
     }
 }
 
