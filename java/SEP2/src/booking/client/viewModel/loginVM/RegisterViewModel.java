@@ -56,9 +56,26 @@ public class RegisterViewModel
 
     public void register()
     {
-
         try
         {
+            if(!viaIDProperty.get().matches("\\d{6}"))
+            {
+                viewHandler.showErrorDialog("VIA ID must be 6 digits");
+                return;
+            }
+
+            if(!usernameProperty.get().trim().matches("[A-Za-z'\\- ]+"))
+            {
+                viewHandler.showErrorDialog("Invalid username");
+                return;
+            }
+
+            if(userTypeProperty.get() == null)
+            {
+                viewHandler.showErrorDialog("No occupation selected");
+                return;
+            }
+
             registerModel.register(usernameProperty.get(), passwordProperty.get(), null, Integer.parseInt(viaIDProperty.get()) , userTypeProperty.get());
             viewHandler.showLogin();
         }
@@ -66,7 +83,8 @@ public class RegisterViewModel
         {
             viewHandler.showErrorDialog(e.getMessage());
         }
-        catch (NumberFormatException e){
+        catch (NumberFormatException e)
+        {
             viewHandler.showErrorDialog("VIA ID must be a number");
         }
 

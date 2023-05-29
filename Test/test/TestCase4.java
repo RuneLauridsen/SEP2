@@ -37,7 +37,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_3();
-        step7_2(""); // TODO(rune):
+        step7_2(""); // TODO(rune): Ændr docs til trin 7.1
         postcondition(false);
     }
 
@@ -49,7 +49,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_1();
-        step7_2(""); // TODO(rune):
+        step7_2("VIA ID must be 6 digits");
         postcondition(false);
     }
 
@@ -61,7 +61,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_1();
-        step7_2(""); // TODO(rune):
+        step7_2("VIA ID must be 6 digits");
         postcondition(false);
     }
 
@@ -73,7 +73,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_1();
-        step7_2(""); // TODO(rune):
+        step7_2("VIA ID must be 6 digits");
         postcondition(false);
     }
 
@@ -85,7 +85,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_2();
         step5_1();
         step6_1();
-        step7_2(""); // TODO(rune):
+        step7_2("Invalid username"); // TODO(rune): Kan man ikke godt hedde "Ma-rtin"?
         postcondition(false);
     }
 
@@ -97,7 +97,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_3();
         step5_1();
         step6_1();
-        step7_2(""); // TODO(rune):
+        step7_2("Invalid username");
         postcondition(false);
     }
 
@@ -107,8 +107,9 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step2();
         step3_1();
         step4_1();
+        step5_1();
         step6_2();
-        step7_2(""); // TODO(rune):
+        step7_2(""); // TODO(rune): Ændr i docs til trin 7.1
         postcondition(false);
     }
 
@@ -120,7 +121,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_3();
-        step7_2(""); // TODO(rune):
+        step7_2(""); // TODO(rune): Ændr i docs til trin 7.1
         postcondition(false);
     }
 
@@ -130,9 +131,9 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step2();
         step3_1();
         step4_1();
-        step5_2();
-        step6_1();
-        step7_2(""); // TODO(rune):
+        step5_1();
+        step6_4();
+        step7_2(""); // TODO(rune): Ændr i docs til trin 7.1
         postcondition(false);
     }
 
@@ -144,7 +145,7 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_2();
         step6_1();
-        step7_2(""); // TODO(rune):
+        step7_2("No occupation selected");
         postcondition(false);
     }
 
@@ -156,11 +157,9 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_4();
         step5_2();
         step6_5();
-        step7_2(""); // TODO(rune):
+        step7_2("VIA ID must be 6 digits");
         postcondition(false);
     }
-
-
 
     //
     // Step 1
@@ -304,11 +303,11 @@ public class TestCase4 extends TestClientServerIntegrationBase
         {
             if (isPostconditionAchieved)
             {
-                assertTrue(server.database().getUser(777777) != null);
+                assertTrue(server.database().getUser(888888) != null);
             }
             else
             {
-                assertTrue(server.database().getUser(777777) == null);
+                assertTrue(server.database().getUser(888888) == null);
             }
         }
         catch (PersistenceException e)
