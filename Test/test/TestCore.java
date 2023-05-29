@@ -20,11 +20,10 @@ public class TestCore
     @Test
     public void Course()
     {
-        Course SDJ2 = new Course(1, "SDJ", 4);
+        Course SDJ2 = new Course(1, "SDJ");
 
         assertEquals(SDJ2.getId(), 1);
         assertEquals(SDJ2.getName(), "SDJ");
-        assertEquals(SDJ2.getTimeSlotCount(), 4);
     }
     //TODO Test unik id og ingen duplicate
 

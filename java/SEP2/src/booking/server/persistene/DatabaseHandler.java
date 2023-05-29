@@ -375,8 +375,7 @@ public class DatabaseHandler implements Persistence
                     ug.user_group_id,
                     ug.user_group_name,
                     c.course_id,
-                    c.course_name,
-                    c.course_time_slot_count
+                    c.course_name
                 FROM 
                     sep2.booking b 
                 INNER JOIN 
@@ -435,8 +434,7 @@ public class DatabaseHandler implements Persistence
                         resultSet.getString("user_group_name"),
                         new Course(
                             resultSet.getInt("course_id"),
-                            resultSet.getString("course_name"),
-                            resultSet.getInt("course_time_slot_count")
+                            resultSet.getString("course_name")
                         )
                     );
                 }
@@ -515,7 +513,8 @@ public class DatabaseHandler implements Persistence
 
         Connection connection = connectionPool.acquireConnection();
         PreparedStatement statement = null;
-        try {
+        try
+        {
             statement = connection.prepareStatement(query);
             statement.setDate(1, Date.valueOf(bookingInterval.getDate()));
             statement.setTime(2, Time.valueOf(bookingInterval.getStart()));
@@ -761,8 +760,7 @@ public class DatabaseHandler implements Persistence
                     ug.user_group_id, 
                     ug.user_group_name, 
                     c.course_id, 
-                    c.course_name, 
-                    c.course_time_slot_count 
+                    c.course_name
                 FROM 
                     sep2.course c
                 INNER JOIN 
@@ -783,8 +781,7 @@ public class DatabaseHandler implements Persistence
                         resultSet.getString("user_group_name"),
                         new Course(
                             resultSet.getInt("course_id"),
-                            resultSet.getString("course_name"),
-                            resultSet.getInt("course_time_slot_count")
+                            resultSet.getString("course_name")
                         )
                     )
                 );
