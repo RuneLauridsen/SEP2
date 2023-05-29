@@ -8,9 +8,11 @@ import booking.server.persistene.DatabaseHandler;
 import booking.server.persistene.PersistenceException;
 import booking.shared.CreateBookingParameters;
 import booking.shared.objects.*;
+import booking.shared.socketMessages.ErrorResponseReason;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,25 +20,45 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static test.TestConstants.VIAID_GITTE;
-import static test.TestConstants.VIAID_HENRIK;
+import static test.TestConstants.*;
+import static booking.shared.socketMessages.ErrorResponseReason.*;
+
+// TODO(rune): Tjek af vi tester all fejlkoder
 
 public class TestServerModel
 {
     private DatabaseHandler database;
     private ServerModel model;
+    private ServerModel modelBadPersistence;
     private FileIO fileIO;
 
     @BeforeEach void setup()
     {
         database = TestDatabaseUtil.setup();
         model = new ServerModelImpl(database, new FakeNowProvider());
+        modelBadPersistence = new ServerModelImpl(new FakePersistenceBad(), new FakeNowProvider());
         fileIO = new FakeFileIO();
     }
 
     @AfterEach void setdown()
     {
         TestDatabaseUtil.setdown(database);
+    }
+
+    @Test void testUpdateRoom() throws ServerModelException
+    {
+        User user1 = model.getUser(VIAID_HENRIK);   // can_edit_rooms = false
+        User user2 = model.getUser(VIAID_GITTE);    // can_edit_rooms = true
+        Room room = model.getRoom("A02.01", null);
+        room.setComment("comment");
+
+        assertErrorReason(() -> model.updateRoom(null, room), ERROR_RESPONSE_REASON_NOT_LOGGED_IN);
+        assertErrorReason(() -> model.updateRoom(user1, room), ERROR_RESPONSE_REASON_INVALID_CREDENTIALS);
+        assertErrorReason(() -> modelBadPersistence.updateRoom(user2, room), ERROR_RESPONSE_REASON_INTERNAL_SERVER_ERROR);
+        model.updateRoom(user2, room);
+
+        Room roomAfterUpdate = model.getRoom("A02.01", null); // Tjek om comment er gemt i databasen
+        assertEquals(roomAfterUpdate.getComment(), "comment");
     }
 
     // Tester om server model returnere korrekte overlap, når man prøver at lave en ny booking.
@@ -142,5 +164,10 @@ public class TestServerModel
         assertEquals(userWithoutPassword.getInitials(), "R2D2");
         assertEquals(userWithoutPassword.getViaId(), VIAID_TEST);
         assertEquals(userWithoutPassword.getType(), userTypes.get(2));
+    }
+
+    @Test void assertErrorReason(Executable executable, ErrorResponseReason reason)
+    {
+        assertThrows(ServerModelException.class, executable, reason.getMessage());
     }
 }

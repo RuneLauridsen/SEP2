@@ -11,9 +11,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static test.TestConstants.*;
 
 // TODO(rune): Tjek at alle database funktioner er testet
@@ -282,26 +284,69 @@ public class TestDatabase
 
     @Test void testGetAvailableRooms() throws PersistenceException
     {
-        // TODO(rune): Gør testGetAvailableRooms færdig. Der er mange parametre!!!
+        Room room = database.getRoom("A03.00", null);
 
-        User user = database.getUser(VIAID_JULIE);
+        User student = database.getUser(VIAID_JULIE);
+        User coordinator = database.getUser(VIAID_GITTE);
 
-        // NOTE(rune): Tester kun med dato tid
-        List<Room> rooms1 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 4, null, null, null);
+        // Tester kun med dato tid
+        List<Room> rooms1 = database.getAvailableRooms(coordinator, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, null);
 
-        // NOTE(rune): Tester med filtre, måde hver for sig og kombineret
-        List<Room> rooms2 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, 4, null, null);
-        List<Room> rooms3 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, 'B', null);
-        List<Room> rooms4 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, 3);
-        List<Room> rooms5 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, null);
-        List<Room> rooms6 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 5, 7, 'A', 2);
+        // Tester alm. student kun har adgang til grupperum
+        List<Room> rooms2 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, null);
 
-        // NOTE(rune): Tester at 11:00-13:00 overlapped med 11:00-13:00
-        List<Room> rooms7 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(11, 0), LocalTime.of(13, 0)), null, null, 'A', 2);
+        // Tester med filtre, måde hver for sig og kombineret
+        List<Room> rooms3 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 4, null, null, null);
+        List<Room> rooms4 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, 4, null, null);
+        List<Room> rooms5 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, 'B', null);
+        List<Room> rooms6 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), null, null, null, 3);
+        List<Room> rooms7 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(14, 0)), 55, 77, 'B', 2);
 
-        // NOTE(rune): Tester at 11:00-13:00 ikke overlapper med 10:00-11:00 eller 13:00-14:00
-        List<Room> rooms8 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(11, 0)), null, null, 'A', 2);
-        List<Room> rooms9 = database.getAvailableRooms(user, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(13, 0), LocalTime.of(14, 0)), null, null, 'A', 2);
+        // Tester at 11:00-13:00 overlapper med 11:00-13:00
+        List<Room> rooms8 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(11, 0), LocalTime.of(13, 0)), null, null, 'A', 3);
+
+        // Tester at 11:00-13:00 ikke overlapper med 10:00-11:00 eller 13:00-14:00
+        List<Room> rooms9 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(10, 0), LocalTime.of(11, 0)), null, null, 'A', 3);
+        List<Room> rooms10 = database.getAvailableRooms(student, new BookingInterval(LocalDate.of(2023, 5, 12), LocalTime.of(13, 0), LocalTime.of(14, 0)), null, null, 'A', 3);
+
+        // A03.01, A03.02 og B02.05 er optaget
+        assertRooms(rooms1, "A02.01", "A02.02", "A02.03", "A03.00", "A03.03", "B02.04", "B02.06", "B03.04", "B03.05", "B03.06", "C02.07", "C02.08", "C02.09", "C03.07", "C03.08", "C03.09", "C05.15", "C06.01");
+
+        // A03.01, A03.02 og B02.05 er optaget
+        // C06.01 og C05.15 er ikke grupperum
+        assertRooms(rooms2, "A02.01", "A02.02", "A02.03", "A03.00", "A03.03", "B02.04", "B02.06", "B03.04", "B03.05", "B03.06", "C02.07", "C02.08", "C02.09", "C03.07", "C03.08", "C03.09");
+
+        // A03.01, A03.02 og B02.05 er optaget
+        // C06.01 og C05.15 er ikke grupperum
+        // A03.00 har capacity >= 4
+        assertRooms(rooms3, "A02.01", "A02.02", "A02.03", "A03.03", "B02.04", "B02.06", "B03.04", "B03.05", "B03.06", "C02.07", "C02.08", "C02.09", "C03.07", "C03.08", "C03.09");
+
+        // A03.01, A03.02 og B02.05 er optaget
+        // C06.01 og C05.15 er ikke grupperum
+        // A03.00 har capacity <= 4
+        assertRooms(rooms4, "A03.00");
+
+        // A03.01, A03.02 og B02.05 er optaget
+        // C06.01 og C05.15 er ikke grupperum
+        // Bygning B
+        assertRooms(rooms5, "B02.04", "B02.06", "B03.04", "B03.05", "B03.06");
+
+        // A03.01, A03.02 og B02.05 er optaget
+        // C06.01 og C05.15 er ikke grupperum
+        // Etage 3
+        assertRooms(rooms6, "A03.00", "A03.03", "B03.04", "B03.05", "B03.06", "C03.07", "C03.08", "C03.09");
+
+        // A03.01, A03.02 og B02.05 er optaget
+        // C06.01 og C05.15 er ikke grupperum
+        // Bygning B
+        // Etage 2
+        // Capacity [55;77]
+        assertRooms(rooms7, "B02.06");
+
+        // A03.01 og A03.02 er booket til 11:00-13:00
+        assertRooms(rooms8, "A03.00", "A03.03");
+        assertRooms(rooms9, "A03.00", "A03.01", "A03.02", "A03.03");
+        assertRooms(rooms9, "A03.00", "A03.01", "A03.02", "A03.03");
     }
 
     @Test void testCreateUser() throws PersistenceException
@@ -447,6 +492,23 @@ public class TestDatabase
         assertEquals(roomAfter.getComment(), "kommentar");
         assertEquals(roomAfter.getUserComment(), "");
         assertEquals(roomAfter.getUserColor(), -1);
+    }
+
+    private static void assertRooms(List<Room> rooms, String... roomNames)
+    {
+        if (rooms.size() != roomNames.length)
+        {
+            assertTrue(false);
+        }
+
+        Set<String> roomNamesSet = Set.of(roomNames);
+        for (int i = 0; i < rooms.size(); i++)
+        {
+            if (!rooms.get(i).getName().equals(roomNames[i]))
+            {
+                assertTrue(false);
+            }
+        }
     }
 }
 

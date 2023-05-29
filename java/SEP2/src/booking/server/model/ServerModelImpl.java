@@ -357,7 +357,6 @@ public class ServerModelImpl implements ServerModel
     {
         try
         {
-
             if (activeUser != null)
             {
                 if (activeUser.getType().canEditRooms())

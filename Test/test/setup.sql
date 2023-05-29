@@ -19,7 +19,7 @@ CREATE TABLE user_type
     can_edit_rooms          bool        NOT NULL ,
     can_edit_bookings       bool        NOT NULL , -- kan redigere/slette andre folks bookinger
     can_overlap_bookings    bool        NOT NULL , -- kan lave bookinger som overlapper med andre bookinger
-    max_booking_count       int         NOT NULL
+    max_booking_count       int         NOT NULL CHECK(max_booking_count >= 0)
 );
 
 -- Hvilke brugertyper har mulighed for at booke hvilke lokaletyper
@@ -47,8 +47,7 @@ CREATE TABLE "user"
 CREATE TABLE course
 (
     course_id               serial      NOT NULL PRIMARY KEY ,
-    course_name             varchar(50) NOT NULL UNIQUE ,
-    course_time_slot_count  int         NOT NULL -- antal timer der skal bookes til dette fag
+    course_name             varchar(50) NOT NULL UNIQUE
 );
 
 -- Hold eller klasser
@@ -79,9 +78,9 @@ CREATE TABLE room
 (
     room_id                 serial      NOT NULL PRIMARY KEY ,
     room_name               varchar(50) NOT NULL UNIQUE ,
-    room_size               int         NOT NULL ,
-    room_comfort_capacity   int         NOT NULL,
-    room_fire_capacity      int         NOT NULL,
+    room_size               int         NOT NULL CHECK(room_size >= 0),
+    room_comfort_capacity   int         NOT NULL CHECK(room_comfort_capacity >= 0),
+    room_fire_capacity      int         NOT NULL CHECK(room_fire_capacity >= 0),
     room_comment            varchar(99) NOT NULL,
 
     room_type_id            int         NOT NULL REFERENCES room_type(room_type_id),
@@ -112,7 +111,7 @@ CREATE TABLE booking
 (
     booking_id              serial      NOT NULL PRIMARY KEY ,
     booking_date            date        NOT NULL,
-    booking_start_time      time        NOT NULL,
+    booking_start_time      time        NOT NULL CHECK(booking_start_time < booking.booking_end_time),
     booking_end_time        time        NOT NULL,
     room_id                 int         NOT NULL REFERENCES "room"(room_id) ,
     user_id                 int         NOT NULL REFERENCES "user"(user_id) ,
@@ -191,7 +190,7 @@ VALUES
     /* id = 8 */ ('C02.08', 8, 88, 888, '', 1, NULL),
     /* id = 9 */ ('C02.09', 9, 99, 999, '', 1, NULL),
 
-    /* id = 11 */ ('A03.00', 0, 00, 000, '', 1, NULL),
+    /* id = 10 */ ('A03.00', 0, 00, 000, '', 1, NULL),
     /* id = 11 */ ('A03.01', 1, 11, 111, '', 1, NULL),
     /* id = 12 */ ('A03.02', 2, 22, 222, '', 1, NULL),
     /* id = 13 */ ('A03.03', 3, 33, 333, '', 1, NULL),
@@ -225,11 +224,11 @@ VALUES
     /* Gitte, A02.01 */ (5, 1, -2715924, 'jeg hedder gitte');
 
 INSERT INTO course
-    (course_name, course_time_slot_count)
+    (course_name)
 VALUES
-    ('SDJ', 10),
-    ('DBS', 20),
-    ('SWE', 30);
+    ('SDJ'),
+    ('DBS'),
+    ('SWE');
 
 INSERT INTO user_group
     (user_group_name, course_id)
