@@ -5,20 +5,13 @@ import java.time.LocalTime;
 
 public class TimeSlot implements Serializable
 {
-    private final int id;
     private final LocalTime start;
     private final LocalTime end;
 
-    public TimeSlot(int id, LocalTime start, LocalTime end)
+    public TimeSlot(LocalTime start, LocalTime end)
     {
-        this.id = id;
         this.start = start;
         this.end = end;
-    }
-
-    public int getId()
-    {
-        return id;
     }
 
     public LocalTime getStart()
@@ -35,7 +28,8 @@ public class TimeSlot implements Serializable
     {
         if (obj instanceof TimeSlot other)
         {
-            return this.id == other.id;
+            return this.start.equals(other.start)
+                && this.end.equals(other.end);
         }
         else
         {

@@ -956,41 +956,6 @@ public class DatabaseHandler implements Persistence
         }
     }
 
-    @Override public List<TimeSlot> getTimeSlots() throws PersistenceException
-    {
-        Connection connection = connectionPool.acquireConnection();
-        Statement statement = null;
-        ResultSet resultSet = null;
-
-        try
-        {
-            String query = "SELECT time_slot_id, time_slot_start, time_slot_end FROM sep2.time_slot ORDER BY time_slot_start; ";
-
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
-
-            List<TimeSlot> timeSlots = new ArrayList<>();
-            while (resultSet.next())
-            {
-                timeSlots.add(new TimeSlot(resultSet.getInt("time_slot_id"),
-                                           resultSet.getTime("time_slot_start").toLocalTime(),
-                                           resultSet.getTime("time_slot_end").toLocalTime()));
-            }
-
-            return timeSlots;
-        }
-        catch (SQLException e)
-        {
-            throw new PersistenceException(e);
-        }
-        finally
-        {
-            closeResultSet(resultSet);
-            closeStatement(statement);
-            connectionPool.releaseConnection(connection);
-        }
-    }
-
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws PersistenceException
     {
         Objects.requireNonNull(name);

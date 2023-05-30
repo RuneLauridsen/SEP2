@@ -111,11 +111,6 @@ public class FakePersistenceBad implements Persistence
         throw new FakePersistenceException();
     }
 
-    @Override public List<TimeSlot> getTimeSlots() throws PersistenceException
-    {
-        throw new FakePersistenceException();
-    }
-
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws PersistenceException
     {
         throw new FakePersistenceException();

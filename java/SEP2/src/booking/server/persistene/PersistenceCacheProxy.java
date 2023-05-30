@@ -175,11 +175,6 @@ public class PersistenceCacheProxy implements Persistence
         subject.updateUserRoomData(user, room, comment, color);
     }
 
-    @Override public List<TimeSlot> getTimeSlots() throws PersistenceException
-    {
-        return subject.getTimeSlots();
-    }
-
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws PersistenceException
     {
         subject.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);

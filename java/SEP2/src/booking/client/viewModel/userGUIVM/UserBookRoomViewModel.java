@@ -8,6 +8,7 @@ import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -67,6 +68,14 @@ public class UserBookRoomViewModel
         selectedFloor = new SimpleObjectProperty<>();
         selectedMaxCap = new SimpleObjectProperty<>("");
         selectedMinCap = new SimpleObjectProperty<>("");
+
+        selectedDate.addListener(this::clearAvailableRooms);
+        selectedFromTime.addListener(this::clearAvailableRooms);
+        selectedToTime.addListener(this::clearAvailableRooms);
+        selectedBuilding.addListener(this::clearAvailableRooms);
+        selectedFloor.addListener(this::clearAvailableRooms);
+        selectedMaxCap.addListener(this::clearAvailableRooms);
+        selectedMinCap.addListener(this::clearAvailableRooms);
 
         roomList = FXCollections.observableArrayList();
     }
@@ -198,6 +207,11 @@ public class UserBookRoomViewModel
                 viewHandler.showErrorDialog(e.getMessage());
             }
         }
+    }
+
+    private void clearAvailableRooms(Observable observable)
+    {
+        roomList.clear();
     }
 
     private static LocalTime parseLocalDateTime(String s)

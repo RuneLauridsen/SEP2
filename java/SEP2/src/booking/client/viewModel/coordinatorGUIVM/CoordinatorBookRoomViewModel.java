@@ -12,6 +12,7 @@ import booking.shared.objects.BookingInterval;
 import booking.shared.objects.Room;
 import booking.shared.objects.TimeSlot;
 import booking.shared.objects.UserGroup;
+import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -82,6 +83,18 @@ public class CoordinatorBookRoomViewModel
         selectedCourse = new SimpleObjectProperty<>();
         selectedCategory = new SimpleObjectProperty<>();
         prefixCheckBox = new SimpleBooleanProperty();
+
+        selectedStartDate.addListener(this::clearAvailableRooms);
+        selectedFromTime.addListener(this::clearAvailableRooms);
+        selectedToTime.addListener(this::clearAvailableRooms);
+        selectedPreFixTime.addListener(this::clearAvailableRooms);
+        selectedMinCap.addListener(this::clearAvailableRooms);
+        selectedMaxCap.addListener(this::clearAvailableRooms);
+        selectedBuilding.addListener(this::clearAvailableRooms);
+        selectedFloor.addListener(this::clearAvailableRooms);
+        selectedCourse.addListener(this::clearAvailableRooms);
+        selectedCategory.addListener(this::clearAvailableRooms);
+        prefixCheckBox.addListener(this::clearAvailableRooms);
 
         roomList = FXCollections.observableArrayList();
 
@@ -258,8 +271,11 @@ public class CoordinatorBookRoomViewModel
     {
         // TODO(rune): timeIntervals liste kunne evt. være med <LocalTime> i stedet,
         // så vi slipper for at parse her.
-        LocalTime startTime = parseLocalDateTime(selectedFromTime.get());
-        LocalTime endTime = parseLocalDateTime(selectedToTime.get());
+
+        boolean usePrefixTimes = prefixCheckBox.get();
+        LocalTime startTime = usePrefixTimes ? selectedPreFixTime.get().getStart() :  parseLocalDateTime(selectedFromTime.get());
+        LocalTime endTime = usePrefixTimes ? selectedPreFixTime.get().getEnd() : parseLocalDateTime(selectedToTime.get());
+
         UserGroup group = selectedCourse.get();
         BookingInterval requestedInterval = new BookingInterval(selectedStartDate.get(), startTime, endTime);
 
@@ -294,6 +310,11 @@ public class CoordinatorBookRoomViewModel
 
     }
 
+    private void clearAvailableRooms(Observable observable)
+    {
+        roomList.clear();
+    }
+
     private static LocalTime parseLocalDateTime(String s)
     {
         String[] parts = s.split(":");
@@ -302,8 +323,6 @@ public class CoordinatorBookRoomViewModel
 
         return LocalTime.of(hour, minute);
     }
-
-
     public void changeToSearch(Room room)
     {
         viewHandler.showRoomInfo(room);

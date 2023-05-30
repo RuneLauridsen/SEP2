@@ -70,9 +70,6 @@ public interface Persistence
     // Opdatere bruger-specifik data på et lokale.
     public void updateUserRoomData(User user, Room room, String comment, int color) throws PersistenceException;
 
-    // Henter all faste booking intervaller
-    public List<TimeSlot> getTimeSlots() throws PersistenceException;
-
     // Indsætter nyt lokale uden bruger-specifik data.
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName) throws PersistenceException;
     public void deleteRoom(Room room) throws PersistenceException;

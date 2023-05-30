@@ -250,12 +250,6 @@ VALUES
     /* SWE Simon   */ (3, 3),
     /* SWE Rune    */ (3, 4);
 
-INSERT INTO time_slot
-    (time_slot_start, time_slot_end)
-VALUES
-    ('8:20', '11:50'),
-    ('12:45', '16:05');
-
 INSERT INTO booking
     (user_id, room_id, booking_date, booking_start_time, booking_end_time, user_group_id)
 VALUES

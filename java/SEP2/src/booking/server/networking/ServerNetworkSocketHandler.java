@@ -262,15 +262,6 @@ public class ServerNetworkSocketHandler implements Runnable
         }
 
         //
-        // Time slots
-        //
-        if (request instanceof TimeSlotsRequest timeSlotsRequest)
-        {
-            List<TimeSlot> timeSlots = model.getTimeSlots();
-            return new TimeSlotsResponse(timeSlots);
-        }
-
-        //
         // Create user
         //
         if (request instanceof CreateUserRequest createUserRequest)

@@ -267,20 +267,12 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    @Override public List<TimeSlot> getTimeSlots() throws ClientModelException
+    @Override public List<TimeSlot> getTimeSlots()
     {
-        try
-        {
-            return networkLayer.getTimeSlots();
-        }
-        catch (ClientNetworkResponseException e)
-        {
-            throw wrapNetworkResponse(e);
-        }
-        catch (ClientNetworkException e)
-        {
-            throw wrapNetwork(e);
-        }
+        return List.of(
+            new TimeSlot(LocalTime.of(8, 20), LocalTime.of(11, 50)),
+            new TimeSlot(LocalTime.of(12, 45), LocalTime.of(16, 5))
+        );
     }
 
     @Override public boolean isAvailable(Room room) throws ClientModelException

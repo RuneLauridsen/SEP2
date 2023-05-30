@@ -396,19 +396,6 @@ public class ServerModelImpl implements ServerModel
         }
     }
 
-    @Override public List<TimeSlot> getTimeSlots()
-    {
-        try
-        {
-            return persistence.getTimeSlots();
-        }
-        catch (PersistenceException e)
-        {
-            Logger.log(e);
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override public void deleteRoom(User activeUser, Room room) throws ServerModelException
     {
         try

@@ -57,9 +57,6 @@ public interface ClientNetwork
     public void updateUserRoomData(Room room, String comment, Integer color)
         throws ClientNetworkException, ClientNetworkResponseException;
 
-    public List<TimeSlot> getTimeSlots()
-        throws ClientNetworkException, ClientNetworkResponseException;
-
     public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
         throws ClientNetworkException, ClientNetworkResponseException;
 

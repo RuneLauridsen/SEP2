@@ -42,7 +42,5 @@ public interface ServerModel
 
     public void updateUserRoomData(User activeUser, Room room, String comment, int color) throws ServerModelException;
 
-    public List<TimeSlot> getTimeSlots() throws ServerModelException;
-
     public ImportFileResult importFile(User activeUser, String fileContent) throws ServerModelException;
 }

@@ -168,13 +168,6 @@ public class ClientNetworkSocket implements ClientNetwork
         UpdateUserRoomDataResponse response = (UpdateUserRoomDataResponse) readResponse();
     }
 
-    @Override public List<TimeSlot> getTimeSlots() throws ClientNetworkException, ClientNetworkResponseException
-    {
-        sendRequest(new TimeSlotsRequest());
-        TimeSlotsResponse response = (TimeSlotsResponse) readResponse();
-        return response.getTimeSlots();
-    }
-
     @Override public void createRoom(String name, RoomType type, int maxComf, int maxSafety, int size, String comment, boolean isDouble, String doubleName)
         throws ClientNetworkException, ClientNetworkResponseException
     {

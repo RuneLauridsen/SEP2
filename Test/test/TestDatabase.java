@@ -454,17 +454,6 @@ public class TestDatabase
         assertEquals(roomAfter.getUserColor(), 0xff00ff00);
     }
 
-    @Test void testGetTimeSlots() throws PersistenceException
-    {
-        List<TimeSlot> timeSlots = database.getTimeSlots();
-
-        assertEquals(timeSlots.size(), 2);
-        assertEquals(timeSlots.get(0).getStart(), LocalTime.of(8, 20));
-        assertEquals(timeSlots.get(0).getEnd(), LocalTime.of(11, 50));
-        assertEquals(timeSlots.get(1).getStart(), LocalTime.of(12, 45));
-        assertEquals(timeSlots.get(1).getEnd(), LocalTime.of(16, 5));
-    }
-
     @Test void testCreateRoom() throws PersistenceException
     {
         Map<Integer, RoomType> roomTypes = database.getRoomTypes();
