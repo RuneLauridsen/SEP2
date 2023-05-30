@@ -54,6 +54,6 @@ public class CoordinatorHomeScreen
 
     public void tableViewClicked(MouseEvent mouseEvent)
     {
-        viewModel.changeToSearch(tvtRooms.getSelectionModel().getSelectedItem().getName());
+        viewModel.changeToSearch(tvtRooms.getSelectionModel().getSelectedItem());
     }
 }

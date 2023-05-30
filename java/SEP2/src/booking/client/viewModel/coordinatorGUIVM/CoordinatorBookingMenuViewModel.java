@@ -7,6 +7,7 @@ import booking.client.model.ClientModelImport;
 import booking.client.viewModel.sharedVM.ViewModelUtil;
 import booking.server.model.importFile.ImportFileResult;
 import booking.shared.objects.Booking;
+import booking.shared.objects.Room;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 
@@ -87,8 +88,8 @@ public class CoordinatorBookingMenuViewModel
         }
     }
 
-    public void ChangeToSearch(String name)
+    public void ChangeToSearch(Room room)
     {
-        viewHandler.showRoomInfo(name);
+        viewHandler.showRoomInfo(room);
     }
 }

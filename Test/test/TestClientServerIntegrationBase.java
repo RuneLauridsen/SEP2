@@ -25,8 +25,8 @@ public class TestClientServerIntegrationBase
         server = TestUtil.setupServer();
         client = TestUtil.setupClient();
 
-        viewHandler = new FakeViewHandler();
         viewModelFactory = new ViewModelFactory();
+        viewHandler = new FakeViewHandler(viewModelFactory, client);
     }
 
     @AfterEach void cleanup()

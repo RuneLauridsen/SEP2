@@ -19,7 +19,7 @@ public interface ViewHandler
 
     public void showAddRoom();
     public void showEditRoom(Room room);
-    public void showRoomInfo(String roomName);
+    public void showRoomInfo(Room room);
 
     public void showInfoDialog(String text);
     public void showInfoDialog(String header, String content);

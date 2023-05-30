@@ -226,12 +226,10 @@ public class ServerModelImpl implements ServerModel
     {
         try
         {
-
             if (activeUser != null)
             {
                 if (activeUser.getType().canEditRooms())
                 {
-                    //TODO(julie) errorhandle stuff
                     persistence.createRoom(name, type, maxComf, maxSafety, size, comment, isDouble, doubleName);
                 }
                 else
@@ -255,7 +253,6 @@ public class ServerModelImpl implements ServerModel
     {
         try
         {
-
             if (activeUser != null)
             {
                 if (activeUser.getType().canEditBookings() || activeUser.equals(booking.getUser()))

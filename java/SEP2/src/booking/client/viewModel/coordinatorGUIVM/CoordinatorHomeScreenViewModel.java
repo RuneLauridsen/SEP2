@@ -60,9 +60,9 @@ public class CoordinatorHomeScreenViewModel
         }
     }
 
-    public void changeToSearch(String name)
+    public void changeToSearch(Room room)
     {
-        viewHandler.showRoomInfo(name);
+        viewHandler.showRoomInfo(room);
     }
 
     public void changeToEditRoom(Room room)

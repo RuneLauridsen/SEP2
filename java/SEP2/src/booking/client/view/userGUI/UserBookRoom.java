@@ -78,7 +78,7 @@ public class UserBookRoom
 
     public void listViewClicked(MouseEvent mouseEvent)
     {
-        viewModel.ChangeToSearch(lvRooms.getSelectionModel().getSelectedItem().getName());
+        viewModel.ChangeToSearch(lvRooms.getSelectionModel().getSelectedItem());
     }
 }
 

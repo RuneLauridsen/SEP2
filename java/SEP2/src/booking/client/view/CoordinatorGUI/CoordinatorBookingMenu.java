@@ -63,6 +63,6 @@ public class CoordinatorBookingMenu
 
     public void tableviewClicked(MouseEvent mouseEvent)
     {
-        viewModel.ChangeToSearch(tvBookings.getSelectionModel().getSelectedItem().getRoom().getName());
+        viewModel.ChangeToSearch(tvBookings.getSelectionModel().getSelectedItem().getRoom());
     }
 }

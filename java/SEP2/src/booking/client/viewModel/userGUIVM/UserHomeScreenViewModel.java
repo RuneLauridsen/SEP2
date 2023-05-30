@@ -3,7 +3,9 @@ package booking.client.viewModel.userGUIVM;
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModelActiveBookings;
 import booking.client.model.ClientModelException;
+import booking.client.model.ClientModelRoomInfo;
 import booking.shared.objects.Booking;
+import booking.shared.objects.Room;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,14 +18,16 @@ public class UserHomeScreenViewModel
 
     private final ViewHandler viewHandler;
     private final ClientModelActiveBookings activeBookingsModel;
+    private final ClientModelRoomInfo roomInfoModel;
     private final UserViewModelState sharedState;
     private final SimpleStringProperty selectedFromSearch;
     private  final BooleanProperty searchDisable;
 
-    public UserHomeScreenViewModel(ViewHandler viewHandler, ClientModelActiveBookings activeBookingsModel, UserViewModelState sharedState)
+    public UserHomeScreenViewModel(ViewHandler viewHandler, ClientModelActiveBookings activeBookingsModel, ClientModelRoomInfo roomInfoModel, UserViewModelState sharedState)
     {
         this.viewHandler = viewHandler;
         this.activeBookingsModel = activeBookingsModel;
+        this.roomInfoModel = roomInfoModel;
         this.sharedState = sharedState;
 
 
@@ -50,21 +54,37 @@ public class UserHomeScreenViewModel
         return selectedFromSearch;
     }
 
-    public void ChangeToBooking()
+    public void changeToBooking()
     {
         viewHandler.showUserBookRoom();
     }
 
-    public void ChangeToSearch(String roomName)
+    public void changeToSearch()
     {
-        try{
-            viewHandler.showRoomInfo(roomName);
+        try
+        {
+            Room room = roomInfoModel.getRoom(selectedFromSearch.get().toUpperCase());
+            if(room != null)
+            {
+                viewHandler.showRoomInfo(room);
+            }
+            else
+            {
+                viewHandler.showErrorDialog("No such room");
+            }
         }
-        catch (NullPointerException e){
-            viewHandler.showErrorDialog("No such Room");
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
         }
+    }
 
-
+    public void showInfo(Room room)
+    {
+        if(room != null)
+        {
+            viewHandler.showRoomInfo(room);
+        }
     }
 
     public void cancelBooking(Booking booking)

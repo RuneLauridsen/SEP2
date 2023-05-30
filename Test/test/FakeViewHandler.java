@@ -1,6 +1,8 @@
 package test;
 
 import booking.client.core.ViewHandler;
+import booking.client.core.ViewModelFactory;
+import booking.client.model.ClientModel;
 import booking.client.view.CoordinatorGUI.CoordinatorBookRoom;
 import booking.client.view.CoordinatorGUI.CoordinatorBookingMenu;
 import booking.client.view.CoordinatorGUI.CoordinatorHomeScreen;
@@ -19,6 +21,14 @@ public class FakeViewHandler implements ViewHandler
     private String latestDialog;
     private Class latestView;
     private boolean okCancelChoice;
+    private ViewModelFactory viewModelFactory;
+    private ClientModel model;
+
+    public FakeViewHandler(ViewModelFactory viewModelFactory, ClientModel model)
+    {
+        this.viewModelFactory = viewModelFactory;
+        this.model = model;
+    }
 
     public String getLatestDialog()
     {
@@ -70,7 +80,7 @@ public class FakeViewHandler implements ViewHandler
         latestView = AddRoomViewModel.class;
     }
 
-    public void showRoomInfo(String roomName)
+    public void showRoomInfo(Room room)
     {
         latestView = RoomInfoViewModel.class;
     }

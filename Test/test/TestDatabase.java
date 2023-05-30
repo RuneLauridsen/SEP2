@@ -347,7 +347,7 @@ public class TestDatabase
         // A03.01 og A03.02 er booket til 11:00-13:00
         assertRooms(rooms8, "A03.00", "A03.03");
         assertRooms(rooms9, "A03.00", "A03.01", "A03.02", "A03.03");
-        assertRooms(rooms9, "A03.00", "A03.01", "A03.02", "A03.03");
+        assertRooms(rooms10, "A03.00", "A03.01", "A03.02", "A03.03");
     }
 
     @Test void testCreateUser() throws PersistenceException

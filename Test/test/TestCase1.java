@@ -24,7 +24,7 @@ public class TestCase1 extends TestClientServerIntegrationBase
         UserBookRoomViewModel bookScreen = viewModelFactory.getUserBookRoomViewModel(viewHandler, client);
 
         // step 1
-        homeScreen.ChangeToBooking();
+        homeScreen.changeToBooking();
         assertEquals(viewHandler.getLatestView(), UserBookRoomViewModel.class);
 
         // step 2.1

@@ -116,7 +116,7 @@ public class CoordinatorBookRoom
 
     public void listViewClicked(MouseEvent Event)
     {
-        viewModel.changeToSearch(lvRooms.getSelectionModel().getSelectedItem().getName());
+        viewModel.changeToSearch(lvRooms.getSelectionModel().getSelectedItem());
     }
 
     public void checkboxClicked(ActionEvent actionEvent)

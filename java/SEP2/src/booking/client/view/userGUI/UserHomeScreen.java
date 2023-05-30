@@ -72,17 +72,17 @@ public class UserHomeScreen
 
     public void findAvailableRoomClick(ActionEvent actionEvent)
     {
-        viewModel.ChangeToBooking();
+        viewModel.changeToBooking();
     }
 
     public void searchRoomClick(ActionEvent actionEvent)
     {
-        viewModel.ChangeToSearch(txtSearch.textProperty().get());
+        viewModel.changeToSearch();
         txtSearch.textProperty().set(null);
     }
 
     public void tableViewClicked(MouseEvent mouseEvent)
     {
-        viewModel.ChangeToSearch(tblActiveBookings.getSelectionModel().getSelectedItem().getRoom().getName());
+        viewModel.showInfo(tblActiveBookings.getSelectionModel().getSelectedItem().getRoom());
     }
 }

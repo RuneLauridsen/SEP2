@@ -304,9 +304,9 @@ public class CoordinatorBookRoomViewModel
     }
 
 
-    public void changeToSearch(String roomName)
+    public void changeToSearch(Room room)
     {
-        viewHandler.showRoomInfo(roomName);
+        viewHandler.showRoomInfo(room);
     }
 
     public ObservableList<PredefinedColor> getColors()

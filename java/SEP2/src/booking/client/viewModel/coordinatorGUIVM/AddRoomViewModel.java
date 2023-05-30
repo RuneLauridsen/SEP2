@@ -22,30 +22,56 @@ public class AddRoomViewModel
 
     public boolean createRoom(String name, RoomType type, String maxComf, String maxSafety, String size, String comment, boolean isDouble, String doubleName)
     {
-        if (name.isEmpty() || maxComf.isEmpty() || maxSafety.isEmpty() ||size.isEmpty() || type == null)
+        if (name.isEmpty() || maxComf.isEmpty() || maxSafety.isEmpty() || size.isEmpty() || type == null)
+        {
             viewHandler.showErrorDialog("Name, room type, max comfort, max safety or size must not be empty");
-        else {
-            try
-            {
-                if (roomManagementModel.getRoom(name) == null){
-                    roomManagementModel.createRoom(name, type, Integer.parseInt(maxComf), Integer.parseInt(maxSafety), Integer.parseInt(size), comment, isDouble, doubleName);
-                    sharedState.refreshAllRooms();
-                    return true;
-                }
-                else
-                    viewHandler.showErrorDialog("Room with this name is already taken");
-            }
-
-            catch (ClientModelException e)
-            {
-                viewHandler.showErrorDialog(e.getMessage());
-            }
-            catch (NumberFormatException e){
-                viewHandler.showErrorDialog("Max capacity and size must be numbers");
-            }
+            return false;
         }
-        return false;
 
+        try
+        {
+            if (roomManagementModel.getRoom(name) == null)
+            {
+                int maxComfInt = Integer.parseInt(maxComf);
+                int maxSafetyInt = Integer.parseInt(maxSafety);
+                int sizeInt = Integer.parseInt(size);
+
+                if(maxComfInt < 0)
+                {
+                    viewHandler.showErrorDialog("Comfort capacity must not be negative");
+                    return false;
+                }
+
+                if(maxSafetyInt < 0)
+                {
+                    viewHandler.showErrorDialog("Safety capacity must not be negative");
+                    return false;
+                }
+
+                if(sizeInt < 0)
+                {
+                    viewHandler.showErrorDialog("Size must not be negative");
+                    return false;
+                }
+
+                roomManagementModel.createRoom(name, type, Integer.parseInt(maxComf), Integer.parseInt(maxSafety), Integer.parseInt(size), comment, isDouble, doubleName);
+                sharedState.refreshAllRooms();
+                return true;
+            }
+            else
+                viewHandler.showErrorDialog("Room with this name is already taken");
+        }
+
+        catch (ClientModelException e)
+        {
+            viewHandler.showErrorDialog(e.getMessage());
+        }
+        catch (NumberFormatException e)
+        {
+            viewHandler.showErrorDialog("Max capacity and size must be numbers");
+        }
+
+        return false;
     }
 
     public ObservableList<RoomType> getRoomTypes()

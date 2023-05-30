@@ -227,7 +227,7 @@ public class ViewHandlerImpl implements ViewHandler
         }
     }
 
-    public void showRoomInfo(String roomName)
+    public void showRoomInfo(Room room)
     {
         try
         {
@@ -238,7 +238,7 @@ public class ViewHandlerImpl implements ViewHandler
             loader.setLocation(getClass().getResource("../view/roomInfo/RoomInfo.fxml"));
             root = loader.load();
 
-            RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, model, roomName);
+            RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, model, room);
 
             RoomInfo view = loader.getController();
             view.init(viewModel);

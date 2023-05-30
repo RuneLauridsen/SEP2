@@ -50,7 +50,7 @@ public class ViewModelFactory
     public UserHomeScreenViewModel getUserHomeScreenViewModel(ViewHandler viewHandler, ClientModel model)
     {
         if (userHomeScreenViewModel == null)
-            userHomeScreenViewModel = new UserHomeScreenViewModel(viewHandler, model, getUserViewModelState(viewHandler, model));
+            userHomeScreenViewModel = new UserHomeScreenViewModel(viewHandler, model, model, getUserViewModelState(viewHandler, model));
         return userHomeScreenViewModel;
     }
 
@@ -103,10 +103,10 @@ public class ViewModelFactory
         // NOTE(rune): Skal altid åbnes i nyt vindue
         return new EditRoomViewModel(viewHandler, model, getCoordinatorViewModelState(viewHandler, model), room);
     }
-    public RoomInfoViewModel getRoomInfoViewModel(ViewHandler viewHandler, ClientModel model, String roomName)
+    public RoomInfoViewModel getRoomInfoViewModel(ViewHandler viewHandler, ClientModel model, Room room)
     {
         // NOTE: Skal altid åbnes i nyt vindue
-        return new RoomInfoViewModel(viewHandler, model, roomName);
+        return new RoomInfoViewModel(viewHandler, model, room);
     }
 
     public RegisterViewModel getRegisterViewModel(ViewHandler viewHandler, ClientModel model)

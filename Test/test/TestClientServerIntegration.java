@@ -33,8 +33,8 @@ public class TestClientServerIntegration
     {
         server = TestUtil.setupServer();
         model = TestUtil.setupClient();
-        viewHandler = new FakeViewHandler();
         viewModelFactory = new ViewModelFactory();
+        viewHandler = new FakeViewHandler(viewModelFactory, model);
     }
 
     @AfterEach void cleanup()

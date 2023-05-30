@@ -210,10 +210,12 @@ public class UserBookRoomViewModel
         return LocalTime.of(hour, minute);
     }
 
-    // TODO(rune): Hvorfor hedder den ChangeToSearch, hvad søger man på?
-    public void ChangeToSearch(String roomName)
+    public void ChangeToSearch(Room room)
     {
-        viewHandler.showRoomInfo(roomName);
+        if(room != null)
+        {
+            viewHandler.showRoomInfo(room);
+        }
     }
 
     public Property<String> selectedMaxCap() {

@@ -18,21 +18,12 @@ public class RoomInfoViewModel
     private final ViewHandler viewHandler;
     private final ObservableList<Booking> bookings;
 
-    public RoomInfoViewModel(ViewHandler viewHandler, ClientModelRoomInfo roomInfoModel, String roomName)
+    public RoomInfoViewModel(ViewHandler viewHandler, ClientModelRoomInfo roomInfoModel, Room room)
     {
         this.roomInfoModel = roomInfoModel;
         this.viewHandler = viewHandler;
         this.bookings = FXCollections.observableArrayList();
-
-        try
-        {
-            this.room = roomInfoModel.getRoom(roomName);
-        }
-        catch (ClientModelException e)
-        {
-            viewHandler.showErrorDialog(e.getMessage());
-            this.room = new Room(0, "", 0, 0, 0, "", new RoomType(0, ""));
-        }
+        this.room = room;
     }
 
     public Room getRoom()
