@@ -4,12 +4,12 @@ import booking.client.model.ClientModel;
 import booking.client.view.CoordinatorGUI.*;
 import booking.client.view.login.Login;
 import booking.client.view.login.Register;
-import booking.client.view.roomInfo.RoomInfo;
+import booking.client.view.shared.RoomInfo;
 import booking.client.view.userGUI.UserBookRoom;
 import booking.client.view.userGUI.UserHomeScreen;
 import booking.client.viewModel.coordinatorGUIVM.*;
 import booking.client.viewModel.loginVM.RegisterViewModel;
-import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
+import booking.client.viewModel.sharedVM.RoomInfoViewModel;
 import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
 import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.shared.objects.Room;
@@ -235,7 +235,7 @@ public class ViewHandlerImpl implements ViewHandler
             FXMLLoader loader = new FXMLLoader();
             Parent root = null;
 
-            loader.setLocation(getClass().getResource("../view/roomInfo/RoomInfo.fxml"));
+            loader.setLocation(getClass().getResource("../view/shared/RoomInfo.fxml"));
             root = loader.load();
 
             RoomInfoViewModel viewModel = viewModelFactory.getRoomInfoViewModel(this, model, room);

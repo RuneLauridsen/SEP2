@@ -1,6 +1,6 @@
 package test;
 
-import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
+import booking.client.viewModel.sharedVM.RoomInfoViewModel;
 import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import org.junit.jupiter.api.Test;
 

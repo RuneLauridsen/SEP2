@@ -1,4 +1,4 @@
-package booking.client.viewModel.roomInfoVM;
+package booking.client.viewModel.sharedVM;
 
 import booking.client.core.ViewHandler;
 import booking.client.model.ClientModelException;

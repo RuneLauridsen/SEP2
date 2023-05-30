@@ -4,7 +4,7 @@ import booking.client.model.ClientModel;
 import booking.client.viewModel.coordinatorGUIVM.*;
 import booking.client.viewModel.loginVM.LoginViewModel;
 import booking.client.viewModel.loginVM.RegisterViewModel;
-import booking.client.viewModel.roomInfoVM.RoomInfoViewModel;
+import booking.client.viewModel.sharedVM.RoomInfoViewModel;
 import booking.client.viewModel.userGUIVM.UserBookRoomViewModel;
 import booking.client.viewModel.userGUIVM.UserHomeScreenViewModel;
 import booking.client.viewModel.userGUIVM.UserViewModelState;

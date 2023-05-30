@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="291.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.client.view.roomInfo.RoomInfo">
+<AnchorPane prefHeight="291.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="booking.client.view.shared.RoomInfo">
    <children>
       <VBox layoutY="7.0" prefHeight="279.0" prefWidth="343.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="7.0">
          <children>
