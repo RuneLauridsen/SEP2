@@ -1,4 +1,4 @@
-package booking.client.model;
+package booking.server.model;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

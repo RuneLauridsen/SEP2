@@ -1,6 +1,5 @@
 package booking.server.model;
 
-import booking.client.model.HashingEncrypter;
 import booking.server.logger.Logger;
 import booking.server.model.importFile.ImportFile;
 import booking.server.model.importFile.ImportFileResult;

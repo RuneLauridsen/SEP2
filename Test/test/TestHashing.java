@@ -1,6 +1,6 @@
 package test;
 
-import booking.client.model.HashingEncrypter;
+import booking.server.model.HashingEncrypter;
 import org.junit.jupiter.api.Test;
 
 import java.security.NoSuchAlgorithmException;
