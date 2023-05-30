@@ -39,6 +39,7 @@ public class TestCase5 extends TestClientServerIntegrationBase
         step2();
 
         // TODO(rune)
+        postcondition(false);
     }
 
     @Test void scenario4()
@@ -75,43 +76,12 @@ public class TestCase5 extends TestClientServerIntegrationBase
 
     // TODO(rune): Ændr docs C02.06 -> CS02.07
 
-    private void step1_1()
-    {
-        homeScreenViewModel.getSearchProperty().set("C02.07");
-    }
-
-    private void step1_2()
-    {
-        homeScreenViewModel.getSearchProperty().set("c02.07");
-    }
-
-    private void step1_3()
-    {
-        homeScreenViewModel.getSearchProperty().set("02.07");
-    }
-
-    private void step1_4()
-    {
-        homeScreenViewModel.getSearchProperty().set("c 02.07");
-    }
-
-    private void step1_5()
-    {
-        homeScreenViewModel.getSearchProperty().set("");
-    }
-
-    //
-    // Step 2
-    //
-
-    private void step2()
-    {
-        homeScreenViewModel.changeToSearch();
-    }
-
-    //
-    // Postcondition
-    //
+    private void step1_1() { homeScreenViewModel.getSearchProperty().set("C02.07"); }
+    private void step1_2() { homeScreenViewModel.getSearchProperty().set("c02.07"); }
+    private void step1_3() { homeScreenViewModel.getSearchProperty().set("02.07"); }
+    private void step1_4() { homeScreenViewModel.getSearchProperty().set("c 02.07"); }
+    private void step1_5() { homeScreenViewModel.getSearchProperty().set(""); }
+    private void step2()   { homeScreenViewModel.changeToSearch(); }
 
     private void postcondition(boolean isPostconditionAchieved)
     {

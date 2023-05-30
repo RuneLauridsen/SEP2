@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static test.TestConstants.*;
 
-public class TestCase7 extends TestClientServerIntegrationBase
+public class TestCase6 extends TestClientServerIntegrationBase
 {
     private AddRoomViewModel addRoomViewModel;
     private CoordinatorHomeScreenViewModel homeScreenViewModel;
