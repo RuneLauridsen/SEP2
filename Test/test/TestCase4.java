@@ -37,8 +37,8 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_3();
-        step7_2(""); // TODO(rune): Ændr docs til trin 7.1
-        postcondition(false);
+        step7_1();
+        postcondition(true);
     }
 
     @Test void scenario3()
@@ -85,8 +85,8 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_2();
         step5_1();
         step6_1();
-        step7_2("Invalid username"); // TODO(rune): Kan man ikke godt hedde "Ma-rtin"?
-        postcondition(false);
+        step7_1();
+        postcondition(true);
     }
 
     @Test void scenario7()
@@ -109,8 +109,8 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_2();
-        step7_2(""); // TODO(rune): Ændr i docs til trin 7.1
-        postcondition(false);
+        step7_1();
+        postcondition(true);
     }
 
     @Test void scenario9()
@@ -121,8 +121,8 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_3();
-        step7_2(""); // TODO(rune): Ændr i docs til trin 7.1
-        postcondition(false);
+        step7_1();
+        postcondition(true);
     }
 
     @Test void scenario10()
@@ -133,8 +133,8 @@ public class TestCase4 extends TestClientServerIntegrationBase
         step4_1();
         step5_1();
         step6_4();
-        step7_2(""); // TODO(rune): Ændr i docs til trin 7.1
-        postcondition(false);
+        step7_1();
+        postcondition(true);
     }
 
     @Test void scenario11()

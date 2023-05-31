@@ -14,7 +14,9 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -58,7 +60,14 @@ public class CoordinatorBookingMenu
     @FXML
     public void btnInsertFileClicked(ActionEvent actionEvent)
     {
-        viewModel.insertFileAction();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("csv", "*.csv")
+        );
+
+        File file = fileChooser.showOpenDialog(null);
+        viewModel.insertFileAction(file);
     }
 
     public void tableviewClicked(MouseEvent mouseEvent)

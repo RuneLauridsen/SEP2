@@ -92,7 +92,7 @@ public class TestUtil
 
         try
         {
-            Thread.sleep(1000); // HACK(rune): Vent på at server starter.
+            Thread.sleep(100); // HACK(rune): Vent på at server starter.
         }
         catch (InterruptedException e)
         {

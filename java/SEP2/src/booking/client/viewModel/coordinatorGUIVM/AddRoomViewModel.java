@@ -42,15 +42,33 @@ public class AddRoomViewModel
                     return false;
                 }
 
+                if(maxComfInt > 10000)
+                {
+                    viewHandler.showErrorDialog("Comfort capacity must not be greater than 10000");
+                    return false;
+                }
+
                 if(maxSafetyInt < 0)
                 {
                     viewHandler.showErrorDialog("Safety capacity must not be negative");
                     return false;
                 }
 
+                if(maxSafetyInt > 10000)
+                {
+                    viewHandler.showErrorDialog("Safety capacity must not be greater than 10000");
+                    return false;
+                }
+
                 if(sizeInt < 0)
                 {
                     viewHandler.showErrorDialog("Size must not be negative");
+                    return false;
+                }
+
+                if(sizeInt > 10000)
+                {
+                    viewHandler.showErrorDialog("Size must not be greater than 10000");
                     return false;
                 }
 

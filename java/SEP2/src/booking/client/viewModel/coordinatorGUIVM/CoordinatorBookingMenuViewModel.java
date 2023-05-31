@@ -33,16 +33,11 @@ public class CoordinatorBookingMenuViewModel
         viewHandler.showCoordinatorBookRoom();
     }
 
-    public void insertFileAction()
+    public void insertFileAction(File file)
     {
         try
         {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
-            fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("csv", "*.csv")
-            );
-            File file = fileChooser.showOpenDialog(null);
+            boolean b = file.canRead();
 
             if (file != null)
             {

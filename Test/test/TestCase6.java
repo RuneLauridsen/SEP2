@@ -105,11 +105,11 @@ public class TestCase6 extends TestClientServerIntegrationBase
         step1();
         step2_1();
         step3_1();
-        step4_4(); // TODO(rune): Drop max på maxComf?
+        step4_4();
         step5_1();
         step6_1();
         step8_1();
-        step9_2("");
+        step9_2("Comfort capacity must not be greater than 10000");
         postcondition(false);
     }
 
@@ -165,7 +165,7 @@ public class TestCase6 extends TestClientServerIntegrationBase
         step5_4(); // TODO(rune): Drop max på maxSafety?
         step6_1();
         step8_1();
-        step9_2("");
+        step9_2("Safety capacity must not be greater than 10000");
         postcondition(false);
     }
 
@@ -219,9 +219,9 @@ public class TestCase6 extends TestClientServerIntegrationBase
         step3_1();
         step4_1();
         step5_1();
-        step6_4(); // TODO(rune): Drop max på size?
+        step6_4();
         step8_1();
-        step9_2("");
+        step9_2("Size must not be greater than 10000");
         postcondition(false);
     }
 

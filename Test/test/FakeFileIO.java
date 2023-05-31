@@ -15,7 +15,7 @@ public class FakeFileIO implements FileIO
     {
         try
         {
-            URL ulr = getClass().getResource(fileName);
+            URL ulr = getClass().getResource(Path.of(fileName).getFileName().toString());
             if (ulr == null)
             {
                 throw new FileNotFoundException(fileName + " not found");
