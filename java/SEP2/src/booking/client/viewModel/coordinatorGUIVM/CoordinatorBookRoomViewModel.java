@@ -76,8 +76,8 @@ public class CoordinatorBookRoomViewModel
         selectedFromTime = new SimpleObjectProperty<>();
         selectedToTime = new SimpleObjectProperty<>();
         selectedPreFixTime = new SimpleObjectProperty<>();
-        selectedMinCap = new SimpleStringProperty();
-        selectedMaxCap = new SimpleStringProperty();
+        selectedMinCap = new SimpleStringProperty("");
+        selectedMaxCap = new SimpleStringProperty("");
         selectedBuilding = new SimpleObjectProperty<>();
         selectedFloor = new SimpleObjectProperty<>();
         selectedCourse = new SimpleObjectProperty<>();

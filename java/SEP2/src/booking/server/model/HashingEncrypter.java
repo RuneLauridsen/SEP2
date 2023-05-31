@@ -5,7 +5,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class HashingEncrypter
 {
-
+    // NOTE: Det er ikke på nogen måde sikkert. Hash funktionen er ikke kryptografisk, vi sender
+    // password over netværk i plaintekst etc. Vi skulle bare bruger noget simpelt til at logge ind.
 
     private static String[] hexTable;
 
