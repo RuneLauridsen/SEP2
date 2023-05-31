@@ -255,7 +255,7 @@ public class ClientModelImpl implements ClientModel
         {
             // TODO(rune): Slå sammen til en request?
             networkLayer.updateRoom(room);
-            networkLayer.updateUserRoomData(room, room.getName(), room.getUserColor());
+            networkLayer.updateUserRoomData(room, room.getUserComment(), room.getUserColor());
         }
         catch (ClientNetworkResponseException e)
         {
