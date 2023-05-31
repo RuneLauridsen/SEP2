@@ -51,7 +51,7 @@ public class CoordinatorBookingMenuViewModel
                     }
                     else
                     {
-                        // TODO(rune): ImportFileResult burde have et view for sig, da det
+                        // TODO: ImportFileResult burde have et view for sig, da det
                         // bliver uoverskueligt, hvis der er mange fejl og/eller overlap.
                         String message = ViewModelUtil.getImportFileResultDisplayText(result);
                         viewHandler.showWarningDialog(message);

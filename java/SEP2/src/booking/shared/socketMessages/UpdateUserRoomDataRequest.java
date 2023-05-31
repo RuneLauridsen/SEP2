@@ -2,7 +2,7 @@ package booking.shared.socketMessages;
 
 import booking.shared.objects.Room;
 
-// NOTE(rune): Opdatere bruger specifik data for et lokale
+// NOTE: Opdatere bruger specifik data for et lokale
 public class UpdateUserRoomDataRequest extends Request
 {
     private final Room room;

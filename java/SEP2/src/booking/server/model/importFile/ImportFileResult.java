@@ -6,10 +6,10 @@ import java.util.List;
 
 public class ImportFileResult implements Serializable
 {
-    // NOTE(rune): Forkert filformat, lokale ikke fundet, io error osv.
+    // NOTE: Forkert filformat, lokale ikke fundet, io error osv.
     private final List<ImportFileError> errors;
 
-    // NOTE(rune): Detaljer om overlap med eksisterende bookinger
+    // NOTE: Detaljer om overlap med eksisterende bookinger
     private final List<ImportFileOverlap> overlaps;
 
     public ImportFileResult()

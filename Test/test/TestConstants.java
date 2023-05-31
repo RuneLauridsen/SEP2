@@ -2,7 +2,7 @@ package test;
 
 public class TestConstants
 {
-    // NOTE(rune): Samme viaid'er som i setup.sql. Ændr ikke viaid'er her,
+    // NOTE: Samme viaid'er som i setup.sql. Ændr ikke viaid'er her,
     // uden også at ændre dem i setup.sql, ellers vil unit tests fejle.
 
     public static final int VIAID_MAJA = 111111;

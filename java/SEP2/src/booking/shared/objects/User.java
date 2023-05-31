@@ -6,8 +6,8 @@ public class User implements Serializable
 {
     private final int id;
     private final String name;
-    private final String initials;    // NOTE(rune): Null hvis ikke medarbejder
-    private final Integer viaId;      // NOTE(rune): Null hvis ikke studerende
+    private final String initials;    // NOTE: Null hvis ikke medarbejder
+    private final Integer viaId;      // NOTE: Null hvis ikke studerende
     private final UserType type;
 
     public User(int id, String name, String initials, Integer viaId, UserType type)

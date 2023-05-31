@@ -23,7 +23,7 @@ public class ServerModelImpl implements ServerModel
     private final Persistence persistence;
     private final NowProvider nowProvider;
 
-    // NOTE(rune): Når man checker efter overlap mellem bookinger, er koden
+    // NOTE: Når man checker efter overlap mellem bookinger, er koden
     // synchronized med dette objekt for at undgå en race condition ved
     // booking overlap check, når flere brugere vil lave en ny booking på
     // samme tid.
@@ -72,7 +72,7 @@ public class ServerModelImpl implements ServerModel
 
     @Override public Room getRoom(String roomName, User activeUser) throws ServerModelException
     {
-        // NOTE(rune): Checker ikke om activeUser er logget ind, da vi bare returnere
+        // NOTE: Checker ikke om activeUser er logget ind, da vi bare returnere
         // lokale uden bruger specifik data, hvis activeUser ikke er logged ind.
 
         try
@@ -88,7 +88,7 @@ public class ServerModelImpl implements ServerModel
 
     @Override public List<Room> getRooms(User activeUser) throws ServerModelException
     {
-        // NOTE(rune): Checker ikke om activeUser er logget ind, da vi bare returnere
+        // NOTE: Checker ikke om activeUser er logget ind, da vi bare returnere
         // lokale uden bruger specifik data, hvis activeUser ikke er logged ind.
 
         try
@@ -162,7 +162,7 @@ public class ServerModelImpl implements ServerModel
             {
                 synchronized (createBookingLock)
                 {
-                    // NOTE(rune): Vi stoler på at klienten sender Room med korrekt RoomType værdi. Dette er ikke en sikker måde
+                    // NOTE: Vi stoler på at klienten sender Room med korrekt RoomType værdi. Dette er ikke en sikker måde
                     // a styre adgang til lokaler på, da klienten nemt kunne sende en Room instans med modificeret RoomType,
                     // for at få adgang til at booke lokaler, som klienten normalt ikke ville have adgang til.
                     // Dog holder SocketHandler'en selv styr på User objektet, så der kan klienten ikke snyde.
@@ -185,13 +185,13 @@ public class ServerModelImpl implements ServerModel
                         throw new ServerModelException(ERROR_RESPONSE_REASON_TOO_MANY_ACTIVE_BOOKINGS);
                     }
 
-                    // NOTE(rune): Selvom klient sender isOverlapAllowed kan det godt være
+                    // NOTE: Selvom klient sender isOverlapAllowed kan det godt være
                     // at klientens brugertype ikke har tilladelse til at overlappe bookinger.
                     boolean isOverlapAllowed = parameters.isOverlapAllowed() && activeUser.getType().canOverlapBookings();
 
                     List<Overlap> overlaps = OverlapChecker.getOverlaps(parameters, activeUser, persistence);
 
-                    // NOTE(rune): Overlap kan enten betyde at lokalet er optaget i booking interval,
+                    // NOTE: Overlap kan enten betyde at lokalet er optaget i booking interval,
                     // eller at en af medlemmerne i en bookings user group er optaget. Planlæggere skal
                     // have mulighed for at overlappe bookinger alligevel, så vi ignorerer overlap hvis
                     // klient eksplicit siger at den nye booking godt må overlappe.

@@ -38,7 +38,6 @@ public class TestCase5 extends TestClientServerIntegrationBase
         step1_3();
         step2();
 
-        // TODO(rune)
         postcondition(false);
     }
 
@@ -46,8 +45,9 @@ public class TestCase5 extends TestClientServerIntegrationBase
     {
         precondition();
         step1_3();
+        step2();
 
-        // TODO(rune)
+        postcondition(false);
     }
 
     @Test void scenario5()
@@ -73,8 +73,6 @@ public class TestCase5 extends TestClientServerIntegrationBase
     //
     // Step 1
     //
-
-    // TODO(rune): Ændr docs C02.06 -> CS02.07
 
     private void step1_1() { homeScreenViewModel.getSearchProperty().set("C02.07"); }
     private void step1_2() { homeScreenViewModel.getSearchProperty().set("c02.07"); }

@@ -19,7 +19,7 @@ public interface ClientModel extends
     ClientModelRoomInfo,
     ClientModelRoomMangement
 {
-    // NOTE(rune): Det er ikke nogen grund til at skrive alle metoderne her, da vi extender de segregerede interfaces
+    // NOTE: Det er ikke nogen grund til at skrive alle metoderne her, da vi extender de segregerede interfaces
     // men det giver et godt overblik.
 
     public User login(int viaid, String password) throws ClientModelException;

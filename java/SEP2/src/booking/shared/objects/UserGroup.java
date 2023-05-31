@@ -8,7 +8,7 @@ public class UserGroup implements Serializable
     private final String name;
     private final Course course;
 
-    // NOTE(rune): I databasen linker UserGroup til en liste af Users, men i Java-land har
+    // NOTE: I databasen linker UserGroup til en liste af Users, men i Java-land har
     // UserGroup objektet ikke selv en liste af Users, da man skal bruge UserGroupUsersRequest
     // i stedet.
 

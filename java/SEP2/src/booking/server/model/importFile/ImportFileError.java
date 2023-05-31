@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ImportFileError implements Serializable
 {
-    // NOTE(rune): Hvis row = 0 stammer fejlen ikke fra en bestemt række, f.eks. FileNotFound
+    // NOTE: Hvis row = 0 stammer fejlen ikke fra en bestemt række, f.eks. FileNotFound
     private final int row;
     private final String message;
 

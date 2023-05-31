@@ -1,6 +1,6 @@
 package booking.shared.socketMessages;
 
-// NOTE(rune): Henter hold/klasser
+// NOTE: Henter hold/klasser
 public class UserGroupsRequest extends Request
 {
 }

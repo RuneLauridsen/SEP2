@@ -12,7 +12,7 @@ public class Room implements Serializable
     private  String comment;
     private  RoomType type;
 
-    // NOTE(rune): Bruger-specifik
+    // NOTE: Bruger-specifik
     private  String userComment;
     private  int userColor;
 

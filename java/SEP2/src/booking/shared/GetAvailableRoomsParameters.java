@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-// NOTE(rune): Disse parameter/argument sendes ofte rundt fra mellem
+// NOTE: Disse parameter/argument sendes ofte rundt fra mellem
 // forskellige metoder, så det er nemmere bare at gemme dem sammen.
 public class GetAvailableRoomsParameters implements Serializable
 {

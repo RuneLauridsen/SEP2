@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// NOTE(rune): Cacher entiteter som ikke ændre sig ofte: UserType, RoomType, UserGroup og Users i UserGroup
+// NOTE: Cacher entiteter som ikke ændre sig ofte: UserType, RoomType, UserGroup og Users i UserGroup
 // Brugeren har ikke mulighed for at tilføje/redigere/slette disse entiteter, så cache invalidation kan
 // laves meget simpelt, bare ved at sætte en tidsbegrænsning på hvor lang tid de må ligge i cachen.
 public class PersistenceCacheProxy implements Persistence

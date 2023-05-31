@@ -64,7 +64,7 @@ public class TestUtil
         }
         catch (Exception e)
         {
-            // NOTE(rune): Database setup fejlede, så vi kan ikke køre test.
+            // NOTE: Database setup fejlede, så vi kan ikke køre test.
             throw new RuntimeException(e);
         }
     }
@@ -92,7 +92,7 @@ public class TestUtil
 
         try
         {
-            Thread.sleep(100); // HACK(rune): Vent på at server starter.
+            Thread.sleep(100); // HACK: Vent på at server starter.
         }
         catch (InterruptedException e)
         {

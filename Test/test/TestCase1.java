@@ -324,7 +324,7 @@ public class TestCase1 extends TestClientServerIntegrationBase
         coordinatorBookRoom = viewModelFactory.getCoordinatorBookRoomViewModel(viewHandler, client);
     }
 
-    // NOTE(rune): Fordi binding af type LocalDate, kan vi ikke simulere at brugeren indtaster tekst i viewmodel,
+    // NOTE: Fordi binding af type LocalDate, kan vi ikke simulere at brugeren indtaster tekst i viewmodel,
     // da det er javafx's DatePicker som parser brugerens input.
     private void step2_1() { userBookRoom.selectedDateProperty().set(LocalDate.of(2023, 7, 1));
                              coordinatorBookRoom.selectedStartDateProperty().set(LocalDate.of(2023, 7, 1)); }

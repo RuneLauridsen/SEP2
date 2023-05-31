@@ -9,7 +9,7 @@ import booking.shared.objects.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-// NOTE(rune): State som deles mellem flere user view models
+// NOTE: State som deles mellem flere user view models
 public class UserViewModelState
 {
     private final ViewHandler viewHandler;

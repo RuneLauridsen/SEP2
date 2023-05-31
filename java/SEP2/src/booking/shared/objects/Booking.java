@@ -8,7 +8,7 @@ public class Booking implements Serializable
     private final BookingInterval interval;
     private final Room room;
     private final User user;
-    private final UserGroup userGroup; // NOTE(rune): Null hvis booking ikke er for et hold/klasse
+    private final UserGroup userGroup; // NOTE: Null hvis booking ikke er for et hold/klasse
 
     public Booking(int id, BookingInterval interval, Room room, User user, UserGroup userGroup)
     {

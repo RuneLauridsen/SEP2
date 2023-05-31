@@ -6,8 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-// TODO(rune): Det bliver et stort interface, men hvilken fordel ville det give at dele op?
-// Måske kunne man dele det op i UserPersistence, RoomPersistence, BookingPersistence osv.
 public interface Persistence
 {
     // Henter all brugertyper. Key = UserType.id.

@@ -11,7 +11,7 @@ import booking.shared.objects.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-// NOTE(rune): State som deles mellem flere coordinator view models
+// NOTE: State som deles mellem flere coordinator view models
 public class CoordinatorViewModelState
 {
     private final ViewHandler viewHandler;

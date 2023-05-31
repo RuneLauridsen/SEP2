@@ -34,7 +34,7 @@ public class ImportFile
         Map<LocalDate, List<ImportFileRow>> groupedByDate = new HashMap<>();
         for (ImportFileRow row : rows)
         {
-            // NOTE(rune): Overlap check kan isoleres pr. dato, da samme booking aldrig dækker flere dage.
+            // NOTE: Overlap check kan isoleres pr. dato, da samme booking aldrig dækker flere dage.
             LocalDate date = row.getBooking().getInterval().getDate();
 
             if (groupedByDate.containsKey(date) == false)

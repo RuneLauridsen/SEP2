@@ -8,7 +8,7 @@ public class CreateUserRequest extends Request
 {
     private final String username;
     private final String password;
-    private final String initials; // NOTE(rune): Null hvis ikke medarbejder
+    private final String initials; // NOTE: Null hvis ikke medarbejder
     private final int viaid;
     private final UserType userType;
 

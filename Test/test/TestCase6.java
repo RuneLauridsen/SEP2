@@ -162,7 +162,7 @@ public class TestCase6 extends TestClientServerIntegrationBase
         step2_1();
         step3_1();
         step4_1();
-        step5_4(); // TODO(rune): Drop max på maxSafety?
+        step5_4();
         step6_1();
         step8_1();
         step9_2("Safety capacity must not be greater than 10000");
@@ -286,7 +286,6 @@ public class TestCase6 extends TestClientServerIntegrationBase
         precondition();
         step1();
         step2_4();
-        // TODO(rune): Docs trin 3.6 er et spøgelse
         step4_6();
         step5_6();
         step6_6();
@@ -315,8 +314,6 @@ public class TestCase6 extends TestClientServerIntegrationBase
         assertEquals(viewHandler.getLatestView(), AddRoomViewModel.class);
         addRoomViewModel = viewModelFactory.getAddRoomViewModel(viewHandler, client);
     }
-
-    // TODO(rune): Test når room name eksisterer i forvejen.
 
     private void step2_1()  { name = "C03.05"; }
     private void step2_2()  { name = "abc"; }
@@ -347,7 +344,6 @@ public class TestCase6 extends TestClientServerIntegrationBase
     private void step6_5() { size = "abc"; }
     private void step6_6() { size = ""; }
 
-    // TODO(rune): Ret docs trin 8, blank står der to gange både 8.1 og 8.4
     private void step8_1() { comment = ""; }
     private void step8_2() { comment = "abc"; }
     private void step8_3() { comment = "123"; }

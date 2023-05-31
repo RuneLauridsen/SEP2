@@ -9,7 +9,7 @@ public class UserType implements Serializable
     private final String name;
     private final boolean canEditUsers;
     private final boolean canEditRooms;
-    private final boolean canEditBookings; // NOTE(rune): Kan ændre andre folks bookinger
+    private final boolean canEditBookings; // NOTE: Kan ændre andre folks bookinger
     private final boolean canOverlapBookings;
     private final int maxBookingCount;
     private final List<RoomType> allowedRoomTypes;

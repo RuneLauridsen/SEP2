@@ -117,7 +117,7 @@ public class OverlapChecker
         return foundOverlaps;
     }
 
-    // NOTE(rune): Antager at alle bookinger i bookingsToCheck har samme dato!
+    // NOTE: Antager at alle bookinger i bookingsToCheck har samme dato!
     public static List<Booking> getRelevantBookings(
         List<Booking> bookingsToCheck,
         //Map<UserGroup, List<User>> userGroupUsersCache,

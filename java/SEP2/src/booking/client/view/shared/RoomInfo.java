@@ -26,7 +26,6 @@ public class RoomInfo
         lblStatus.textProperty().set(viewModel.isAvailable());
         lvRoomBookings.setItems(viewModel.getBookings());
 
-        //TODO skal måske ikke checkes her
         if (viewModel.getRoom().getComment().isEmpty())
             lblComment.textProperty().set(viewModel.getRoom().getComment());
 

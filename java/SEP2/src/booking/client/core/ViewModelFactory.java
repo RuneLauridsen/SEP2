@@ -100,7 +100,7 @@ public class ViewModelFactory
 
     public EditRoomViewModel getEditRoomViewModel(ViewHandler viewHandler, ClientModel model, Room room)
     {
-        // NOTE(rune): Skal altid åbnes i nyt vindue
+        // NOTE: Skal altid åbnes i nyt vindue
         return new EditRoomViewModel(viewHandler, model, getCoordinatorViewModelState(viewHandler, model), room);
     }
     public RoomInfoViewModel getRoomInfoViewModel(ViewHandler viewHandler, ClientModel model, Room room)

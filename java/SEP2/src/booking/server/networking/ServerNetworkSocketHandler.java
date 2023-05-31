@@ -22,7 +22,7 @@ public class ServerNetworkSocketHandler implements Runnable
 
     private ServerModel model;
 
-    // NOTE(rune): Så længe activeUser er null, er klienten ikke logget ind. Nogle request
+    // NOTE: Så længe activeUser er null, er klienten ikke logget ind. Nogle request
     // kan godt behandles uden af være logget ind, f.eks. CreateUserRequest.
     private User activeUser;
 
@@ -62,7 +62,7 @@ public class ServerNetworkSocketHandler implements Runnable
         }
         catch (IOException e)
         {
-            // NOTE(rune): Når server er ved at lukke smider readObject en IOException
+            // NOTE: Når server er ved at lukke smider readObject en IOException
             // fordi readObject stream bliver lukket, så readObject ikke blokerer tråden længere.
             // Hvis vi IOException har en anden årsag, lukker vi også bare socket'en.
         }
@@ -320,7 +320,6 @@ public class ServerNetworkSocketHandler implements Runnable
         }
         catch (IOException e)
         {
-            // TODO(rune): Giver det mening at håndtere fejlen anderledes?
             e.printStackTrace();
         }
     }

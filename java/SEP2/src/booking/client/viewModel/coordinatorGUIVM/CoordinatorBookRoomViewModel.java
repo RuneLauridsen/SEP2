@@ -197,16 +197,15 @@ public class CoordinatorBookRoomViewModel
 
     public ObservableList<Room> showAvailableRooms()
     {
-        // Comments er fra UserBookRoomViewModel
-        //TODO Category
         try
         {
             Character building = selectedBuilding.get();
             Integer floor = selectedFloor.get();
             LocalDate date = selectedStartDate.get();
 
-            // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
-            // så vi slipper for at parse her.
+            // TODO: timeIntervals list kunne evt. være med <LocalTime> i stedet,
+            // så vi slipper for at parse her. Vi ville dog ikke kunne unit test
+            // forskellige string input.
 
             LocalTime startTime = null;
             LocalTime endTime= null;
@@ -226,7 +225,6 @@ public class CoordinatorBookRoomViewModel
                 viewHandler.showErrorDialog("Start time of booking must be before end time of booking");
             }
             else {
-                // TODO(rune): Check om det virker rigtigt med, at building/floor er null, hvis ikke valgt.
                 GetAvailableRoomsParameters parameters = new GetAvailableRoomsParameters(
                         date, startTime, endTime
                 );
@@ -269,9 +267,6 @@ public class CoordinatorBookRoomViewModel
 
     public void bookRoom(Room room)
     {
-        // TODO(rune): timeIntervals liste kunne evt. være med <LocalTime> i stedet,
-        // så vi slipper for at parse her.
-
         boolean usePrefixTimes = prefixCheckBox.get();
         LocalTime startTime = usePrefixTimes ? selectedPreFixTime.get().getStart() :  parseLocalDateTime(selectedFromTime.get());
         LocalTime endTime = usePrefixTimes ? selectedPreFixTime.get().getEnd() : parseLocalDateTime(selectedToTime.get());
@@ -292,7 +287,7 @@ public class CoordinatorBookRoomViewModel
             viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
             sharedState.refreshActiveBookings();
 
-            // NOTE(rune): Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
+            // NOTE: Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
             showAvailableRooms();
         }
         catch (ClientModelOverlapException e)

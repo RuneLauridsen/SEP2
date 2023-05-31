@@ -1,6 +1,6 @@
 package booking.shared.socketMessages;
 
-// NOTE(rune): Hvis der er noget galt med en request, sender serveren et ErrorResponse tilbage,
+// NOTE: Hvis der er noget galt med en request, sender serveren et ErrorResponse tilbage,
 // med en af følgende ErrorResponseReasons:
 public enum ErrorResponseReason
 {

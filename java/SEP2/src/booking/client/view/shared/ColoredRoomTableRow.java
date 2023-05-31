@@ -16,7 +16,6 @@ public class ColoredRoomTableRow extends TableRow<Room>
     {
         super.updateItem(room, empty);
 
-        // TODO(rune): Hvorfor room.getUserColor() != 0?
         if (room != null && room.getUserColor() != 0 && !empty)
         {
             Color color = ArgbIntConverter.intToColor(room.getUserColor());

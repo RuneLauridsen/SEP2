@@ -92,24 +92,6 @@ public class DatabaseConnectionPool
         String connectionString = getConnectionString();
 
         return DriverManager.getConnection(connectionString);
-
-        /*
-        switch (System.getProperty("user.name"))
-        {
-            case "runel":
-                // TODO(rune): Forbinde til rigtig database, ikke bare localhost. Måske er måde at konfigurere
-                // hvilken connection string der skal bruges, f.eks. debug database eller prod database.
-                return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?user=postgres&password=asdasd");
-            case "jbram":
-                // TODO(rune): Forbinde til rigtig database, ikke bare localhost. Måske er måde at konfigurere
-                // hvilken connection string der skal bruges, f.eks. debug database eller prod database.
-                return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?user=postgres&password=1234");
-
-            default:
-                throw new RuntimeException("Unknown user");
-        }
-
-         */
     }
 
     private static String getConnectionString() throws SQLException

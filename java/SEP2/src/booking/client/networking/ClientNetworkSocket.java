@@ -51,7 +51,7 @@ public class ClientNetworkSocket implements ClientNetwork
     @Override public void logout()
         throws ClientNetworkException, ClientNetworkResponseException
     {
-        // TODO(rune): Disconnect
+        // TODO: Logout request. Dog lukker ClientNetworkSocketHandler automatisk når client disconnecter.
     }
 
     public void createUser(String username, String password, String initials, int viaid, UserType userType)
@@ -86,7 +86,7 @@ public class ClientNetworkSocket implements ClientNetwork
     }
 
     @Override public List<Overlap> createBooking(CreateBookingParameters parameters)
-        throws ClientNetworkException, ClientNetworkResponseException //TODO billede i rapport skal opdateres hvis metoden ændres
+        throws ClientNetworkException, ClientNetworkResponseException
     {
         sendRequest(new CreateBookingRequest(parameters));
         CreateBookingResponse response = (CreateBookingResponse) readResponse();

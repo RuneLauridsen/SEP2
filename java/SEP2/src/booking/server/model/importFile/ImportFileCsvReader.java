@@ -43,7 +43,7 @@ public class ImportFileCsvReader
                 String line = scanner.nextLine();
                 rowIndex++;
 
-                // NOTE(rune): Skip første linje med headers
+                // NOTE: Skip første linje med headers
                 if (rowIndex == 1)
                 {
                     continue;
@@ -54,7 +54,7 @@ public class ImportFileCsvReader
                     continue;
                 }
 
-                // NOTE(rune): https://stackoverflow.com/a/13939902, -1 så vi beholder tomme celler.
+                // NOTE: https://stackoverflow.com/a/13939902, -1 så vi beholder tomme celler.
                 String[] cells = line.split(",", -1);
                 if (cells.length != 6)
                 {
@@ -127,7 +127,7 @@ public class ImportFileCsvReader
                         rowIndex,
                         isOverlapAllowed,
                         new Booking(
-                            // NOTE(rune): Bruger negative id, for at sikre at ny id ikke clasher med id fra database.
+                            // NOTE: Bruger negative id, for at sikre at ny id ikke clasher med id fra database.
                             rowIndex + Integer.MIN_VALUE,
                             interval,
                             room,

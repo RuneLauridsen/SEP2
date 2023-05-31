@@ -26,8 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static test.TestConstants.*;
 import static booking.shared.socketMessages.ErrorResponseReason.*;
 
-// TODO(rune): Tjek at vi tester all fejlkoder
-
 public class TestServerModel
 {
     private DatabaseHandler database;

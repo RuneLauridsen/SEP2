@@ -129,16 +129,12 @@ public class UserBookRoomViewModel
     {
         try
         {
-            // TODO(rune): Min/max cap
-
             String startTimeString = selectedFromTime.get();
             String endTimeString = selectedToTime.get();
             Character building = selectedBuilding.get();
             Integer floor = selectedFloor.get();
             LocalDate date = selectedDate.get();
 
-            // TODO(rune): timeIntervals list kunne evt. være med <LocalTime> i stedet,
-            // så vi slipper for at parse her.
             LocalTime startTime = parseLocalDateTime(startTimeString);
             LocalTime endTime = parseLocalDateTime(endTimeString);
 
@@ -175,13 +171,12 @@ public class UserBookRoomViewModel
             viewHandler.showErrorDialog("Max- and min capacity must be a number");
         }
         catch (NullPointerException e){
-            // TODO(rune): NullPointerException kan skyldes mange ting. Ville være mere sikkert og eksplicit med f.eks. if (startTimeString == null) { ... }
             viewHandler.showErrorDialog("Date and time interval must not be empty");
         }
     }
 
     public void bookRoom(Room room)
-    { //TODO billede i rapport skal opdateres hvis metoden ændres
+    {
         LocalTime startTime = parseLocalDateTime(selectedFromTime.get());
         LocalTime endTime = parseLocalDateTime(selectedToTime.get());
         BookingInterval requestedInterval = new BookingInterval(selectedDate.get(), startTime, endTime);
@@ -199,7 +194,7 @@ public class UserBookRoomViewModel
                 viewHandler.showInfoDialog("Lokale " + room + " er booket til " + requestedInterval);
                 sharedState.refreshActiveBookings();
 
-                // NOTE(rune): Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
+                // NOTE: Genindlæs så lokalet der lige er bliver booket forsvinder fra listen.
                 showAvailableRooms();
             }
             catch (ClientModelException e)

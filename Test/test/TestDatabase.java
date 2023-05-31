@@ -19,9 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static test.TestConstants.*;
 import static test.TestUtil.assertRooms;
 
-// TODO(rune): Tjek at alle database funktioner er testet
-// (kig i Persistence interfacet)
-
 public class TestDatabase
 {
     private DatabaseHandler database;
@@ -81,7 +78,7 @@ public class TestDatabase
         assertEquals(user.getId(), 5);
         assertEquals(user.getName(), "Gitte");
         assertEquals(user.getInitials(), "GITT");
-        assertEquals(user.getViaId(), 555555); // TODO(rune): Har medarbejdere viaid ligesom studerende?
+        assertEquals(user.getViaId(), 555555);
         assertEquals(user.getType().getId(), 1);
     }
 
@@ -152,7 +149,7 @@ public class TestDatabase
     {
         User user = database.getUser(VIAID_GITTE);
 
-        // NOTE(rune): 2023-05-12 så vi tester at bookingen til 2023-05-11 ikke kommer med.
+        // NOTE: 2023-05-12 så vi tester at bookingen til 2023-05-11 ikke kommer med.
         List<Booking> bookings = database.getBookingsForUser(user, LocalDate.of(2023, 5, 12), LocalDate.MAX, user);
 
         assertEquals(bookings.size(), 3);
@@ -414,8 +411,8 @@ public class TestDatabase
         roomToUpdate.setComfortCapacity(91);
         roomToUpdate.setComment("new global comment");
 
-        // TODO(rune): Test kører igennem selvom updateRoom er udkommenteret
-        // database.updateRoom(roomToUpdate);
+        database.updateRoom(roomToUpdate);
+        Room roomAfterUpdate = database.getRoom("A02.99", user);
 
         assertEquals(roomToUpdate.getName(), "A02.99");
         assertEquals(roomToUpdate.getSize(), 90);
@@ -440,7 +437,7 @@ public class TestDatabase
 
     @Test void testUpdateUserRoomData_insert() throws PersistenceException
     {
-        // NOTE(rune): A02.03 har ikke Gitte-specifik data i forvejen, så her
+        // NOTE: A02.03 har ikke Gitte-specifik data i forvejen, så her
         // tester vi også at indsætte en ny user_room_data række.
 
         User user = database.getUser(VIAID_GITTE);

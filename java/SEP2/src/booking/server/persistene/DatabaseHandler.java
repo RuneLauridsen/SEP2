@@ -70,7 +70,7 @@ public class DatabaseHandler implements Persistence
                     resultSet.getInt("user_id"),
                     resultSet.getString("user_name"),
                     resultSet.getString("user_initials"),
-                    resultSet.getInt("user_viaid"), // NOTE(rune): Hvis user_viaid er NULL, returnere resulSet.getInt 0.
+                    resultSet.getInt("user_viaid"), // NOTE: Hvis user_viaid er NULL, returnere resulSet.getInt 0.
                     userTypes.get(resultSet.getInt("user_type_id"))
                 );
             }
@@ -920,8 +920,7 @@ public class DatabaseHandler implements Persistence
 
         try
         {
-            // TODO(rune): Er der en bedre måde at lave "INSERT el. UPDATE hvis række findes i forvejen" på?
-            // NOTE(rune): https://stackoverflow.com/a/11135767
+            // NOTE: https://stackoverflow.com/a/11135767
             String query = " "
                 + "UPDATE sep2.user_room_data SET comment = ?, color = ? WHERE user_id = ? AND room_id = ?; "
                 + "INSERT INTO sep2.user_room_data (user_id, room_id, comment, color) "
@@ -1036,7 +1035,6 @@ public class DatabaseHandler implements Persistence
             }
             catch (SQLException e)
             {
-                // TODO(rune): Hvad gør vi hvis statement ikke kan lukkes?
                 throw new RuntimeException(e);
             }
         }
@@ -1052,7 +1050,6 @@ public class DatabaseHandler implements Persistence
             }
             catch (SQLException e)
             {
-                // TODO(rune): Hvad gør vi hvis resultSet ikke kan lukkes?
                 throw new RuntimeException(e);
             }
         }
@@ -1060,7 +1057,7 @@ public class DatabaseHandler implements Persistence
 
     private static Date truncateToSqlDate(LocalDate localDate)
     {
-        // NOTE(rune): Postgres' dato type har ikke lige så stor range som Java's LocalDate.
+        // NOTE: Postgres' dato type har ikke lige så stor range som Java's LocalDate.
         // Vi bruger LocalDate.MIN og LocalDate.MAX når man f.eks. vil finde ALLE bookinger,
         // med getBookingsForRoom, så denne funktion sørger for, at de ikke overskrider
         // Postgres' dato types grænser. Håndterer ikke BCE.

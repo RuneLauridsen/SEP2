@@ -3,7 +3,7 @@ package booking.client.core;
 import booking.shared.objects.Room;
 import booking.shared.objects.User;
 
-// NOTE(rune): ViewHandler er nødt til at være et interface,
+// NOTE: ViewHandler er nødt til at være et interface,
 // fordi UnitTest'ene ikke skal begynde at loade fxml filer.
 public interface ViewHandler
 {

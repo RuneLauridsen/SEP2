@@ -1,6 +1,6 @@
 package booking.client.networking;
 
-// NOTE(rune): Når noget går galt i BookingClientNetworkLayer
+// NOTE: Når noget går galt i BookingClientNetworkLayer
 public class  ClientNetworkException extends Exception
 {
 

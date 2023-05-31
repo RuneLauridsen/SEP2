@@ -35,7 +35,7 @@ public class RunApp
         });
 
         serverThread.start();
-        Thread.sleep(2000); // NOTE(rune): Wait for server to start
+        Thread.sleep(2000); // NOTE: Wait for server to start
 
         Application.launch(App.class, args);
     }

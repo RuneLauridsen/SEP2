@@ -253,7 +253,6 @@ public class ClientModelImpl implements ClientModel
     {
         try
         {
-            // TODO(rune): Slå sammen til en request?
             networkLayer.updateRoom(room);
             networkLayer.updateUserRoomData(room, room.getUserComment(), room.getUserColor());
         }
@@ -279,10 +278,6 @@ public class ClientModelImpl implements ClientModel
     {
         try
         {
-            // TODO(rune): Kan vi gøre det smartere end at hente alle bookinger ned hver gang?
-            // Er det nødvendigt at lave smartere? Hvis vi laver en kalender er den en god idé
-            // at hente alle dagens bookinger ned fra serveren.
-
             LocalTime nowTime = nowProvider.nowTime();
             LocalDate nowDate = nowProvider.nowDate();
 
@@ -352,7 +347,7 @@ public class ClientModelImpl implements ClientModel
         }
     }
 
-    // NOTE(rune): Separate exceptiontyper er ikke strengt tager nødvendigt, men
+    // NOTE: Separate exceptiontyper er ikke strengt tager nødvendigt, men
     // holder lagene adskilt. Det er også praktisk at kunne skelne mellem egentlige
     // netværksfejl, og et response med eksempelvis TOO_MANY_ACTIVE_BOOKINGS, hvis man
     // kun ville logge egentlige netværksfejl.
@@ -364,7 +359,6 @@ public class ClientModelImpl implements ClientModel
 
     private static ClientModelException wrapNetwork(ClientNetworkException e)
     {
-        // TODO(rune): Client-side logging
         return new ClientModelException("Netværksfejl " + e.getMessage(), e);
     }
 }

@@ -19,7 +19,7 @@ public class CreateBookingParameters implements Serializable
         this.room = Objects.requireNonNull(room);
         this.interval = Objects.requireNonNull(interval);
         this.isOverlapAllowed = isOverlapAllowed;
-        this.userGroup = userGroup; // NOTE(rune): Null hvis booking ikk er til et bestemt hold/klasse
+        this.userGroup = userGroup; // NOTE: Null hvis booking ikk er til et bestemt hold/klasse
     }
 
     public Room getRoom()

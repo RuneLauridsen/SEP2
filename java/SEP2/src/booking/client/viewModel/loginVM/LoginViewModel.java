@@ -46,8 +46,6 @@ public class LoginViewModel
 
     public void loginAction()
     {
-        // TODO(rune): Input validering, eks. "abc" kan ikke parses som int
-
         try
         {
             User user = loginModel.login(Integer.parseInt(VIAID.get()), password.get());

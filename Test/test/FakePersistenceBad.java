@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class FakePersistenceBad implements Persistence
 {
-    // NOTE(rune): Så det er nemmere at kende forskel på "rigtige" database fejl og dem fra FakePersistenceBad i stack trace
+    // NOTE: Så det er nemmere at kende forskel på "rigtige" database fejl og dem fra FakePersistenceBad i stack trace
     class FakePersistenceException extends PersistenceException
     {
         public FakePersistenceException()

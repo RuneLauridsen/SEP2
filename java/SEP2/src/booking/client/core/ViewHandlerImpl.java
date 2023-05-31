@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
-// TODO(rune): Meget gentaget kode i showXYZ metoder.
+// TODO: Meget gentaget kode i showXYZ metoder.
 public class ViewHandlerImpl implements ViewHandler
 {
     private static final String DEFAULT_WINDOW_TITLE = "Bookingsystem";
