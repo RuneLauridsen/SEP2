@@ -425,7 +425,7 @@ public class TestCase7 extends TestClientServerIntegrationBase
         step10_1();
         step11_1();
         step12_b();
-        postcondition(true);
+        postcondition(false);
     }
 
 
@@ -445,17 +445,15 @@ public class TestCase7 extends TestClientServerIntegrationBase
 
     private void step1()
     {
-        homeScreenViewModel.changeToEditRoom(homeScreenViewModel.getAllRooms().get(0));
+        homeScreenViewModel.changeToEditRoom(homeScreenViewModel.getAllRooms().get(1));
 
     }
 
     private void step2()
     {
         assertEquals(viewHandler.getLatestView(), EditRoomViewModel.class);
-        editRoomViewModel = viewModelFactory.getEditRoomViewModel(viewHandler, client, homeScreenViewModel.getAllRooms().get(0));
+        editRoomViewModel = viewModelFactory.getEditRoomViewModel(viewHandler, client, homeScreenViewModel.getAllRooms().get(1));
     }
-
-    // TODO(rune): Test når room name eksisterer i forvejen.
 
     private void step3_1()  { name = "C02.14"; }
     private void step3_2()  { name = "abc"; }

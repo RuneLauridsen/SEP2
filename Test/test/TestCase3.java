@@ -147,7 +147,7 @@ public class TestCase3 extends TestClientServerIntegrationBase
 
     private void step2_5()
     {
-        loginViewModel.VIAIDProperty().set(""); // TODO(rune): Ændr testcase på docs så der blank i stedet for Null
+        loginViewModel.VIAIDProperty().set("");
     }
 
     //
@@ -176,7 +176,7 @@ public class TestCase3 extends TestClientServerIntegrationBase
 
     private void step3_5()
     {
-        loginViewModel.passwordProperty().set(""); // TODO(rune): Ændr testcase på docs så der blank i stedet for Null
+        loginViewModel.passwordProperty().set("");
     }
 
     //

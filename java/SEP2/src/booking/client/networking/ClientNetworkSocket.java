@@ -6,10 +6,15 @@ import booking.shared.GetAvailableRoomsParameters;
 import booking.shared.objects.*;
 import booking.shared.socketMessages.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,13 +27,16 @@ public class ClientNetworkSocket implements ClientNetwork
     {
         try
         {
-            Socket socket = new Socket("localhost", 2910);
+            URI uri = getClass().getResource("ClientNetworkSocketHost.txt").toURI();
+            String host = Files.readString(Path.of(uri));
+
+            Socket socket = new Socket(host, 2910);
             outToServer = new ObjectOutputStream(socket.getOutputStream());
             inFromServer = new ObjectInputStream(socket.getInputStream());
         }
-        catch (IOException e)
+        catch (IOException | URISyntaxException e)
         {
-            throw new RuntimeException(e); // TODO(rune): Bedre error handling
+            throw new RuntimeException(e);
         }
     }
 
